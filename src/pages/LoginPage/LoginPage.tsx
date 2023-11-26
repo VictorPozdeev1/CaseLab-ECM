@@ -1,11 +1,10 @@
-import { FC, useContext, useState } from "react";
-import { Context } from "../..";
+import { FC, useState } from "react";
+import store from "@store/store";
 
 export const LoginPage: FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const { store } = useContext(Context);
   return (
     <form
       onSubmit={(e) => {

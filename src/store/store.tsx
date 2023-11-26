@@ -3,7 +3,7 @@ import CaselabEcmApi from "@api/CaselabEcmApi";
 
 const { loginService } = CaselabEcmApi;
 
-export default class Store {
+class Store {
   isAuth = false;
 
   constructor() {
@@ -33,3 +33,5 @@ export default class Store {
     }
   }
 }
+
+export default new Store();

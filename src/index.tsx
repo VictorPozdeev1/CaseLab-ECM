@@ -1,34 +1,19 @@
-import React, { createContext } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import { BrowserRouter } from "react-router-dom";
+
 import App from "@app/App";
-import Store from "@store/store";
-import { BrowserRouter as Router } from "react-router-dom";
 
-interface IStore {
-  store: Store;
-}
-
-const store = new Store();
-
-export const Context = createContext<IStore>({
-  store,
-});
+import "./index.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   // <React.StrictMode>
-  <Context.Provider
-    value={{
-      store,
-    }}
-  >
-    <Router>
-      <App />
-    </Router>
-  </Context.Provider>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
   // </React.StrictMode>
 );
 
