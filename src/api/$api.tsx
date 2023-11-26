@@ -1,34 +1,47 @@
-import axios, { AxiosResponse } from "axios";
+import axios, {
+  isAxiosError,
+  type AxiosResponse,
+  // type AxiosError,
+} from 'axios';
 
-const BASE_URL = "http://127.0.0.1:8080";
+const BASE_URL = 'http://127.0.0.1:8080';
 
-const getRequestErrorFormatted = (error: any): { message: string } => {
-  let message: string = "";
+const getRequestErrorFormatted = (error: unknown): { message: string } => {
+  let message: string = '';
   if (!navigator.onLine) {
-    message = "Error: no internet access";
-  } else if (error.response) {
-    const { status, data } = error.response;
-    message = `Error ${status}: ${data}`;
-    if (status === 401) {
-      message = `Error: Handle unauthorized access`;
-    } else if (status === 404) {
-      message = `Error: Handle not found`;
+    message = 'Error: no internet access';
+    return { message };
+  }
+  if (isAxiosError(error)) {
+    if (error.response !== null) {
+      message = `Error ${error.response?.status}: ${error.response?.data}`;
+      if (error.response?.status === 401) {
+        message = `Error: Handle unauthorized access`;
+      } else if (error.response?.status === 404) {
+        message = `Error: Handle not found`;
+      }
+      return { message };
     }
-  } else if (error.request) {
-    message = "No response received";
+
+    if (error.request !== null) {
+      message = 'No response received';
+    } else {
+      message = `Error: ${error.message}`;
+    }
   } else {
-    message = `Error: ${error.message}`;
+    message = 'Not axios error';
+    // return { message };
   }
   return { message };
 };
 
-type Methods = "head" | "options" | "put" | "post" | "patch" | "delete" | "get";
+type Methods = 'head' | 'options' | 'put' | 'post' | 'patch' | 'delete' | 'get';
 
 interface IApi {
   token?: string;
   method: Methods;
   url: string;
-  body?: Object;
+  body?: unknown;
 }
 
 const $api = async ({
@@ -36,31 +49,26 @@ const $api = async ({
   method,
   url,
   body,
-}: IApi): Promise<Object | string> => {
+}: IApi): Promise<unknown | string> => {
   try {
-    let response: AxiosResponse<Object | string>;
-    if (!body) {
-      response = await axios[method](`${BASE_URL}/${url}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          accept: "*/*",
-          credentials: "include",
-        },
-      });
-    } else {
-      response = await axios[method](`${BASE_URL}/${url}`, body, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-          accept: "*/*",
-          credentials: "include",
-        },
-      });
-    }
+    const config = {
+      method,
+      body,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        accept: '*/*',
+        credentials: 'include',
+      },
+    };
+    const response: AxiosResponse<unknown | string> = await axios(
+      `${BASE_URL}/${url}`,
+      config,
+    );
+
     return response.data;
   } catch (err) {
-    throw getRequestErrorFormatted(err);
+    throw new Error(getRequestErrorFormatted(err).message);
   }
 };
 
