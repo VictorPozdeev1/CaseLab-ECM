@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import CaselabEcmApi from "../data/api/CaselabEcmApi";
+import CaselabEcmApi from "@api/CaselabEcmApi";
 
 const { loginService } = CaselabEcmApi;
 

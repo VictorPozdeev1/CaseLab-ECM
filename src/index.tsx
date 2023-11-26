@@ -1,8 +1,8 @@
 import React, { createContext } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
-import Store from "./store/store";
+import App from "@app/App";
+import Store from "@store/store";
 import { BrowserRouter as Router } from "react-router-dom";
 
 interface IStore {
