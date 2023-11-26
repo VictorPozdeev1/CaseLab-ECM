@@ -1,7 +1,6 @@
 import { FC } from "react";
-import CaselabEcmApi from "../../data/api/CaselabEcmApi";
-import "./App.css";
-import AppRouter from "../AppRouter";
+import CaselabEcmApi from "./data/api/CaselabEcmApi";
+import AppRouter from "./components/AppRouter";
 
 const { loginService, getUsersCount, getAllUsers, getAllOrganization } =
   CaselabEcmApi;
