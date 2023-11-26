@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^7.1.0",
     "@mui/icons-material": "^5.14.18",
     "@mui/material": "^5.14.18",
     "@testing-library/jest-dom": "^5.17.0",
@@ -21,21 +22,21 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",
     "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+     "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "lint": "eslint src/**/*.ts{,x}",
+    "lint:fix": "eslint --fix src/**/*.ts{,x}",
+    "format": "prettier --write src/**/*.ts{,x}",
+    "eject": "react-scripts eject",
+    "prepare": "husky install"
+
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
+
+  "cracoConfig": "craco.config.js",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -47,5 +48,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^40.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^16.3.1",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "prettier": "^3.1.0",
+    "typescript": "^4.3.2",
+    "husky": "^8.0.0"
   }
 }
