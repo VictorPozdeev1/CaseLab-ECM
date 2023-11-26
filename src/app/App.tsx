@@ -1,9 +1,9 @@
-import { FC } from "react";
-import CaselabEcmApi from "@api/CaselabEcmApi";
-import AppRouter from "./AppRouter";
+import { type FC } from 'react';
+// import CaselabEcmApi from '@api/CaselabEcmApi';
+import AppRouter from './AppRouter';
 
-const { loginService, getUsersCount, getAllUsers, getAllOrganization } =
-  CaselabEcmApi;
+// const { loginService, getUsersCount, getAllUsers, getAllOrganization } =
+//   CaselabEcmApi;
 
 const App: FC = () => {
   // loginService("admin@mail.ru", "251323Nn").then((token) => {
@@ -14,6 +14,6 @@ const App: FC = () => {
   // });
 
   return <AppRouter />;
-}
+};
 
 export default App;

@@ -1,5 +1,5 @@
-import { makeAutoObservable } from "mobx";
-import CaselabEcmApi from "@api/CaselabEcmApi";
+import { makeAutoObservable } from 'mobx';
+import CaselabEcmApi from '@api/CaselabEcmApi';
 
 const { loginService } = CaselabEcmApi;
 
@@ -10,23 +10,23 @@ class Store {
     makeAutoObservable(this);
   }
 
-  setAuth(bool: boolean) {
+  setAuth(bool: boolean): void {
     this.isAuth = bool;
   }
 
-  async login(email: string, password: string) {
+  async login(email: string, password: string): Promise<void> {
     try {
       const response = await loginService(email, password);
-      localStorage.setItem("token", response as string);
+      localStorage.setItem('token', response as string);
       this.setAuth(true);
     } catch (e) {
       console.log(e);
     }
   }
 
-  async logout() {
+  async logout(): Promise<void> {
     try {
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
       this.setAuth(false);
     } catch (e) {
       console.log(e);
