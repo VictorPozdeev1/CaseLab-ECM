@@ -1,37 +1,49 @@
-import { makeAutoObservable } from 'mobx';
-import CaselabEcmApi from '@api/CaselabEcmApi';
+import { makeAutoObservable, runInAction } from 'mobx';
 
-const { loginService } = CaselabEcmApi;
+// import CaselabEcmApi from '@api/CaselabEcmApi';
 
-class Store {
-  isAuth = false;
+// const { loginService } = CaselabEcmApi;
 
+const TOKEN_ITEM_NAME = 'token';
+
+class CurrentUser {
   constructor() {
+    this.refreshState();
     makeAutoObservable(this);
   }
 
-  setAuth(bool: boolean): void {
-    this.isAuth = bool;
+  isAuth: boolean = false;
+  roles: string[] = [];
+
+  refreshState(): void {
+    this.isAuth = localStorage.getItem(TOKEN_ITEM_NAME) !== null;
+    this.roles = this.isAuth ? ['COMPANY_ADMIN', 'USER'] : [];
   }
 
-  async login(email: string, password: string): Promise<void> {
+  async login(email: string, password: string): Promise<boolean> {
     try {
-      const response = await loginService(email, password);
-      localStorage.setItem('token', response as string);
-      this.setAuth(true);
+      email = password; // for eslint
+      // const response = await loginService(email, password);
+      const response = 'fake_token';
+      localStorage.setItem(TOKEN_ITEM_NAME, response as string);
+      runInAction(() => {
+        this.refreshState();
+      });
+      return true;
     } catch (e) {
       console.log(e);
+      return false;
     }
   }
 
-  async logout(): Promise<void> {
+  logout(): void {
     try {
-      localStorage.removeItem('token');
-      this.setAuth(false);
+      localStorage.removeItem(TOKEN_ITEM_NAME);
+      this.refreshState();
     } catch (e) {
       console.log(e);
     }
   }
 }
-
-export default new Store();
+const currentUser = new CurrentUser();
+export { currentUser };

@@ -1,21 +1,50 @@
-import React, { type FC } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import type { FC } from 'react';
+import { Outlet, Route, Routes } from 'react-router-dom';
+import { RequireAuth, RequireRoleCheck } from '../hoc';
 import { LoginPage } from '@pages/LoginPage/LoginPage';
+import { Header } from '@widgets/Header/Header';
+import { HomePage } from '@pages/HomePage/HomePage';
+import { Page1 } from '@pages/Page1/Page1';
+import { AdminPage } from '@pages/AdminPage/AdminPage';
+import { ForbiddenPage } from '@pages/ForbiddenPage/ForbiddenPage';
 
 const AppRouter: FC = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      {/* При переходе на / надо проверять, залогинен юзер или нет, и исходя из его роли редиректить его на его домашнюю страницу.
-      Видимо, надо посмотреть такие вещи из реакт-роутинга как <Navigate/>, 'loaders', 'redirect action' */}
-      {/* <Route path="/" element={<Layout />}> */}
-      {/* {loggedIn ? <Redirect to="/dashboard" /> : <PublicHomePage />} */}
       <Route
-        path="*"
+        path="/"
         element={
-          <h1> page not found. Only the page /login is presented by now.</h1>
+          <RequireAuth>
+            <>
+              <Header />
+              <Outlet />
+            </>
+          </RequireAuth>
         }
-      />
+      >
+        <Route index element={<HomePage />} />
+
+        <Route
+          path="page1"
+          element={
+            <RequireRoleCheck role="USER">
+              <Page1 />
+            </RequireRoleCheck>
+          }
+        />
+
+        <Route
+          path="systemadmin"
+          element={
+            <RequireRoleCheck role="SYSTEM_ADMIN">
+              <AdminPage />
+            </RequireRoleCheck>
+          }
+        />
+      </Route>
+      <Route path="forbidden" element={<ForbiddenPage />} />
+      <Route path="*" element={<h1> page not found</h1>} />
     </Routes>
   );
 };
