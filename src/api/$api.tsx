@@ -13,7 +13,7 @@ const getRequestErrorFormatted = (error: unknown): { message: string } => {
     return { message };
   }
   if (isAxiosError(error)) {
-    if (error.response !== null) {
+    if (error.response !== undefined) {
       message = `Error ${error.response?.status}: ${error.response?.data}`;
       if (error.response?.status === 401) {
         message = `Error: Handle unauthorized access`;
