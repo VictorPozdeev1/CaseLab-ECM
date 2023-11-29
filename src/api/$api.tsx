@@ -55,12 +55,14 @@ const $api = async ({
       method,
       body,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: token !== undefined ? `Bearer ${token}` : undefined,
+        // Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
         accept: '*/*',
         credentials: 'include',
       },
     };
+    // console.log(config);
     const response: AxiosResponse<unknown | string> = await axios(
       `${BASE_URL}/${url}`,
       config,
