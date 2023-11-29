@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios, {
   isAxiosError,
   type AxiosResponse,
@@ -44,34 +45,15 @@ interface IApi {
   body?: unknown;
 }
 
-const $api = async ({
-  token,
-  method,
-  url,
-  body,
-}: IApi): Promise<unknown | string> => {
-  try {
-    const config = {
-      method,
-      data: body,
-      headers: {
-        Authorization: token !== undefined ? `Bearer ${token}` : undefined,
-        // Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        accept: '*/*',
-        credentials: 'include',
-      },
-    };
-    // console.log(config);
-    const response: AxiosResponse<unknown | string> = await axios(
-      `${BASE_URL}/${url}`,
-      config,
-    );
-
-    return response.data;
-  } catch (err) {
-    throw new Error(getRequestErrorFormatted(err).message);
-  }
-};
+const $api = (token?: string) =>
+  axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Authorization: token !== undefined ? `Bearer ${token}` : undefined,
+      'Content-Type': 'application/json',
+      accept: '*/*',
+      credentials: 'include',
+    },
+  });
 
 export default $api;

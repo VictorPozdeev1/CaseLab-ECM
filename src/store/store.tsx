@@ -25,7 +25,7 @@ class CurrentUser {
       // email = password; // for eslint
       const response = await loginService(email, password);
       // const response = 'fake_token';
-      localStorage.setItem(TOKEN_ITEM_NAME, response as string);
+      localStorage.setItem(TOKEN_ITEM_NAME, response);
       runInAction(() => {
         this.refreshState();
       });
