@@ -53,7 +53,7 @@ const $api = async ({
   try {
     const config = {
       method,
-      body,
+      data: body,
       headers: {
         Authorization: token !== undefined ? `Bearer ${token}` : undefined,
         // Authorization: `Bearer ${token}`,
