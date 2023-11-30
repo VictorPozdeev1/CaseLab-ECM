@@ -1,4 +1,4 @@
-export default interface IOrganisation {
+export default interface IOrganization {
   id: number;
   name: string;
   inn: string;
