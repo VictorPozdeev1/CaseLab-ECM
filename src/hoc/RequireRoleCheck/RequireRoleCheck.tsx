@@ -8,7 +8,9 @@ const RequireRoleCheck: FC<{ role: string; children: JSX.Element }> = ({
   children,
 }) => {
   const currentLocation = useLocation();
-
+  console.log(currentUser.roles);
+  console.log(role);
+  console.log(currentUser.roles.includes(role));
   if (!currentUser.roles.includes(role)) {
     return (
       <Navigate to="/Forbidden" state={{ previousLocation: currentLocation }} />
