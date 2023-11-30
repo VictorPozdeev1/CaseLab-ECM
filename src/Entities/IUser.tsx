@@ -14,7 +14,7 @@ export default interface IUser {
     passportKp: string;
   };
   orgDto: {
-    id: 0;
+    id: number;
     name: string;
     inn: string;
   };

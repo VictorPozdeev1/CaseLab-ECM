@@ -6,4 +6,5 @@ export default interface ICaselabEcmApi {
   getUsersCount: (token: string) => Promise<string>;
   getAllUsers: (token: string) => Promise<IUser[]>;
   getAllOrganizations: (token: string) => Promise<IOrganisation[]>;
+  getAuthInfo: (token: string) => Promise<IUser>;
 }

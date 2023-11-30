@@ -35,6 +35,13 @@ export const CaselabEcmApi: ICaselabEcmApi = {
       await $api(token).get<IOrganization[]>('v1/org');
     return response.data;
   },
+
+  // получить информацию о пользователе по токену авторизации
+  getAuthInfo: async (token: string): Promise<IUser> => {
+    const response: AxiosResponse<IUser> =
+      await $api(token).get<IUser>('auth/info');
+    return response.data;
+  },
 };
 
 export default CaselabEcmApi;
