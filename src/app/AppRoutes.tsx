@@ -8,7 +8,7 @@ import { Page1 } from '@pages/Page1/Page1';
 import { AdminPage } from '@pages/AdminPage/AdminPage';
 import { ForbiddenPage } from '@pages/ForbiddenPage/ForbiddenPage';
 
-const AppRouter: FC = () => {
+const AppRoutes: FC = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
@@ -49,4 +49,4 @@ const AppRouter: FC = () => {
   );
 };
 
-export default AppRouter;
+export default AppRoutes;
