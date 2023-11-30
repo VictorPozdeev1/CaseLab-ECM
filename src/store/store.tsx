@@ -20,7 +20,7 @@ class CurrentUser {
   token?: string;
   isAuth: boolean = false; // todo Сделать computed value
   get roles(): string[] {
-    return rolesMapping[this.data?.role as keyof typeof rolesMapping];
+    return rolesMapping[this.data?.role as keyof typeof rolesMapping] ?? [];
   }
 
   data: IUser | null = null;
