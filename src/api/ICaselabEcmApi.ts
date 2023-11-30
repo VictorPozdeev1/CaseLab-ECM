@@ -1,5 +1,5 @@
-import type IOrganisation from '../Entities/IOrganization';
-import type IUser from '../Entities/IUser';
+import type IOrganisation from '@entities/IOrganization';
+import type IUser from '@entities/IUser';
 
 export default interface ICaselabEcmApi {
   loginService: (email: string, password: string) => Promise<string>;

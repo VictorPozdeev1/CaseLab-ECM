@@ -1,7 +1,7 @@
 import $api from './$api';
 import type ICaselabEcmApi from './ICaselabEcmApi';
-import type IUser from '../Entities/IUser';
-import type IOrganization from '../Entities/IOrganization';
+import type IUser from '@entities/IUser';
+import type IOrganization from '@entities/IOrganization';
 import { type AxiosResponse } from 'axios';
 
 // Auth
