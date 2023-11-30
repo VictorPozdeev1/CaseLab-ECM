@@ -1,8 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
-// import CaselabEcmApi from '@api/CaselabEcmApi';
+import CaselabEcmApi from '@api/CaselabEcmApi';
 
-// const { loginService } = CaselabEcmApi;
+const { loginService } = CaselabEcmApi;
 
 const TOKEN_ITEM_NAME = 'token';
 
@@ -22,10 +22,10 @@ class CurrentUser {
 
   async login(email: string, password: string): Promise<boolean> {
     try {
-      email = password; // for eslint
-      // const response = await loginService(email, password);
-      const response = 'fake_token';
-      localStorage.setItem(TOKEN_ITEM_NAME, response as string);
+      // email = password; // for eslint
+      const response = await loginService(email, password);
+      // const response = 'fake_token';
+      localStorage.setItem(TOKEN_ITEM_NAME, response);
       runInAction(() => {
         this.refreshState();
       });

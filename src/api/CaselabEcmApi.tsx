@@ -1,39 +1,40 @@
 import $api from './$api';
-// import { AxiosResponse } from 'axios';
+import type ICaselabEcmApi from './ICaselabEcmApi';
+import type IUser from '../Entities/IUser';
+import type IOrganization from '../Entities/IOrganization';
+import { type AxiosResponse } from 'axios';
 
 // Auth
-export const CaselabEcmApi = {
-  loginService: async (email: string, password: string) =>
-    await $api({
-      method: 'post',
-      url: 'auth/login',
-      body: {
-        email,
-        password,
-      },
-    }),
+export const CaselabEcmApi: ICaselabEcmApi = {
+  loginService: async (email: string, password: string): Promise<string> => {
+    const response: AxiosResponse<string> = await $api().post<string>(
+      'auth/login',
+      { email, password },
+    );
+    return response.data;
+  },
+
   // получить число пользователей
-  getUsersCount: async (token: string) =>
-    await $api({
-      url: 'statistic/users/count',
+  getUsersCount: async (token: string): Promise<string> => {
+    const response: AxiosResponse<{ countUser: string }> = await $api(
       token,
-      method: 'get',
-    }),
+    ).get<{ countUser: string }>('statistic/users/count');
+    return response.data.countUser;
+  },
+
   // получить всех пользователей
-  getAllUsers: async (token: string) =>
-    await $api({
-      method: 'get',
-      token,
-      url: 'admin/users',
-    }),
+  getAllUsers: async (token: string): Promise<IUser[]> => {
+    const response: AxiosResponse<IUser[]> =
+      await $api(token).get<IUser[]>('admin/users');
+    return response.data;
+  },
 
   //  получить все организации
-  getAllOrganization: async (token: string) =>
-    await $api({
-      token,
-      url: 'v1/org',
-      method: 'get',
-    }),
+  getAllOrganizations: async (token: string): Promise<IOrganization[]> => {
+    const response: AxiosResponse<IOrganization[]> =
+      await $api(token).get<IOrganization[]>('v1/org');
+    return response.data;
+  },
 };
 
 export default CaselabEcmApi;
