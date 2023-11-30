@@ -12,12 +12,14 @@ class CurrentUser {
     makeAutoObservable(this);
   }
 
+  token?: string;
   isAuth: boolean = false;
   roles: string[] = [];
 
   refreshState(): void {
-    this.isAuth = localStorage.getItem(TOKEN_ITEM_NAME) !== null;
-    this.roles = this.isAuth ? ['COMPANY_ADMIN', 'USER'] : [];
+    this.token = localStorage.getItem(TOKEN_ITEM_NAME) ?? undefined;
+    this.isAuth = this.token !== undefined;
+    this.roles = this.isAuth ? ['COMPANY_ADMIN', 'USER'] : []; // Сделать по-нормальному из роли юзера: 'ADMIN' -> ['COMPANY_ADMIN', 'SYSTEM_ADMIN'] ; 'USER' -> ['USER']
   }
 
   async login(email: string, password: string): Promise<boolean> {
