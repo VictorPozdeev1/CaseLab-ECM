@@ -1,17 +1,21 @@
-import { type FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { currentUserStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
+import Spinner from '@widgets/Spinner/Spinner';
 
 const RequireRoleCheck: FC<{ role: string; children: JSX.Element }> = ({
   role,
   children,
 }) => {
   const currentLocation = useLocation();
-  console.log(currentUserStore.roles);
-  console.log(role);
-  console.log(currentUserStore.roles.includes(role));
-  if (!currentUserStore.roles.includes(role)) {
+  useEffect(() => {
+    void currentUserStore.getData();
+  }, []);
+
+  if (currentUserStore.isLoading) {
+    return <Spinner />;
+  } else if (currentUserStore.data?.role !== role) {
     return (
       <Navigate to="/Forbidden" state={{ previousLocation: currentLocation }} />
     );

@@ -37,7 +37,7 @@ const AppRoutes: FC = () => {
         <Route
           path="systemadmin"
           element={
-            <RequireRoleCheck role="SYSTEM_ADMIN">
+            <RequireRoleCheck role="ADMIN">
               <AdminPage />
             </RequireRoleCheck>
           }

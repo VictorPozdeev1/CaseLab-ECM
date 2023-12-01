@@ -19,11 +19,25 @@ class CurrentUser {
 
   token?: string;
   isAuth: boolean = false; // todo Сделать computed value
+  data?: IUser;
+  isLoading: boolean = true;
+
   get roles(): string[] {
     return rolesMapping[this.data?.role as keyof typeof rolesMapping] ?? [];
   }
 
-  data: IUser | null = null;
+  getData: () => Promise<void> = async () => {
+    try {
+      this.isLoading = true;
+      const res = await getAuthInfo(this.token as string);
+      runInAction(() => {
+        this.data = res;
+        this.isLoading = false;
+      });
+    } catch {
+      this.isLoading = false;
+    }
+  };
 
   refreshState(): void {
     this.token = localStorage.getItem(TOKEN_ITEM_NAME) ?? undefined;
