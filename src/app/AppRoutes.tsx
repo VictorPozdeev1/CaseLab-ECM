@@ -7,6 +7,7 @@ import { HomePage } from '@pages/HomePage/HomePage';
 import { Page1 } from '@pages/Page1/Page1';
 import { AdminPage } from '@pages/AdminPage/AdminPage';
 import { ForbiddenPage } from '@pages/ForbiddenPage/ForbiddenPage';
+import { OwnDocumentsPage } from '@pages/OwnDocumentsPage/OwnDocumentsPage';
 
 const AppRoutes: FC = () => {
   return (
@@ -24,7 +25,7 @@ const AppRoutes: FC = () => {
         }
       >
         <Route index element={<HomePage />} />
-
+        <Route path="myDocuments" element={<OwnDocumentsPage />} />
         <Route
           path="page1"
           element={
