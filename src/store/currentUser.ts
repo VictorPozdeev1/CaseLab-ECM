@@ -61,5 +61,5 @@ class CurrentUser {
     }
   }
 }
-const currentUser = new CurrentUser();
-export { currentUser };
+
+export default new CurrentUser();

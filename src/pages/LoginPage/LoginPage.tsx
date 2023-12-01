@@ -1,5 +1,5 @@
 import { type FC, useState } from 'react';
-import { currentUser as currentUserStore } from '@store/store';
+import { currentUserStore } from '@store/index';
 import { useLocation, useNavigate } from 'react-router-dom';
 import logo from './logo.png';
 import styles from './LoginPage.module.css';
