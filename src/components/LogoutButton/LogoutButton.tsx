@@ -1,12 +1,12 @@
 import { type FC } from 'react';
-import { currentUser } from '@store/store';
+import { currentUserStore } from '@store/index';
 
 export const LogoutButton: FC = () => {
-  if (!currentUser.isAuth) return null;
+  if (!currentUserStore.isAuth) return null;
   return (
     <button
       onClick={() => {
-        currentUser.logout();
+        currentUserStore.logout();
       }}
     >
       Выход!
