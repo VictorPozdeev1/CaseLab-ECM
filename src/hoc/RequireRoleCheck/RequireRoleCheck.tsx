@@ -15,7 +15,7 @@ const RequireRoleCheck: FC<{ role: string; children: JSX.Element }> = ({
 
   if (currentUserStore.isLoading) {
     return <Spinner />;
-  } else if (currentUserStore.data?.role !== role) {
+  } else if (!currentUserStore.roles.includes(role)) {
     return (
       <Navigate to="/Forbidden" state={{ previousLocation: currentLocation }} />
     );

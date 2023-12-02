@@ -25,7 +25,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-     "start": "craco start",
+    "start": "craco start",
     "build": "craco build",
     "test": "craco test",
     "lint": "eslint src/**/*.ts{,x}",
@@ -33,9 +33,7 @@
     "format": "prettier --write src/**/*.ts{,x}",
     "eject": "react-scripts eject",
     "prepare": "husky install"
-
   },
-
   "cracoConfig": "craco.config.js",
   "browserslist": {
     "production": [

@@ -6,6 +6,8 @@ import type IUser from '@entities/IUser';
 const { loginService, getAuthInfo } = CaselabEcmApi;
 
 const TOKEN_ITEM_NAME = 'token';
+const USER_DATA = 'userData';
+
 const rolesMapping = {
   ADMIN: ['COMPANY_ADMIN', 'SYSTEM_ADMIN'],
   USER: ['USER'],
@@ -29,26 +31,26 @@ class CurrentUser {
   getData: () => Promise<void> = async () => {
     try {
       this.isLoading = true;
-      const res = await getAuthInfo(this.token as string);
-      runInAction(() => {
-        this.data = res;
-        this.isLoading = false;
-      });
-    } catch {
+      if (localStorage.getItem(USER_DATA) == null ?? '') {
+        const res = await getAuthInfo(this.token as string);
+        localStorage.setItem(USER_DATA, JSON.stringify(res));
+        runInAction(() => {
+          this.data = res;
+        });
+      } else {
+        const res = localStorage.getItem(USER_DATA);
+        this.data = JSON.parse(res as string);
+      }
       this.isLoading = false;
+    } catch (e) {
+      this.isLoading = false;
+      console.log(e);
     }
   };
 
   refreshState(): void {
     this.token = localStorage.getItem(TOKEN_ITEM_NAME) ?? undefined;
     this.isAuth = this.token !== undefined;
-    if (this.isAuth) {
-      getAuthInfo(this.token as string)
-        .then((dataRes: IUser) => {
-          this.data = dataRes;
-        })
-        .catch(() => {});
-    }
   }
 
   async login(email: string, password: string): Promise<boolean> {
@@ -69,6 +71,7 @@ class CurrentUser {
   logout(): void {
     try {
       localStorage.removeItem(TOKEN_ITEM_NAME);
+      localStorage.removeItem(USER_DATA);
       this.refreshState();
     } catch (e) {
       console.log(e);
