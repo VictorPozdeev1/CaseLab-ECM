@@ -1,5 +1,5 @@
 import currentUserStore from './currentUser';
 import documentsStore from './documents';
-import attributesStore from './attributes';
+import atributesStore from './atributes';
 
-export { currentUserStore, documentsStore, attributesStore };
+export { currentUserStore, documentsStore, atributesStore };
