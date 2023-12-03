@@ -1,11 +1,12 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import CaselabEcmApi from '@api/CaselabEcmApi';
-import type IUser from '@entities/IUser';
+import type IUserLogin from '@entities/IUserLogin';
 
-const { loginService, getAuthInfo } = CaselabEcmApi;
+const { loginService } = CaselabEcmApi;
 
 const TOKEN_ITEM_NAME = 'token';
+const USER_DATA = 'userData';
 const rolesMapping = {
   ADMIN: ['COMPANY_ADMIN', 'SYSTEM_ADMIN'],
   USER: ['USER'],
@@ -19,29 +20,25 @@ class CurrentUser {
 
   token?: string;
   isAuth: boolean = false; // todo Сделать computed value
+  data?: IUserLogin;
   get roles(): string[] {
     return rolesMapping[this.data?.role as keyof typeof rolesMapping] ?? [];
   }
 
-  data: IUser | null = null;
-
   refreshState(): void {
     this.token = localStorage.getItem(TOKEN_ITEM_NAME) ?? undefined;
     this.isAuth = this.token !== undefined;
-    if (this.isAuth) {
-      getAuthInfo(this.token as string)
-        .then((dataRes: IUser) => {
-          this.data = dataRes;
-        })
-        .catch(() => {});
-    }
+    this.data =
+      localStorage.getItem(USER_DATA) != null
+        ? JSON.parse(localStorage.getItem(USER_DATA) as string)
+        : undefined;
   }
 
   async login(email: string, password: string): Promise<boolean> {
     try {
       const response = await loginService(email, password);
-      this.token = response;
-      localStorage.setItem(TOKEN_ITEM_NAME, response);
+      localStorage.setItem(TOKEN_ITEM_NAME, response.token);
+      localStorage.setItem(USER_DATA, JSON.stringify(response.user));
       runInAction(() => {
         this.refreshState();
       });
@@ -55,6 +52,7 @@ class CurrentUser {
   logout(): void {
     try {
       localStorage.removeItem(TOKEN_ITEM_NAME);
+      localStorage.removeItem(USER_DATA);
       this.refreshState();
     } catch (e) {
       console.log(e);

@@ -3,11 +3,12 @@ import type ICaselabEcmApi from './ICaselabEcmApi';
 import type IUser from '@entities/IUser';
 import type IOrganization from '@entities/IOrganization';
 import { type AxiosResponse } from 'axios';
+import type ILogin from '@entities/ILogin';
 
 // Auth
 export const CaselabEcmApi: ICaselabEcmApi = {
-  loginService: async (email: string, password: string): Promise<string> => {
-    const response: AxiosResponse<string> = await $api().post<string>(
+  loginService: async (email: string, password: string): Promise<ILogin> => {
+    const response: AxiosResponse<ILogin> = await $api().post<ILogin>(
       'auth/login',
       { email, password },
     );
