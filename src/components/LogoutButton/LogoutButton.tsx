@@ -1,15 +1,21 @@
-import { type FC } from 'react';
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import { Button } from '@mui/material';
 import { currentUserStore } from '@store/index';
 
-export const LogoutButton: FC = () => {
+export const LogoutButton: React.FC = observer(() => {
   if (!currentUserStore.isAuth) return null;
+
   return (
-    <button
+    <Button
+      variant="contained"
+      color="primary"
+      size="large"
       onClick={() => {
         currentUserStore.logout();
       }}
     >
-      Выход!
-    </button>
+      Выход
+    </Button>
   );
-};
+});
