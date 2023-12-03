@@ -19,7 +19,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-  BASE: 'http://localhost:8080',
+  BASE: 'https://api.docflow.fokidoki.su',
   VERSION: '1.0.0',
   WITH_CREDENTIALS: false,
   CREDENTIALS: 'include',

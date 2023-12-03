@@ -144,16 +144,24 @@ export class Service {
    * Все атрибуты с пагинацией и сортировкой
    * @param page Номер страницы
    * @param sortBy Сортировка
+   * @param token токен
    * @returns DocAttributeDto OK
    * @throws ApiError
    */
   public static getAllDocTypes1(
+    token: string,
     page?: number,
     sortBy?: string,
   ): CancelablePromise<Array<DocAttributeDto>> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/docattributes',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        accept: '*/*',
+        credentials: 'include',
+      },
       query: {
         page: page,
         sortBy: sortBy,
