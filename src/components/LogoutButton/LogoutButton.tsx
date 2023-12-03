@@ -14,6 +14,16 @@ export const LogoutButton: React.FC = observer(() => {
       onClick={() => {
         currentUserStore.logout();
       }}
+      sx={{
+        display: 'flex',
+        height: '38px',
+        padding: '8px 22px',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '6px',
+        background: 'var(--navy-blue, #035FA2)',
+      }}
     >
       Выход
     </Button>
