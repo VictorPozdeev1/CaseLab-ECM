@@ -4,7 +4,6 @@ import {
   Service,
   type DocAttributeValueCreateDto,
 } from '@api/generated';
-import CaselabEcmApi from '@api/CaselabEcmApi';
 import currentUser from './currentUser';
 
 class DocumentsStore {
@@ -16,9 +15,7 @@ class DocumentsStore {
 
   async getDocuments(): Promise<void> {
     try {
-      const creatorId: number = (
-        await CaselabEcmApi.getAuthInfo(currentUser.token ?? '')
-      ).id;
+      const creatorId: number = (await Service.getUserInfo()).id;
       const response = await Service.findDocuments(
         undefined,
         undefined,
@@ -31,17 +28,20 @@ class DocumentsStore {
     }
   }
 
-  async createDocumet(
-    idOrg: number,
+  async createDocument(
     docTypeId: number,
     docAttr: DocAttributeValueCreateDto[],
-  ): Promise<DocumentDto> {
+  ): Promise<DocumentDto | Error> {
     try {
-      return await Service.createDocument({
-        idOrganization: idOrg,
-        docTypId: docTypeId,
-        docAttributeValueCreateDtos: docAttr,
-      });
+      if (currentUser.data !== undefined) {
+        return await Service.createDocument({
+          idOrganization: currentUser.data.organizationId,
+          docTypId: docTypeId,
+          docAttributeValueCreateDtos: docAttr,
+        });
+      } else {
+        return new Error('data is undefined');
+      }
     } catch (e) {
       console.log(e);
       throw e;
