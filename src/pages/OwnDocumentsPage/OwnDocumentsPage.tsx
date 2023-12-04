@@ -1,12 +1,13 @@
 import { type FC } from 'react';
-import { documentsStore } from '@store/index';
-import { OwnDocument } from '@components/OwnDocumentCard/OwnDocumentCard';
-import { CreateDocumentWidget } from '@components/CreateDocumentWidget/CreateDocumentWidget';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import { observer } from 'mobx-react-lite';
 
-export const OwnDocumentsPage: FC = () => {
+import { Typography, Container, Box } from '@mui/material';
+
+import { documentsStore } from '@store/index';
+import { CreateDocumentWidget } from '@components/CreateDocumentWidget/CreateDocumentWidget';
+import { OwnDocumentsTable } from '@components/OwnDocumentsTable/OwnDocumentsTable';
+
+export const OwnDocumentsPage: FC = observer(() => {
   return (
     <Container
       sx={{
@@ -50,9 +51,9 @@ export const OwnDocumentsPage: FC = () => {
         </Typography>
         <CreateDocumentWidget />
       </Box>
-      {documentsStore.ownDocuments.map((d) => (
-        <OwnDocument key={d.id} document={d}></OwnDocument>
-      ))}
+      <Box>
+        <OwnDocumentsTable documents={documentsStore.ownDocuments} />
+      </Box>
     </Container>
   );
-};
+});
