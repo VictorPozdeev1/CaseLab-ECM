@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Typography, Container, Box } from '@mui/material';
@@ -8,6 +8,10 @@ import { CreateDocumentWidget } from '@components/CreateDocumentWidget/CreateDoc
 import { OwnDocumentsTable } from '@components/OwnDocumentsTable/OwnDocumentsTable';
 
 export const OwnDocumentsPage: FC = observer(() => {
+  useEffect(() => {
+    void documentsStore.getDocuments();
+  }, []);
+
   return (
     <Container
       sx={{
