@@ -1,3 +1,4 @@
+import React from 'react';
 import type { FC } from 'react';
 import {
   Dialog,
@@ -5,8 +6,15 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography,
+  Box,
+  TextField,
+  Select,
+  MenuItem,
+  type SelectChangeEvent,
+  //  Typography,
 } from '@mui/material';
+
+import styles from './CreateDocumentDialogForm.module.css';
 
 interface CreateDocumentFormProps {
   onSubmit: (
@@ -19,8 +27,16 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent): void => {
+    setAge(event.target.value);
+  };
   return (
     <Dialog
+      className={styles.dialog}
+      PaperProps={{ variant: 'elevation', className: styles.paper }}
+      maxWidth={'md'}
       open={true}
       onClose={() => {
         console.log(
@@ -28,13 +44,35 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = ({
         );
       }}
     >
-      <DialogTitle>
-        <Typography variant="h6">Создать документ</Typography>
+      <DialogTitle variant="h6" className={styles.title}>
+        Создать документ
       </DialogTitle>
-      <DialogContent>
-        {['attr1', 'attr2'].map((attr) => (
-          <div key={attr}>{attr}</div>
-        ))}
+      <DialogContent sx={{ alignSelf: 'stretch' }}>
+        <Box className={styles.inputGroup}>
+          <TextField
+            className={styles.documentNameInput}
+            id="outlined-basic"
+            label="Название"
+            variant="outlined"
+          />
+          <Select
+            className={styles.documentTypeSelect}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={age}
+            label="Age"
+            onChange={handleChange}
+          >
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select>
+        </Box>
+        <Box>
+          {['attr1', 'attr2'].map((attr) => (
+            <div key={attr}>{attr}</div>
+          ))}
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button
