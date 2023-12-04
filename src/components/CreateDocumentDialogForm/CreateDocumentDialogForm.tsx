@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { FC } from 'react';
 import {
   Dialog,
@@ -16,6 +16,8 @@ import {
 
 import styles from './CreateDocumentDialogForm.module.css';
 
+import { attributesStore } from '@store/index';
+
 interface CreateDocumentFormProps {
   onSubmit: (
     attributeValues: Array<{ attributeId: number; attributeValue: string }>,
@@ -32,6 +34,12 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = ({
   const handleChange = (event: SelectChangeEvent): void => {
     setAge(event.target.value);
   };
+
+  // todo это надо как-то переделать по-человечески
+  useEffect(() => {
+    void attributesStore.getAttributes();
+  }, []);
+
   return (
     <Dialog
       className={styles.dialog}
@@ -69,8 +77,8 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = ({
           </Select>
         </Box>
         <Box>
-          {['attr1', 'attr2'].map((attr) => (
-            <div key={attr}>{attr}</div>
+          {attributesStore.attributes?.map((a) => (
+            <div key={a.id}>{a.name}</div>
           ))}
         </Box>
       </DialogContent>
