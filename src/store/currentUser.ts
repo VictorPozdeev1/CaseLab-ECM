@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import CaselabEcmApi from '@api/CaselabEcmApi';
 import type IUserLogin from '@entities/IUserLogin';
+import { OpenAPI } from '@api/generated';
 
 const { loginService } = CaselabEcmApi;
 
@@ -32,6 +33,7 @@ class CurrentUser {
       localStorage.getItem(USER_DATA) != null
         ? JSON.parse(localStorage.getItem(USER_DATA) as string)
         : undefined;
+    OpenAPI.TOKEN = this.token;
   }
 
   async login(email: string, password: string): Promise<boolean> {

@@ -1,10 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import { Service, OpenAPI } from '@api/generated';
+import { Service } from '@api/generated';
 import { type DocAttributeDto } from '@api/generated';
-import { currentUserStore } from '.';
-
-OpenAPI.TOKEN = localStorage.getItem('token') ?? currentUserStore.token;
-
 class AttributesStore {
   constructor() {
     makeAutoObservable(this);
@@ -21,6 +17,7 @@ class AttributesStore {
       console.log(e);
     }
   }
+  // todo перзапросить страницу вместо push(res)
 
   async createAttribute(requestBody: DocAttributeDto): Promise<void> {
     try {

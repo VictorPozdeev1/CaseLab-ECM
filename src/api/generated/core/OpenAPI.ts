@@ -1,7 +1,6 @@
 /* generated using openapi-typescript-codegen -- do no edit */
 /* istanbul ignore file */
 /* eslint-disable */
-import currentUser from '@store/currentUser';
 import type { ApiRequestOptions } from './ApiRequestOptions';
 
 type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
