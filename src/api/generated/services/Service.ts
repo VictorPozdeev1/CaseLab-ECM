@@ -144,24 +144,17 @@ export class Service {
    * Все атрибуты с пагинацией и сортировкой
    * @param page Номер страницы
    * @param sortBy Сортировка
-   * @param token токен
+   
    * @returns DocAttributeDto OK
    * @throws ApiError
    */
   public static getAllDocTypes1(
-    token: string,
     page?: number,
     sortBy?: string,
   ): CancelablePromise<Array<DocAttributeDto>> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/docattributes',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        accept: '*/*',
-        credentials: 'include',
-      },
       query: {
         page: page,
         sortBy: sortBy,
@@ -172,23 +165,15 @@ export class Service {
   /**
    * Создать атрибут
    * @param requestBody
-   * @token
    * @returns DocAttributeDto Created
    * @throws ApiError
    */
   public static createAttribute(
     requestBody: DocAttributeCreateDto,
-    token: string,
   ): CancelablePromise<DocAttributeDto> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/v1/docattributes',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        accept: '*/*',
-        credentials: 'include',
-      },
       body: requestBody,
       mediaType: 'application/json',
     });
@@ -501,24 +486,16 @@ export class Service {
 
   /**
    * Получить атрибут по ID
-   * @param token
    * @param docAttributeId ID атрибута
    * @returns DocAttributeDto OK
    * @throws ApiError
    */
   public static getAttribute(
-    token: string,
     docAttributeId: number,
   ): CancelablePromise<DocAttributeDto> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/docattributes/{docAttributeId}',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        accept: '*/*',
-        credentials: 'include',
-      },
       path: {
         docAttributeId: docAttributeId,
       },
@@ -528,23 +505,15 @@ export class Service {
   /**
    * Удалить атрибут
    * @param docAttributeId ID атрибута
-   * @param token
    * @returns void
    * @throws ApiError
    */
   public static deleteAttribute(
-    token: string,
     docAttributeId: number,
   ): CancelablePromise<void> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/v1/docattributes/{docAttributeId}',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        accept: '*/*',
-        credentials: 'include',
-      },
       path: {
         docAttributeId: docAttributeId,
       },
@@ -553,26 +522,18 @@ export class Service {
 
   /**
    * Изменить атрибут
-   * @param token
    * @param docAttributeId ID атрибута
    * @param requestBody
    * @returns DocAttributeDto OK
    * @throws ApiError
    */
   public static updateAttribute(
-    token: string,
     docAttributeId: number,
     requestBody: DocAttributeUpdateRequestDto,
   ): CancelablePromise<DocAttributeDto> {
     return __request(OpenAPI, {
       method: 'PATCH',
       url: '/v1/docattributes/{docAttributeId}',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        accept: '*/*',
-        credentials: 'include',
-      },
       path: {
         docAttributeId: docAttributeId,
       },
@@ -832,24 +793,16 @@ export class Service {
 
   /**
    * Поиск атрибута по подстроке в имени
-   * @param token
    * @param name Подстрока имени
    * @returns DocAttributeDto OK
    * @throws ApiError
    */
   public static getDocAttributesByNameLike(
-    token: string,
     name: string,
   ): CancelablePromise<Array<DocAttributeDto>> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/docattributes/name/{name}',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        accept: '*/*',
-        credentials: 'include',
-      },
       path: {
         name: name,
       },

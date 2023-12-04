@@ -1,7 +1,9 @@
 import { makeAutoObservable } from 'mobx';
-import { Service } from '@api/generated';
+import { Service, OpenAPI } from '@api/generated';
 import { type DocAttributeDto } from '@api/generated';
 import { currentUserStore } from '.';
+
+OpenAPI.TOKEN = localStorage.getItem('token') ?? currentUserStore.token;
 
 class AttributesStore {
   constructor() {
@@ -13,11 +15,7 @@ class AttributesStore {
 
   async getAttributes(page?: number, sortBy?: string): Promise<void> {
     try {
-      const response = await Service.getAllDocTypes1(
-        currentUserStore.token as string,
-        page,
-        sortBy,
-      );
+      const response = await Service.getAllDocTypes1(page, sortBy);
       this.attributes = response;
     } catch (e) {
       console.log(e);
@@ -26,10 +24,7 @@ class AttributesStore {
 
   async createAttribute(requestBody: DocAttributeDto): Promise<void> {
     try {
-      const res = await Service.createAttribute(
-        requestBody,
-        currentUserStore.token as string,
-      );
+      const res = await Service.createAttribute(requestBody);
       this.attributes?.push(res);
     } catch (e) {
       console.log(e);
@@ -38,42 +33,31 @@ class AttributesStore {
 
   async getAttributeById(id: number): Promise<DocAttributeDto | undefined> {
     try {
-      const res = await Service.getAttribute(
-        currentUserStore.token as string,
-        id,
-      );
+      const res = await Service.getAttribute(id);
       return res;
     } catch (e) {
       console.log(e);
     }
   }
 
-  // ошибка cors завел issue
   async deleteAttributeById(id: number): Promise<void> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-      const res = await Service.deleteAttribute(
-        currentUserStore.token as string,
-        id,
-      );
-      console.log(res);
+      await Service.deleteAttribute(id);
+      this.attributes = this.attributes?.filter((el) => el.id !== id);
     } catch (e) {
       console.log(e);
     }
   }
 
-  // ошибка cors завел issue
   async updateAttributeById(
     id: number,
     newAttribute: DocAttributeDto,
   ): Promise<void> {
     try {
-      const res = await Service.updateAttribute(
-        currentUserStore.token as string,
-        id,
-        newAttribute,
+      const res = await Service.updateAttribute(id, newAttribute);
+      this.attributes = this.attributes?.map((el) =>
+        el.id === res.id ? res : el,
       );
-      console.log(res);
     } catch (e) {
       console.log(e);
     }
@@ -81,10 +65,7 @@ class AttributesStore {
 
   async getDocAttributesByNameSubstring(nameSubstring: string): Promise<void> {
     try {
-      const res = await Service.getDocAttributesByNameLike(
-        currentUserStore.token as string,
-        nameSubstring,
-      );
+      const res = await Service.getDocAttributesByNameLike(nameSubstring);
       this.filteredAttributes = res;
     } catch (e) {
       console.log(e);
