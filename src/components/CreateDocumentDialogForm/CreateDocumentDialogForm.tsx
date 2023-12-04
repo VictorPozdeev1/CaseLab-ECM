@@ -28,10 +28,10 @@ interface CreateDocumentFormProps {
 
 export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
   ({ onSubmit, onCancel }) => {
-    const [age, setAge] = React.useState('');
+    const [docType, setDocType] = React.useState('');
 
-    const handleChange = (event: SelectChangeEvent): void => {
-      setAge(event.target.value);
+    const handleDocTypeChange = (event: SelectChangeEvent): void => {
+      setDocType(event.target.value);
     };
 
     // todo это надо как-то переделать по-человечески
@@ -59,17 +59,14 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
           <Box className={styles.inputGroup}>
             <TextField
               className={styles.documentNameInput}
-              id="outlined-basic"
               label="Название"
               variant="outlined"
             />
             <Select
               className={styles.documentTypeSelect}
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={age}
-              label="Age"
-              onChange={handleChange}
+              value={docType}
+              label="Тип документа"
+              onChange={handleDocTypeChange}
             >
               {docTypesStore.docTypes?.map((t) => (
                 <MenuItem key={t.id} value={t.id}>
