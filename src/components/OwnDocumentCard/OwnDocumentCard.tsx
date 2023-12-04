@@ -4,10 +4,10 @@
 
 import { type FC } from 'react';
 
-import type IDocument from '@entities/IDocument';
+import type { DocumentDto } from '@api/generated';
 
 interface OwnDocumentProps {
-  document: IDocument;
+  document: DocumentDto;
 }
 
 export const OwnDocument: FC<OwnDocumentProps> = ({ document }) => {
