@@ -1,12 +1,12 @@
 import currentUserStore from './currentUser';
 import documentsStore from './documents';
-import atributesStore from './atributes';
+import attributesStore from './attributes';
 import { injectStores } from '@mobx-devtools/tools';
 
 injectStores({
   currentUserStore,
   documentsStore,
-  atributesStore,
+  attributesStore,
 });
 
-export { currentUserStore, documentsStore, atributesStore };
+export { currentUserStore, documentsStore, attributesStore };

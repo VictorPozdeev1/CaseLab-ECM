@@ -1,3 +1,7 @@
+/* Судя по всему, такой компонент будет не нужен, т.к. делаем таблицу на DataGrid.
+   Позже можно удалить, если не понадобится.
+ */
+
 import { type FC } from 'react';
 
 import type { DocumentDto } from '@api/generated';
