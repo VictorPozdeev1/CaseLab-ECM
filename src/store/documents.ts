@@ -13,6 +13,11 @@ class DocumentsStore {
 
   documents?: DocumentDto[];
 
+  // todo сделать норм
+  get ownDocuments(): DocumentDto[] | undefined {
+    return this.documents;
+  }
+
   async getDocuments(): Promise<void> {
     try {
       const creatorId: number = (await Service.getUserInfo()).id;
