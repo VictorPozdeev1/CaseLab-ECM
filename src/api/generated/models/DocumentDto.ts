@@ -8,7 +8,7 @@ import type { DocAttributeValues } from './DocAttributeValues';
  * Документ
  */
 export type DocumentDto = {
-  'ID документа'?: number;
+  id: number;
   /**
    * Название
    */
@@ -20,7 +20,7 @@ export type DocumentDto = {
   /**
    * Дата последнего обновления
    */
-  date: string;
+  date: Date;
   /**
    * ID организации
    */

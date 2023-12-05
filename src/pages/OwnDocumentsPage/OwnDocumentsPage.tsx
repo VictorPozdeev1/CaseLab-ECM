@@ -55,7 +55,7 @@ export const OwnDocumentsPage: FC = observer(() => {
         </Typography>
         <CreateDocumentWidget />
       </Box>
-      <Box>
+      <Box style={{ alignSelf: 'stretch' }}>
         <OwnDocumentsTable documents={documentsStore.ownDocuments} />
       </Box>
     </Container>
