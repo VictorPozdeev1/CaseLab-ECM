@@ -13,16 +13,21 @@ interface OwnDocumentsTableProps {
 
 const columns: GridColDef[] = [
   { field: 'name', headerName: 'Название', width: 300 },
-  { field: 'anotherColumn', headerName: 'Ещё столбец', width: 300 },
+  { field: 'docType', headerName: 'Тип', width: 300 },
+  { field: 'creationDate', headerName: 'Создан', width: 300 },
+  { field: 'status', headerName: 'Статус', width: 300 },
 ];
 
 export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = ({
   documents,
 }) => {
   const documentRows: GridRowsProp =
-    documents?.map((d) =>
-      // <OwnDocument key={d.id} document={d}></OwnDocument>
-      ({ ...d, anotherColumn: d.name + ' status' }),
-    ) ?? [];
+    documents?.map((d) => ({
+      id: d.id,
+      name: d.name,
+      docType: d.docTypeName,
+      creationDate: d.date,
+      status: d.finalDocStatus,
+    })) ?? [];
   return <DataGrid rows={documentRows} columns={columns} />;
 };
