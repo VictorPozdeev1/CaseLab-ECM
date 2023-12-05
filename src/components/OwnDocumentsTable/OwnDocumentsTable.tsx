@@ -10,6 +10,27 @@ import styles from './OwnDocumentsTable.module.css';
 import { Chip } from '@mui/material';
 
 const chips = {
+  NEW: (
+    <Chip
+      label="Создан"
+      color="default"
+      icon={
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="24"
+          viewBox="0 0 25 24"
+          fill="none"
+        >
+          <path
+            d="M14.5587 9.02L15.4787 9.94L6.41875 19H5.49875V18.08L14.5587 9.02ZM18.1587 3C17.9087 3 17.6487 3.1 17.4587 3.29L15.6287 5.12L19.3787 8.87L21.2087 7.04C21.5987 6.65 21.5987 6.02 21.2087 5.63L18.8687 3.29C18.6687 3.09 18.4187 3 18.1587 3ZM14.5587 6.19L3.49875 17.25V21H7.24875L18.3087 9.94L14.5587 6.19Z"
+            fill="#0F0F0F"
+            fillOpacity="0.941176"
+          />
+        </svg>
+      }
+    />
+  ),
   WAITING_FOR_APPROVE: (
     <Chip
       label="На рассмотрении"
@@ -30,6 +51,9 @@ const chips = {
       }
     />
   ),
+  APPROVED: null,
+  REJECTED: null,
+  CORRECTING: null,
 };
 
 /*
