@@ -20,7 +20,7 @@ export type DocumentDto = {
   /**
    * Дата последнего обновления
    */
-  date: string;
+  date: Date;
   /**
    * ID организации
    */

@@ -27,7 +27,10 @@ class DocumentsStore {
         undefined,
         creatorId,
       );
-      this.documents = response;
+      this.documents = response.map((d) => ({
+        ...d,
+        date: new Date(d.date as unknown as string),
+      }));
     } catch (e) {
       console.log(e);
     }
