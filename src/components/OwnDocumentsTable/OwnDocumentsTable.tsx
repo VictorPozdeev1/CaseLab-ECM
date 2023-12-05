@@ -12,10 +12,10 @@ interface OwnDocumentsTableProps {
 }
 
 const columns: GridColDef[] = [
-  { field: 'name', headerName: 'Название', width: 300 },
-  { field: 'docType', headerName: 'Тип', width: 300 },
-  { field: 'creationDate', headerName: 'Создан', width: 300 },
-  { field: 'status', headerName: 'Статус', width: 300 },
+  { field: 'name', headerName: 'Название', flex: 4 },
+  { field: 'docType', headerName: 'Тип', flex: 2 },
+  { field: 'creationDate', headerName: 'Создан', flex: 2 },
+  { field: 'status', headerName: 'Статус', flex: 2 },
 ];
 
 export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = ({
