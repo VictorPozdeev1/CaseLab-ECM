@@ -39,16 +39,17 @@ class DocumentsStore {
   async createDocument(
     docTypeId: number,
     docAttr: DocAttributeValueCreateDto[],
-  ): Promise<DocumentDto | Error> {
+  ): Promise<void> {
     try {
       if (currentUser.data !== undefined) {
-        return await Service.createDocument({
+        const res = await Service.createDocument({
           idOrganization: currentUser.data.organizationId,
           docTypId: docTypeId,
           docAttributeValueCreateDtos: docAttr,
         });
+        this.documents?.push(res);
       } else {
-        return new Error('data is undefined');
+        console.log('data is undefined');
       }
     } catch (e) {
       console.log(e);

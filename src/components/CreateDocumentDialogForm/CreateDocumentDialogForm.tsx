@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { FC } from 'react';
 import {
   Dialog,
@@ -18,7 +18,7 @@ import {
 
 import styles from './CreateDocumentDialogForm.module.css';
 
-import { attributesStore, docTypesStore } from '@store/index';
+import { attributesStore, docTypesStore, documentsStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
 import {
   DataGrid,
@@ -31,14 +31,17 @@ import { DocAttributeDto } from '@api/generated/models/DocAttributeDto';
 import { toJS } from 'mobx';
 interface CreateDocumentFormProps {
   onSubmit: (
-    attributeValues: Array<{ attributeId: number; attributeValue: string }>,
+    attributeValues: Array<{ attributeId: number; value: string }>,
   ) => void;
   onCancel: () => void;
 }
 
 export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
   ({ onSubmit, onCancel }) => {
-    const [docType, setDocType] = React.useState('');
+    const [docType, setDocType] = useState('');
+    const newDocAtrRef = useRef<
+      Array<{ attributeId: number; value: string }> | []
+    >([]);
 
     const handleDocTypeChange = (event: SelectChangeEvent): void => {
       setDocType(event.target.value);
@@ -46,7 +49,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
 
     // todo это надо как-то переделать по-человечески
     useEffect(() => {
-      void attributesStore.getAttributes();
+      // void attributesStore.getAttributes();
       void docTypesStore.getAllDocTypes();
     }, []);
 
@@ -72,7 +75,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
     ];
     const rows:
       | Array<{
-          // id: number;
+          id?: number;
           name?: string;
           type?: string;
           value?: string;
@@ -136,7 +139,10 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               {/* <GridToolbarQuickFilter> </GridToolbarQuickFilter> */}
               <DataGrid
                 processRowUpdate={(e) =>
-                  rows?.map((el) => (el.name === e.name ? e : el))
+                  (newDocAtrRef.current = [
+                    ...newDocAtrRef.current,
+                    { attributeId: e.id, value: e.value },
+                  ])
                 }
                 rows={rows as DocAttributeDto[]}
                 columns={columns}
@@ -158,10 +164,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               onClick={(e) => {
                 console.log(rows);
                 console.log('ok clicked');
-                // onSubmit([
-                //   { attributeId: 1, attributeValue: 'a1' },
-                //   { attributeId: 2, attributeValue: 'dsjfh' },
-                // ]);
+                onSubmit(newDocAtrRef.current);
               }}
             >
               Создать

@@ -3,8 +3,11 @@ import { useState, type FC } from 'react';
 // import { currentUserStore } from '@store/index';
 import { CreateDocumentButton } from '@components/CreateDocumentButton/CreateDocumentButton';
 import { CreateDocumentDialogForm } from '@components/CreateDocumentDialogForm/CreateDocumentDialogForm';
+import { documentsStore } from '@store/index';
+import { type DocAttributeValueCreateDto } from '@api/generated';
+import { observer } from 'mobx-react-lite';
 
-export const CreateDocumentWidget: FC = () => {
+export const CreateDocumentWidget: FC = observer(() => {
   const [isMinimized, setIsMinimized] = useState<boolean>(true);
   if (isMinimized)
     return (
@@ -20,12 +23,17 @@ export const CreateDocumentWidget: FC = () => {
         setIsMinimized(true);
       }}
       onSubmit={(attributeValues) => {
-        console.log(
-          'Тут будет вызываться метод сохранения документа',
-          attributeValues,
-        );
+        void documentsStore
+          .createDocument(
+            1,
+            attributeValues as unknown as DocAttributeValueCreateDto[],
+          )
+          .then(async () => {
+            await documentsStore.getDocuments();
+          });
+
         setIsMinimized(true); // После ответа от сервера
       }}
     />
   );
-};
+});
