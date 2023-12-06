@@ -3,81 +3,46 @@ import { type FC } from 'react';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import logo from './logo.png';
+// import rosatomIcon from '@assets/rosatomLogo.svg';
+import Logo from '@components/Logo/Logo';
+import { AppBar, Container } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export const Header: FC = () => {
   return (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'flex',
-        padding: 'var(--paddings-pad-2, 16px)',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: '10px',
-        alignSelf: 'stretch',
-        background: 'var(--colors-grey-highlight, #F7F7F7)',
-        justifyContent: 'center',
-        fontWeight: '500',
-      }}
+    <AppBar
+      elevation={0}
+      color="transparent"
+      position="relative"
+      sx={{ padding: 2 }}
     >
-      <Box
+      <Container
+        maxWidth={'md'}
+        disableGutters
         sx={{
-          width: '90%',
           display: 'flex',
-          padding: 'var(--none, 0px)',
           justifyContent: 'space-between',
           alignItems: 'center',
-          alignSelf: 'stretch',
-          borderRadius: 'var(--none, 0px)',
         }}
       >
-        <img src={logo} alt="Логотип" width="150px" />
-        <Typography
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            color: 'var(--text-primary, rgba(0, 0, 0, 0.87))',
-            fontFeatureSettings: "'clig' off, 'liga' off",
-            fontFamily: 'Roboto',
-            fontSize: '24px',
-            fontStyle: 'normal',
-            fontWeight: 500,
-            lineHeight: '133.4%',
-          }}
-          variant="h5"
-        >
+        <Link to={'/'} style={{ color: 'inherit', textDecoration: 'inherit' }}>
+          <Logo hasText={true} size={'small'} />
+        </Link>
+        <Typography variant="h5" fontWeight={'bold'}>
           Название Организации
         </Typography>
         <Box
           sx={{
             display: 'flex',
-            padding: 'var(--none, 0px)',
             alignItems: 'center',
-            gap: 'var(--paddings-pad-1, 8px)',
-            borderRadius: 'var(--none, 0px)',
+            gap: 1,
           }}
         >
-          <Avatar alt="Иванов И. И." src="/path/to/avatar.jpg" />
-          <Typography
-            variant="h6"
-            sx={{
-              marginRight: '30px',
-              color: 'var(--text-primary, rgba(0, 0, 0, 0.87))',
-              fontFeatureSettings: "'clig' off, 'liga' off",
-              fontFamily: 'Roboto',
-              fontSize: '24px',
-              fontStyle: 'normal',
-              fontWeight: 500,
-              lineHeight: '133.4%',
-            }}
-          >
-            Иванов И. И.
-          </Typography>
+          <Avatar sizes="40px" alt="Иванов И. И." src="/path/to/avatar.jpg" />
+          <Typography variant="h6">Иванов И. И.</Typography>
           <LogoutButton />
         </Box>
-      </Box>
-    </Box>
+      </Container>
+    </AppBar>
   );
 };
