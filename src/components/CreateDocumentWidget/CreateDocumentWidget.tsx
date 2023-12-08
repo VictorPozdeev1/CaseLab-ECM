@@ -22,16 +22,11 @@ export const CreateDocumentWidget: FC = observer(() => {
       onCancel={() => {
         setIsMinimized(true);
       }}
-      onSubmit={(attributeValues) => {
-        void documentsStore
-          .createDocument(
-            1,
-            attributeValues as unknown as DocAttributeValueCreateDto[],
-          )
-          .then(async () => {
-            await documentsStore.getDocuments();
-          });
-
+      onSubmit={(
+        docTypeId: number,
+        attributeValues: DocAttributeValueCreateDto[],
+      ) => {
+        void documentsStore.createDocument(docTypeId, attributeValues);
         setIsMinimized(true); // После ответа от сервера
       }}
     />

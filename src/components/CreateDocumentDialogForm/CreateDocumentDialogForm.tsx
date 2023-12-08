@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useEffect, useState, useRef } from 'react';
 import type { FC } from 'react';
 import {
@@ -18,19 +17,14 @@ import {
 
 import styles from './CreateDocumentDialogForm.module.css';
 
-import { attributesStore, docTypesStore, documentsStore } from '@store/index';
+import { docTypesStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
-import {
-  DataGrid,
-  GridToolbarQuickFilter,
-  // DataGrid,
-  type GridColDef,
-  type GridValueGetterParams,
-} from '@mui/x-data-grid';
-import { DocAttributeDto } from '@api/generated/models/DocAttributeDto';
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
+import { type DocAttributeDto } from '@api/generated/models/DocAttributeDto';
 import { toJS } from 'mobx';
 interface CreateDocumentFormProps {
   onSubmit: (
+    docTypeId: number,
     attributeValues: Array<{ attributeId: number; value: string }>,
   ) => void;
   onCancel: () => void;
@@ -38,22 +32,21 @@ interface CreateDocumentFormProps {
 
 export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
   ({ onSubmit, onCancel }) => {
-    const [docType, setDocType] = useState('');
-    const newDocAtrRef = useRef<
+    const [docTypeId, setDocTypeId] = useState<number>(0);
+    const attributesRef = useRef<
       Array<{ attributeId: number; value: string }> | []
     >([]);
 
     const handleDocTypeChange = (event: SelectChangeEvent): void => {
-      setDocType(event.target.value);
+      setDocTypeId(+event.target.value);
     };
 
     // todo это надо как-то переделать по-человечески
     useEffect(() => {
-      // void attributesStore.getAttributes();
       void docTypesStore.getAllDocTypes();
     }, []);
 
-    const columns: GridColDef[] = [
+    const formData: GridColDef[] = [
       {
         field: 'name',
         headerName: 'Название',
@@ -73,19 +66,12 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
         editable: true,
       },
     ];
-    const rows:
-      | Array<{
-          id?: number;
-          name?: string;
-          type?: string;
-          value?: string;
-        }>
-      | undefined =
-      docType === ''
+    const rows: DocAttributeDto[] | undefined =
+      docTypeId === 0
         ? []
-        : toJS(docTypesStore.docTypes)
+        : toJS(docTypesStore.docTypes) != null
           ? toJS(docTypesStore.docTypes)
-              ?.filter((el) => el.name === docType)[0]
+              ?.filter((el) => el.id === docTypeId)[0]
               .attributes?.map((a) => ({
                 id: a.id,
                 name: a.name,
@@ -93,8 +79,6 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
                 value: '',
               }))
           : [];
-
-    console.log(rows);
 
     return (
       <Dialog
@@ -121,12 +105,12 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               />
               <Select
                 className={styles.documentTypeSelect}
-                value={docType}
+                value={docTypeId !== 0 ? docTypeId?.toString() : ''}
                 label="Тип документа"
                 onChange={handleDocTypeChange}
               >
                 {docTypesStore.docTypes?.map((t) => (
-                  <MenuItem key={t.id} value={t.name}>
+                  <MenuItem key={t.id} value={t.id}>
                     {t.name}
                   </MenuItem>
                 ))}
@@ -139,20 +123,19 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               {/* <GridToolbarQuickFilter> </GridToolbarQuickFilter> */}
               <DataGrid
                 processRowUpdate={(e) =>
-                  (newDocAtrRef.current = [
-                    ...newDocAtrRef.current,
+                  (attributesRef.current = [
+                    ...attributesRef.current,
                     { attributeId: e.id, value: e.value },
                   ])
                 }
                 rows={rows as DocAttributeDto[]}
-                columns={columns}
+                columns={formData}
               />
             </Box>
           </DialogContent>
           <DialogActions>
             <Button
               onClick={() => {
-                console.log('cancel clicked');
                 onCancel();
               }}
             >
@@ -160,11 +143,9 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
             </Button>
             <Button
               variant="contained"
-              disabled={!docType}
+              disabled={docTypeId === 0}
               onClick={(e) => {
-                console.log(rows);
-                console.log('ok clicked');
-                onSubmit(newDocAtrRef.current);
+                onSubmit(docTypeId, attributesRef.current);
               }}
             >
               Создать

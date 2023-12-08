@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import {
   type DocumentDto,
   Service,
@@ -27,12 +27,15 @@ class DocumentsStore {
         undefined,
         creatorId,
       );
-      this.documents = response.map((d) => ({
-        ...d,
-        date: new Date(d.date as unknown as string),
-      }));
+      runInAction(() => {
+        this.documents = response.map((d) => ({
+          ...d,
+          date: new Date(d.date as unknown as string),
+        }));
+      });
     } catch (e) {
       console.log(e);
+      throw e;
     }
   }
 
@@ -47,9 +50,11 @@ class DocumentsStore {
           docTypId: docTypeId,
           docAttributeValueCreateDtos: docAttr,
         });
-        this.documents?.push(res);
+        runInAction(() => {
+          this.documents?.push(res);
+        });
       } else {
-        console.log('data is undefined');
+        throw new Error('data is undefined');
       }
     } catch (e) {
       console.log(e);

@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import {
   Service,
   type DocTypeDto,
@@ -16,7 +16,9 @@ class DocTypes {
   async getAllDocTypes(page?: number, sortBy?: string): Promise<void> {
     try {
       const response = await Service.getAllDocTypes(page, sortBy);
-      this.docTypes = response;
+      runInAction(() => {
+        this.docTypes = response;
+      });
     } catch (e) {
       console.log(e);
     }
