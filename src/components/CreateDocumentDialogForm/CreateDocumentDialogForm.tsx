@@ -33,7 +33,7 @@ interface CreateDocumentFormProps {
 export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
   ({ onSubmit, onCancel }) => {
     const [docTypeId, setDocTypeId] = useState<number>(0);
-    const attributesRef = useRef<
+    const attributeValuesRef = useRef<
       Array<{ attributeId: number; value: string }> | []
     >([]);
 
@@ -46,7 +46,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
       void docTypesStore.getAllDocTypes();
     }, []);
 
-    const formData: GridColDef[] = [
+    const columns: GridColDef[] = [
       {
         field: 'name',
         headerName: 'Название',
@@ -123,13 +123,13 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               {/* <GridToolbarQuickFilter> </GridToolbarQuickFilter> */}
               <DataGrid
                 processRowUpdate={(e) =>
-                  (attributesRef.current = [
-                    ...attributesRef.current,
+                  (attributeValuesRef.current = [
+                    ...attributeValuesRef.current,
                     { attributeId: e.id, value: e.value },
                   ])
                 }
                 rows={rows as DocAttributeDto[]}
-                columns={formData}
+                columns={columns}
               />
             </Box>
           </DialogContent>
@@ -145,7 +145,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               variant="contained"
               disabled={docTypeId === 0}
               onClick={(e) => {
-                onSubmit(docTypeId, attributesRef.current);
+                onSubmit(docTypeId, attributeValuesRef.current);
               }}
             >
               Создать
