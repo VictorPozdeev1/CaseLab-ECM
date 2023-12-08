@@ -54,7 +54,10 @@ class DocumentsStore {
           this.documents?.push(res);
         });
       } else {
-        throw new Error('data is undefined');
+        // todo: Разобраться, как сделать, чтобы не писать эту проверку во всех методах. Декоратор использовать, мб?
+        throw new Error(
+          'currentUser.data is undefined. Probably, user is not logged in.',
+        );
       }
     } catch (e) {
       console.log(e);
