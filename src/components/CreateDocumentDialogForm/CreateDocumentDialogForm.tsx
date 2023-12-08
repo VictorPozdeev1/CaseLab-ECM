@@ -22,19 +22,14 @@ import { observer } from 'mobx-react-lite';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 
 interface CreateDocumentFormProps {
-  onSubmit: (
-    docTypeId: number,
-    attributeValues: Array<{ attributeId: number; value: string }>,
-  ) => void;
+  onSubmit: (docTypeId: number, attributeValues: Map<number, string>) => void;
   onCancel: () => void;
 }
 
 export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
   ({ onSubmit, onCancel }) => {
     const [docTypeId, setDocTypeId] = useState<number>(0);
-    const attributeValuesRef = useRef<
-      Array<{ attributeId: number; value: string }> | []
-    >([]);
+    const attributeValuesRef = useRef<Map<number, string>>(new Map());
 
     const handleDocTypeChange = (event: SelectChangeEvent): void => {
       setDocTypeId(+event.target.value);
@@ -118,12 +113,9 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               </Typography>
               {/* <GridToolbarQuickFilter> </GridToolbarQuickFilter> */}
               <DataGrid
-                processRowUpdate={(e) => {
-                  attributeValuesRef.current = [
-                    ...attributeValuesRef.current,
-                    { attributeId: e.id, value: e.value },
-                  ];
-                  return e;
+                processRowUpdate={(cell) => {
+                  attributeValuesRef.current.set(cell.id, cell.value);
+                  return cell;
                 }}
                 rows={rows}
                 columns={columns}

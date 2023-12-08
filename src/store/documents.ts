@@ -1,9 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import {
-  type DocumentDto,
-  Service,
-  type DocAttributeValueCreateDto,
-} from '@api/generated';
+import { type DocumentDto, Service } from '@api/generated';
 import currentUser from './currentUser';
 
 class DocumentsStore {
@@ -41,14 +37,17 @@ class DocumentsStore {
 
   async createDocument(
     docTypeId: number,
-    docAttr: DocAttributeValueCreateDto[],
+    attributeValues: Map<number, string>,
   ): Promise<void> {
     try {
       if (currentUser.data !== undefined) {
         const res = await Service.createDocument({
           idOrganization: currentUser.data.organizationId,
           docTypId: docTypeId,
-          docAttributeValueCreateDtos: docAttr,
+          docAttributeValueCreateDtos: Array.from(
+            attributeValues,
+            ([attributeId, value]) => ({ attributeId, value }),
+          ),
         });
         runInAction(() => {
           this.documents?.push(res);
