@@ -1,9 +1,5 @@
-import { makeAutoObservable } from 'mobx';
-import {
-  type DocumentDto,
-  Service,
-  type DocAttributeValueCreateDto,
-} from '@api/generated';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { type DocumentDto, Service } from '@api/generated';
 import currentUser from './currentUser';
 
 class DocumentsStore {
@@ -27,28 +23,40 @@ class DocumentsStore {
         undefined,
         creatorId,
       );
-      this.documents = response.map((d) => ({
-        ...d,
-        date: new Date(d.date as unknown as string),
-      }));
+      runInAction(() => {
+        this.documents = response.map((d) => ({
+          ...d,
+          date: new Date(d.date as unknown as string),
+        }));
+      });
     } catch (e) {
       console.log(e);
+      throw e;
     }
   }
 
   async createDocument(
     docTypeId: number,
-    docAttr: DocAttributeValueCreateDto[],
-  ): Promise<DocumentDto | Error> {
+    attributeValues: Map<number, string>,
+  ): Promise<void> {
     try {
       if (currentUser.data !== undefined) {
-        return await Service.createDocument({
+        const res = await Service.createDocument({
           idOrganization: currentUser.data.organizationId,
           docTypId: docTypeId,
-          docAttributeValueCreateDtos: docAttr,
+          docAttributeValueCreateDtos: Array.from(
+            attributeValues,
+            ([attributeId, value]) => ({ attributeId, value }),
+          ),
+        });
+        runInAction(() => {
+          this.documents?.push(res);
         });
       } else {
-        return new Error('data is undefined');
+        // todo: Разобраться, как сделать, чтобы не писать эту проверку во всех методах. Декоратор использовать, мб?
+        throw new Error(
+          'currentUser.data is undefined. Probably, user is not logged in.',
+        );
       }
     } catch (e) {
       console.log(e);

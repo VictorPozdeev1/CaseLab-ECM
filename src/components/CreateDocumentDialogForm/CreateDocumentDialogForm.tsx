@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { FC } from 'react';
 import {
   Dialog,
+  Paper,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -11,34 +12,64 @@ import {
   Select,
   MenuItem,
   type SelectChangeEvent,
-  //  Typography,
+  Typography,
 } from '@mui/material';
 
 import styles from './CreateDocumentDialogForm.module.css';
 
-import { attributesStore, docTypesStore } from '@store/index';
+import { docTypesStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 
 interface CreateDocumentFormProps {
-  onSubmit: (
-    attributeValues: Array<{ attributeId: number; attributeValue: string }>,
-  ) => void;
+  onSubmit: (docTypeId: number, attributeValues: Map<number, string>) => void;
   onCancel: () => void;
 }
 
 export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
   ({ onSubmit, onCancel }) => {
-    const [docType, setDocType] = React.useState('');
+    const [docTypeId, setDocTypeId] = useState<number>(0);
+    const attributeValuesRef = useRef<Map<number, string>>(new Map());
 
     const handleDocTypeChange = (event: SelectChangeEvent): void => {
-      setDocType(event.target.value);
+      setDocTypeId(+event.target.value);
     };
 
     // todo это надо как-то переделать по-человечески
     useEffect(() => {
-      void attributesStore.getAttributes();
       void docTypesStore.getAllDocTypes();
     }, []);
+
+    const columns: GridColDef[] = [
+      {
+        field: 'name',
+        headerName: 'Название',
+        width: 200,
+        editable: false,
+      },
+      {
+        field: 'type',
+        headerName: 'Тип',
+        width: 200,
+        editable: false,
+      },
+      {
+        field: 'value',
+        headerName: 'Значение',
+        width: 200,
+        editable: true,
+      },
+    ];
+
+    const rows =
+      docTypesStore.docTypes
+        ?.find((dt) => dt.id === docTypeId)
+        ?.attributes?.map((a) => ({
+          id: a.id,
+          name: a.name,
+          type: a.type,
+          value: '',
+        })) ?? [];
 
     return (
       <Dialog
@@ -52,56 +83,64 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
           );
         }}
       >
-        <DialogTitle variant="h6" className={styles.title}>
-          Создать документ
-        </DialogTitle>
-        <DialogContent sx={{ alignSelf: 'stretch' }}>
-          <Box className={styles.inputGroup}>
-            <TextField
-              className={styles.documentNameInput}
-              label="Название"
-              variant="outlined"
-            />
-            <Select
-              className={styles.documentTypeSelect}
-              value={docType}
-              label="Тип документа"
-              onChange={handleDocTypeChange}
+        <Paper sx={{ width: '100%' }}>
+          <DialogTitle variant="h6" className={styles.title}>
+            Создать документ
+          </DialogTitle>
+          <DialogContent sx={{ alignSelf: 'stretch' }}>
+            <Box className={styles.inputGroup}>
+              <TextField
+                className={styles.documentNameInput}
+                label="Название"
+                variant="outlined"
+              />
+              <Select
+                className={styles.documentTypeSelect}
+                value={docTypeId !== 0 ? docTypeId?.toString() : ''}
+                label="Тип документа"
+                onChange={handleDocTypeChange}
+              >
+                {docTypesStore.docTypes?.map((t) => (
+                  <MenuItem key={t.id} value={t.id}>
+                    {t.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Box>
+            <Box>
+              <Typography variant="h6" gutterBottom={false}>
+                Атрибуты
+              </Typography>
+              {/* <GridToolbarQuickFilter> </GridToolbarQuickFilter> */}
+              <DataGrid
+                processRowUpdate={(cell) => {
+                  attributeValuesRef.current.set(cell.id, cell.value);
+                  return cell;
+                }}
+                rows={rows}
+                columns={columns}
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                onCancel();
+              }}
             >
-              {docTypesStore.docTypes?.map((t) => (
-                <MenuItem key={t.id} value={t.id}>
-                  {t.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </Box>
-          <Box>
-            {attributesStore.attributes?.map((a) => (
-              <div key={a.id}>{a.name}</div>
-            ))}
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              console.log('cancel clicked');
-              onCancel();
-            }}
-          >
-            Отменить
-          </Button>
-          <Button
-            onClick={() => {
-              console.log('ok clicked');
-              onSubmit([
-                { attributeId: 1, attributeValue: 'a1' },
-                { attributeId: 2, attributeValue: 'dsjfh' },
-              ]);
-            }}
-          >
-            Создать
-          </Button>
-        </DialogActions>
+              Отменить
+            </Button>
+            <Button
+              variant="contained"
+              disabled={docTypeId === 0}
+              onClick={(e) => {
+                onSubmit(docTypeId, attributeValuesRef.current);
+              }}
+            >
+              Создать
+            </Button>
+          </DialogActions>
+        </Paper>
       </Dialog>
     );
   },
