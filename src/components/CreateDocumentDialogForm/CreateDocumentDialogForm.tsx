@@ -20,7 +20,6 @@ import styles from './CreateDocumentDialogForm.module.css';
 import { docTypesStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
-import { type DocAttributeDto } from '@api/generated/models/DocAttributeDto';
 import { toJS } from 'mobx';
 interface CreateDocumentFormProps {
   onSubmit: (
@@ -66,7 +65,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
         editable: true,
       },
     ];
-    const rows: DocAttributeDto[] | undefined =
+    const rows =
       docTypeId === 0
         ? []
         : toJS(docTypesStore.docTypes) != null
@@ -77,7 +76,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
                 name: a.name,
                 type: a.type,
                 value: '',
-              }))
+              })) ?? []
           : [];
 
     return (
@@ -128,7 +127,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
                     { attributeId: e.id, value: e.value },
                   ])
                 }
-                rows={rows as DocAttributeDto[]}
+                rows={rows}
                 columns={columns}
               />
             </Box>
