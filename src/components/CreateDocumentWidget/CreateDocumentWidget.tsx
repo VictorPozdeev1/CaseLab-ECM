@@ -4,7 +4,6 @@ import { useState, type FC } from 'react';
 import { CreateDocumentButton } from '@components/CreateDocumentButton/CreateDocumentButton';
 import { CreateDocumentDialogForm } from '@components/CreateDocumentDialogForm/CreateDocumentDialogForm';
 import { documentsStore } from '@store/index';
-import { type DocAttributeValueCreateDto } from '@api/generated';
 import { observer } from 'mobx-react-lite';
 
 export const CreateDocumentWidget: FC = observer(() => {
@@ -22,10 +21,7 @@ export const CreateDocumentWidget: FC = observer(() => {
       onCancel={() => {
         setIsMinimized(true);
       }}
-      onSubmit={(
-        docTypeId: number,
-        attributeValues: DocAttributeValueCreateDto[],
-      ) => {
+      onSubmit={(docTypeId, attributeValues) => {
         void documentsStore.createDocument(docTypeId, attributeValues);
         setIsMinimized(true); // После ответа от сервера
       }}
