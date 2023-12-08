@@ -118,12 +118,13 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               </Typography>
               {/* <GridToolbarQuickFilter> </GridToolbarQuickFilter> */}
               <DataGrid
-                processRowUpdate={(e) =>
-                  (attributeValuesRef.current = [
+                processRowUpdate={(e) => {
+                  attributeValuesRef.current = [
                     ...attributeValuesRef.current,
                     { attributeId: e.id, value: e.value },
-                  ])
-                }
+                  ];
+                  return e;
+                }}
                 rows={rows}
                 columns={columns}
               />
