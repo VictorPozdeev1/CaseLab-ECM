@@ -8,6 +8,9 @@
             "@app/*": [
                 "app/*"
             ],
+            "@style/*": [
+                "style/*"
+            ],
             "@components/*": [
                 "components/*"
             ],
