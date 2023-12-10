@@ -4,7 +4,14 @@ import CaselabEcmApi from '@api/CaselabEcmApi';
 import type IUserLogin from '@entities/IUserLogin';
 import { OpenAPI } from '@api/generated';
 
+// import {UserReplyDto} from '@api/generated';
+
 const { loginService } = CaselabEcmApi;
+
+// type Session = {
+//   token: string;
+//   currentUserData: UserCreateDto;
+// };
 
 const TOKEN_ITEM_NAME = 'token';
 const USER_DATA = 'userData';

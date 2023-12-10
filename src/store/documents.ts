@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { type DocumentDto, Service } from '@api/generated';
-import currentUser from './currentUser';
+import currentUser from './session';
 
 class DocumentsStore {
   constructor() {
