@@ -50,7 +50,7 @@ class DocumentsStore {
           ),
         });
         runInAction(() => {
-          this.documents?.push(res);
+          this.documents?.push({ ...res, date: new Date(res.date) });
         });
       } else {
         // todo: Разобраться, как сделать, чтобы не писать эту проверку во всех методах. Декоратор использовать, мб?

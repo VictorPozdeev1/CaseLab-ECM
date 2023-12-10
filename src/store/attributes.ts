@@ -1,12 +1,15 @@
 import { makeAutoObservable } from 'mobx';
 import { Service } from '@api/generated';
 import { type DocAttributeDto } from '@api/generated';
+import { type DocAttributeDtoWithSelected } from '@api/generated/models/DocAttributeDtoWithSelected';
 class AttributesStore {
   constructor() {
     makeAutoObservable(this);
   }
 
   attributes?: DocAttributeDto[];
+  attributesWithSelectProp?: DocAttributeDtoWithSelected[];
+
   filteredAttributes?: DocAttributeDto[];
 
   async getAttributes(page?: number, sortBy?: string): Promise<void> {
@@ -17,12 +20,12 @@ class AttributesStore {
       console.log(e);
     }
   }
-  // todo перзапросить страницу вместо push(res)
 
   async createAttribute(requestBody: DocAttributeDto): Promise<void> {
     try {
-      const res = await Service.createAttribute(requestBody);
-      this.attributes?.push(res);
+      await Service.createAttribute(requestBody);
+      // this.attributes?.push(res);
+      void this.getAttributes();
     } catch (e) {
       console.log(e);
     }

@@ -8,6 +8,7 @@ import { Page1 } from '@pages/Page1/Page1';
 import { AdminPage } from '@pages/AdminPage/AdminPage';
 import { ForbiddenPage } from '@pages/ForbiddenPage/ForbiddenPage';
 import { OwnDocumentsPage } from '@pages/OwnDocumentsPage/OwnDocumentsPage';
+import { AgreementsTypesPage } from '@pages/AgreementsTypesPage/AgreementsTypesPage';
 
 const AppRoutes: FC = () => {
   return (
@@ -40,6 +41,14 @@ const AppRoutes: FC = () => {
           element={
             <RequireRoleCheck role="SYSTEM_ADMIN">
               <AdminPage />
+            </RequireRoleCheck>
+          }
+        />
+        <Route
+          path="agreementstypes"
+          element={
+            <RequireRoleCheck role="SYSTEM_ADMIN">
+              <AgreementsTypesPage />
             </RequireRoleCheck>
           }
         />

@@ -104,8 +104,8 @@ export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = observer(
         id: d.id,
         name: d.name,
         docType: d.docTypeName,
-        creationDate: new Date(d.date),
-        // creationDate: d.date,
+        // creationDate: new Date(d.date),
+        creationDate: d.date,
         status: d.finalDocStatus,
       })) ?? [];
     return (
