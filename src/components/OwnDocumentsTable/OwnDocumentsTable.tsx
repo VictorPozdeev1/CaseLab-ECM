@@ -8,6 +8,7 @@ import {
 import { type DocumentDto } from '@api/generated';
 import styles from './OwnDocumentsTable.module.css';
 import { Chip } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 
 const chips = {
   NEW: (
@@ -96,22 +97,22 @@ const columns: GridColDef[] = [
   },
 ];
 
-export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = ({
-  documents,
-}) => {
-  const documentRows: GridRowsProp =
-    documents?.map((d) => ({
-      id: d.id,
-      name: d.name,
-      docType: d.docTypeName,
-      creationDate: d.date,
-      status: d.finalDocStatus,
-    })) ?? [];
-  return (
-    <DataGrid
-      rows={documentRows}
-      columns={columns}
-      getRowClassName={(_) => styles.tableRowText}
-    />
-  );
-};
+export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = observer(
+  ({ documents }) => {
+    const documentRows: GridRowsProp =
+      documents?.map((d) => ({
+        id: d.id,
+        name: d.name,
+        docType: d.docTypeName,
+        creationDate: d.date,
+        status: d.finalDocStatus,
+      })) ?? [];
+    return (
+      <DataGrid
+        rows={documentRows}
+        columns={columns}
+        getRowClassName={(_) => styles.tableRowText}
+      />
+    );
+  },
+);
