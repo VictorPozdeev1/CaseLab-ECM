@@ -1,12 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-
-import CaselabEcmApi from '@api/CaselabEcmApi';
-import type IUserLogin from '@entities/IUserLogin';
-import { OpenAPI } from '@api/generated';
-
-// import {UserReplyDto} from '@api/generated';
-
-const { loginService } = CaselabEcmApi;
+import { OpenAPI, Service } from '@api/generated';
+import { type CurrentUserData } from '@api/generated/models/UserLoginResponseDto';
 
 // type Session = {
 //   token: string;
@@ -19,6 +13,7 @@ const rolesMapping = {
   ADMIN: ['COMPANY_ADMIN', 'SYSTEM_ADMIN'],
   USER: ['USER'],
 };
+const REMEMBER_ME = true;
 
 class CurrentUser {
   constructor() {
@@ -28,7 +23,7 @@ class CurrentUser {
 
   token?: string;
   isAuth: boolean = false; // todo Сделать computed value
-  data?: IUserLogin;
+  data?: CurrentUserData;
   get roles(): string[] {
     return rolesMapping[this.data?.role as keyof typeof rolesMapping] ?? [];
   }
@@ -45,9 +40,11 @@ class CurrentUser {
 
   async login(email: string, password: string): Promise<boolean> {
     try {
-      const response = await loginService(email, password);
-      localStorage.setItem(TOKEN_ITEM_NAME, response.token);
-      localStorage.setItem(USER_DATA, JSON.stringify(response.user));
+      const response = await Service.login({ email, password });
+      if (REMEMBER_ME) {
+        localStorage.setItem(TOKEN_ITEM_NAME, response.token);
+        localStorage.setItem(USER_DATA, JSON.stringify(response.user));
+      }
       runInAction(() => {
         this.refreshState();
       });
