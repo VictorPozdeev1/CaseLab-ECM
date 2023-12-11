@@ -8,11 +8,11 @@
             "@app/*": [
                 "app/*"
             ],
-            "@style/*": [
-                "style/*"
+            "@features/*": [
+                "features/*"
             ],
-            "@components/*": [
-                "components/*"
+            "@shared/*": [
+                "shared/*"
             ],
             "@entities/*": [
                 "entities/*"

@@ -1,0 +1,1 @@
+export { OwnDocumentsTable } from './OwnDocumentsTable';

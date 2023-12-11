@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './AppRoutes';
 import { ThemeProvider } from '@mui/material/styles';
-import { appTheme } from '@style/theme';
+import { appTheme } from '@shared/themes/theme';
 
 const App: FC = () => {
   return (

@@ -1,8 +1,8 @@
 import { useState, type FC } from 'react';
 
 // import { currentUserStore } from '@store/index';
-import { CreateDocumentButton } from '@components/CreateDocumentButton/CreateDocumentButton';
-import { CreateDocumentDialogForm } from '@components/CreateDocumentDialogForm/CreateDocumentDialogForm';
+import { CreateDocumentButton } from '../CreateDocumentButton/CreateDocumentButton';
+import { CreateDocumentDialogForm } from '../CreateDocumentDialogForm/CreateDocumentDialogForm';
 import { documentsStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
 

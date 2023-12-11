@@ -1,10 +1,10 @@
-import { LogoutButton } from '@components/LogoutButton/LogoutButton';
+import { LogoutButton } from '@features/logout';
 import { type FC } from 'react';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 // import rosatomIcon from '@assets/rosatomLogo.svg';
-import Logo from '@components/Logo/Logo';
+import Logo from '@shared/components/Logo/Logo';
 import { AppBar, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
 
