@@ -1,13 +1,13 @@
-import currentUserStore from './session';
+import currentSessionStore from './session';
 import documentsStore from './documents';
 import attributesStore from './attributes';
 import docTypesStore from './docTypes';
 import { injectStores } from '@mobx-devtools/tools';
 
 injectStores({
-  currentUserStore,
+  currentUserStore: currentSessionStore,
   documentsStore,
   attributesStore,
 });
 
-export { currentUserStore, documentsStore, attributesStore, docTypesStore };
+export { currentSessionStore, documentsStore, attributesStore, docTypesStore };
