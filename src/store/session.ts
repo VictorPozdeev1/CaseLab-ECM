@@ -1,53 +1,63 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { OpenAPI, Service } from '@api/generated';
-import { type CurrentUserData } from '@api/generated/models/UserLoginResponseDto';
+import type {
+  CurrentUserData,
+  UserLoginResponseDto,
+} from '@api/generated/models/UserLoginResponseDto';
 
-// type Session = {
-//   token: string;
-//   currentUserData: UserCreateDto;
-// };
+type SessionData = UserLoginResponseDto;
 
-const TOKEN_ITEM_NAME = 'token';
-const USER_DATA = 'userData';
+const SESSION_DATA = 'sessionData';
+
 const rolesMapping = {
   ADMIN: ['COMPANY_ADMIN', 'SYSTEM_ADMIN'],
   USER: ['USER'],
 };
-const REMEMBER_ME = true;
 
-class CurrentUser {
+const REMEMBER_ME = true; // todo Брать из формы логина
+
+class Session {
   constructor() {
-    this.refreshState();
+    const savedSessionDataString = localStorage.getItem(SESSION_DATA);
+    this._state =
+      savedSessionDataString !== null
+        ? JSON.parse(savedSessionDataString)
+        : null;
+    this._setApiToken();
     makeAutoObservable(this);
   }
 
-  token?: string;
-  isAuth: boolean = false; // todo Сделать computed value
-  data?: CurrentUserData;
-  get roles(): string[] {
-    return rolesMapping[this.data?.role as keyof typeof rolesMapping] ?? [];
+  private _state: SessionData | null;
+
+  get isAuth(): boolean {
+    return this._state?.token !== undefined;
   }
 
-  refreshState(): void {
-    this.token = localStorage.getItem(TOKEN_ITEM_NAME) ?? undefined;
-    this.isAuth = this.token !== undefined;
-    this.data =
-      localStorage.getItem(USER_DATA) != null
-        ? JSON.parse(localStorage.getItem(USER_DATA) as string)
-        : undefined;
-    OpenAPI.TOKEN = this.token;
+  get userData(): CurrentUserData | undefined {
+    return this._state?.user;
+  }
+
+  get roles(): string[] {
+    if (this._state?.user?.role === undefined) return [];
+    return (
+      rolesMapping[this._state.user.role as keyof typeof rolesMapping] ?? []
+    );
+  }
+
+  // Это, видимо, через autoRun делается в MobX?
+  private _setApiToken(): void {
+    OpenAPI.TOKEN = this._state?.token;
   }
 
   async login(email: string, password: string): Promise<boolean> {
     try {
       const response = await Service.login({ email, password });
-      if (REMEMBER_ME) {
-        localStorage.setItem(TOKEN_ITEM_NAME, response.token);
-        localStorage.setItem(USER_DATA, JSON.stringify(response.user));
-      }
       runInAction(() => {
-        this.refreshState();
+        this._state = response;
+        this._setApiToken();
       });
+      if (REMEMBER_ME)
+        localStorage.setItem(SESSION_DATA, JSON.stringify(response));
       return true;
     } catch (e) {
       console.log(e);
@@ -57,13 +67,13 @@ class CurrentUser {
 
   logout(): void {
     try {
-      localStorage.removeItem(TOKEN_ITEM_NAME);
-      localStorage.removeItem(USER_DATA);
-      this.refreshState();
+      localStorage.removeItem(SESSION_DATA);
+      this._state = null;
+      this._setApiToken();
     } catch (e) {
       console.log(e);
     }
   }
 }
 
-export default new CurrentUser();
+export default new Session();

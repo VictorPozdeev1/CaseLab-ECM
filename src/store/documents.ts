@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { type DocumentDto, Service } from '@api/generated';
-import currentUser from './session';
+import currentSession from './session';
 
 class DocumentsStore {
   constructor() {
@@ -40,9 +40,9 @@ class DocumentsStore {
     attributeValues: Map<number, string>,
   ): Promise<void> {
     try {
-      if (currentUser.data !== undefined) {
+      if (currentSession.userData !== undefined) {
         const res = await Service.createDocument({
-          idOrganization: currentUser.data.organizationId,
+          idOrganization: currentSession.userData.organizationId,
           docTypId: docTypeId,
           docAttributeValueCreateDtos: Array.from(
             attributeValues,
