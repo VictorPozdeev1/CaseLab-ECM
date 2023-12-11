@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { currentUserStore } from '@store/index';
+import { currentSessionStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
 
 const RequireRoleCheck: FC<{ role: string; children: JSX.Element }> = ({
@@ -9,7 +9,7 @@ const RequireRoleCheck: FC<{ role: string; children: JSX.Element }> = ({
 }) => {
   const currentLocation = useLocation();
 
-  if (!currentUserStore.roles.includes(role)) {
+  if (!currentSessionStore.roles.includes(role)) {
     return (
       <Navigate to="/Forbidden" state={{ previousLocation: currentLocation }} />
     );

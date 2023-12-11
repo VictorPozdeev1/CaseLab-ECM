@@ -1,5 +1,5 @@
 import { type FC, useState } from 'react';
-import { currentUserStore } from '@store/index';
+import { currentSessionStore } from '@store/index';
 import { useLocation, useNavigate } from 'react-router-dom';
 import logo from './logo.png';
 import styles from './LoginPage.module.css';
@@ -35,7 +35,7 @@ export const LoginPage: FC = () => {
             e.preventDefault();
             if (!loginInProgress) {
               setLoginInProgress(true);
-              currentUserStore
+              currentSessionStore
                 .login(email, password)
                 .then((loginSucceeded) => {
                   if (loginSucceeded) {

@@ -23,6 +23,7 @@ import type { UserCredentialsDto } from '../models/UserCredentialsDto';
 import type { UserRatingDto } from '../models/UserRatingDto';
 import type { UserReplyDto } from '../models/UserReplyDto';
 import type { UserUpdateDto } from '../models/UserUpdateDto';
+import type { UserLoginResponseDto } from '../models/UserLoginResponseDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -246,7 +247,7 @@ export class Service {
    */
   public static login(
     requestBody: UserCredentialsDto,
-  ): CancelablePromise<Record<string, any>> {
+  ): CancelablePromise<UserLoginResponseDto> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/auth/login',
