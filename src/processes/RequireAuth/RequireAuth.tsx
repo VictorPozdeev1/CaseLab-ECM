@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { currentSessionStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
 
-const RequireAuth: FC<{ children: JSX.Element }> = ({ children }) => {
+const RequireAuth: FC<{ children: JSX.Element }> = observer(({ children }) => {
   const currentLocation = useLocation();
 
   if (!currentSessionStore.isAuth) {
@@ -12,6 +12,6 @@ const RequireAuth: FC<{ children: JSX.Element }> = ({ children }) => {
     );
   }
   return children;
-};
+});
 
-export default observer(RequireAuth);
+export { RequireAuth };

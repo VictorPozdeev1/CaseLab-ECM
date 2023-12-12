@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
-import { RequireAuth, RequireRoleCheck } from '../hoc';
+import { RequireAuth } from '@processes/RequireAuth/RequireAuth';
+import { RequireRoleCheck } from '@processes/RequireRoleCheck/RequireRoleCheck';
 import { LoginPage } from '@pages/LoginPage/LoginPage';
 import { Header } from '@widgets/Header/Header';
 import { HomePage } from '@pages/HomePage/HomePage';
