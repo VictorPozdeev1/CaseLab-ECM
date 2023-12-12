@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { RosatomLogo } from '@components/Icons';
+import { RosatomLogo } from '@shared/icons';
 import { Box, Typography } from '@mui/material';
 
 interface LogoProps {

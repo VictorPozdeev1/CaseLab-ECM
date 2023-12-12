@@ -1,9 +1,9 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { OpenAPI, Service } from '@api/generated';
+import { OpenAPI, Service } from '@api';
 import type {
   CurrentUserData,
   UserLoginResponseDto,
-} from '@api/generated/models/UserLoginResponseDto';
+} from '@api/models/UserLoginResponseDto';
 
 type SessionData = UserLoginResponseDto;
 

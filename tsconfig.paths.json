@@ -2,17 +2,20 @@
     "compilerOptions": {
         "baseUrl": "./src/",
         "paths": {
+            "@api": [
+                "shared/api"
+            ],
             "@api/*": [
-                "api/*"
+                "shared/api/*"
             ],
             "@app/*": [
                 "app/*"
             ],
-            "@style/*": [
-                "style/*"
+            "@features/*": [
+                "features/*"
             ],
-            "@components/*": [
-                "components/*"
+            "@shared/*": [
+                "shared/*"
             ],
             "@entities/*": [
                 "entities/*"
@@ -26,6 +29,9 @@
             "@widgets/*": [
                 "widgets/*"
             ],
+            "@processes/*": [
+                "processes/*"
+            ]
         }
     }
 }

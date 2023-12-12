@@ -1,9 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import {
-  Service,
-  type DocTypeDto,
-  type DocTypeCreateDto,
-} from '@api/generated';
+import { Service, type DocTypeDto, type DocTypeCreateDto } from '@api';
 
 class DocTypes {
   constructor() {

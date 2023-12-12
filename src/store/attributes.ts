@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
-import { Service } from '@api/generated';
-import { type DocAttributeDto } from '@api/generated';
+import { Service } from '@api';
+import { type DocAttributeDto } from '@api';
 class AttributesStore {
   constructor() {
     makeAutoObservable(this);

@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite';
 import { Typography, Container, Box } from '@mui/material';
 
 import { documentsStore } from '@store/index';
-import { CreateDocumentWidget } from '@components/CreateDocumentWidget/CreateDocumentWidget';
-import { OwnDocumentsTable } from '@components/OwnDocumentsTable/OwnDocumentsTable';
+import { CreateDocumentWidget } from '@widgets/CreateDocumentWidget';
+import { OwnDocumentsTable } from '@widgets/OwnDocumentsTable';
 
 export const OwnDocumentsPage: FC = observer(() => {
   useEffect(() => {
