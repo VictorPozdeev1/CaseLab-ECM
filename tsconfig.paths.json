@@ -2,8 +2,11 @@
     "compilerOptions": {
         "baseUrl": "./src/",
         "paths": {
+            "@api": [
+                "shared/api"
+            ],
             "@api/*": [
-                "api/*"
+                "shared/api/*"
             ],
             "@app/*": [
                 "app/*"

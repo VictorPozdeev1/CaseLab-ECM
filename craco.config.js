@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   webpack: {
     alias: {
-      '@api': path.resolve(__dirname, 'src/api'),
+      '@api': path.resolve(__dirname, 'src/shared/api'),
       '@app': path.resolve(__dirname, 'src/app'),
       '@features': path.resolve(__dirname, 'src/features'),
       '@shared': path.resolve(__dirname, 'src/shared'),

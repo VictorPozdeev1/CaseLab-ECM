@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { type DocumentDto, Service } from '@api/generated';
+import { type DocumentDto, Service } from '@api';
 import currentSession from './session';
 
 class DocumentsStore {

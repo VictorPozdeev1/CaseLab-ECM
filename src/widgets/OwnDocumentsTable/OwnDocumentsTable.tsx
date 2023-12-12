@@ -5,7 +5,7 @@ import {
   type GridColDef,
   type GridRenderCellParams,
 } from '@mui/x-data-grid';
-import { type DocumentDto } from '@api/generated';
+import { type DocumentDto } from '@api';
 import styles from './OwnDocumentsTable.module.css';
 import { Chip } from '@mui/material';
 import { observer } from 'mobx-react-lite';
