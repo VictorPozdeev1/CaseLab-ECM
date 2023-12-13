@@ -17,8 +17,8 @@ export const Header: FC = () => {
       sx={{ padding: 2 }}
     >
       <Container
-        maxWidth={'md'}
         disableGutters
+        maxWidth="lg"
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -35,11 +35,21 @@ export const Header: FC = () => {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: 1,
+            gap: '16px',
           }}
         >
-          <Avatar sizes="40px" alt="Иванов И. И." src="/path/to/avatar.jpg" />
-          <Typography variant="h6">Иванов И. И.</Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <Avatar sizes="40px" alt="Иванов И. И." src="/path/to/avatar.jpg" />
+            <Typography variant="h6" sx={{ fontSize: '16px' }}>
+              Иванов И. И.
+            </Typography>
+          </Box>
           <LogoutButton />
         </Box>
       </Container>

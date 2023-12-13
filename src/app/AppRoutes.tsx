@@ -9,6 +9,10 @@ import { Page1 } from '@pages/Page1/Page1';
 import { AdminPage } from '@pages/AdminPage/AdminPage';
 import { ForbiddenPage } from '@pages/ForbiddenPage/ForbiddenPage';
 import { OwnDocumentsPage } from '@pages/OwnDocumentsPage/OwnDocumentsPage';
+import { UsersPage } from '@pages/UsersPage';
+import { Page404 } from '@pages/Page404';
+
+// Роут users надо будет сделать вложенным
 
 const AppRoutes: FC = () => {
   return (
@@ -46,7 +50,8 @@ const AppRoutes: FC = () => {
         />
       </Route>
       <Route path="forbidden" element={<ForbiddenPage />} />
-      <Route path="*" element={<h1> page not found</h1>} />
+      <Route path="*" element={<Page404 />} />
+      <Route path="users" element={<UsersPage />} />
     </Routes>
   );
 };
