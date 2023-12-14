@@ -9,6 +9,8 @@ import { Page1 } from '@pages/Page1/Page1';
 import { AdminPage } from '@pages/AdminPage/AdminPage';
 import { ForbiddenPage } from '@pages/ForbiddenPage/ForbiddenPage';
 import { OwnDocumentsPage } from '@pages/OwnDocumentsPage/OwnDocumentsPage';
+import { MyCompanyAdministrationPage } from '@pages/MyCompanyAdministrationPage/MyCompanyAdministrationPage';
+import { SpecificCompanyAdministrationPage } from '@pages/SpecificCompanyAdministrationPage/SpecificCompanyAdministrationPage';
 import { UsersPage } from '@pages/UsersPage';
 import { Page404 } from '@pages/Page404';
 
@@ -52,6 +54,22 @@ const AppRoutes: FC = () => {
       <Route path="forbidden" element={<ForbiddenPage />} />
       <Route path="*" element={<Page404 />} />
       <Route path="users" element={<UsersPage />} />
+      <Route
+        path="myCompany"
+        element={
+          <RequireRoleCheck role="COMPANY_ADMIN">
+            <MyCompanyAdministrationPage />
+          </RequireRoleCheck>
+        }
+      />
+      <Route
+        path="company/:companyId"
+        element={
+          <RequireRoleCheck role="SYSTEM_ADMIN">
+            <SpecificCompanyAdministrationPage />
+          </RequireRoleCheck>
+        }
+      />
     </Routes>
   );
 };
