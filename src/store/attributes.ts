@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Service } from '@api/generated';
 import { type DocAttributeDto } from '@api/generated';
 import { type DocAttributeDtoWithSelected } from '@api/generated/models/DocAttributeDtoWithSelected';
@@ -15,7 +15,9 @@ class AttributesStore {
   async getAttributes(page?: number, sortBy?: string): Promise<void> {
     try {
       const response = await Service.getAllDocTypes1(page, sortBy);
-      this.attributes = response;
+      runInAction(() => {
+        this.attributes = response;
+      });
     } catch (e) {
       console.log(e);
     }
@@ -25,7 +27,9 @@ class AttributesStore {
     try {
       await Service.createAttribute(requestBody);
       // this.attributes?.push(res);
-      void this.getAttributes();
+      runInAction(() => {
+        void this.getAttributes();
+      });
     } catch (e) {
       console.log(e);
     }
@@ -43,7 +47,9 @@ class AttributesStore {
   async deleteAttributeById(id: number): Promise<void> {
     try {
       await Service.deleteAttribute(id);
-      this.attributes = this.attributes?.filter((el) => el.id !== id);
+      runInAction(() => {
+        this.attributes = this.attributes?.filter((el) => el.id !== id);
+      });
     } catch (e) {
       console.log(e);
     }
@@ -55,9 +61,11 @@ class AttributesStore {
   ): Promise<void> {
     try {
       const res = await Service.updateAttribute(id, newAttribute);
-      this.attributes = this.attributes?.map((el) =>
-        el.id === res.id ? res : el,
-      );
+      runInAction(() => {
+        this.attributes = this.attributes?.map((el) =>
+          el.id === res.id ? res : el,
+        );
+      });
     } catch (e) {
       console.log(e);
     }
@@ -66,7 +74,9 @@ class AttributesStore {
   async getDocAttributesByNameSubstring(nameSubstring: string): Promise<void> {
     try {
       const res = await Service.getDocAttributesByNameLike(nameSubstring);
-      this.filteredAttributes = res;
+      runInAction(() => {
+        this.filteredAttributes = res;
+      });
     } catch (e) {
       console.log(e);
     }
