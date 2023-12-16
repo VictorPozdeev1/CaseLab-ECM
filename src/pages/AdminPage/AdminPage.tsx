@@ -41,7 +41,7 @@ export const AdminPage: FC = observer(() => {
         setIsMinimized(true);
       }}
       userInfo={userInfo}
-      setUserInfo={setUserInfo}
+      onSubmit={setUserInfo}
     />
   );
 });

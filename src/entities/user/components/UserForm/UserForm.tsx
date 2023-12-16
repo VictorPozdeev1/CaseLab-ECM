@@ -15,12 +15,12 @@ import CloseIcon from '@mui/icons-material/Close';
 
 interface EditingUserFormProps {
   userInfo: UserReplyDto;
-  setUserInfo: (userData: UserReplyDto) => void;
+  onSubmit: (userData: UserReplyDto) => void;
   onCancel: () => void;
 }
 
 export const UserForm: FC<EditingUserFormProps> = observer(
-  ({ userInfo, onCancel, setUserInfo }) => {
+  ({ userInfo, onCancel, onSubmit }) => {
     return (
       <Dialog open={true} sx={{ width: '688px', margin: '0 auto' }}>
         <DialogActions>
@@ -44,7 +44,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               onChange={(e) => {
                 userInfo.fullName = e.target.value;
 
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
               defaultValue={userInfo.fullName}
             />
@@ -56,7 +56,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               onChange={(e) => {
                 userInfo.dateOfBirth = e.target.value;
 
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
               defaultValue={userInfo.dateOfBirth}
             />
@@ -69,7 +69,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               onChange={(e) => {
                 userInfo.email = e.target.value;
 
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
             />
           </Box>
@@ -83,7 +83,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
                   userInfo.orgDto.name = e.target.value;
                 }
 
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
             />
           </Box>
@@ -95,7 +95,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               onChange={(e) => {
                 userInfo.phone = e.target.value;
 
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
             />
           </Box>
@@ -107,7 +107,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               onChange={(e) => {
                 userInfo.post = e.target.value;
 
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
             />
           </Box>
@@ -119,7 +119,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               onChange={(e) => {
                 userInfo.role = e.target.value;
 
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
             />
           </Box>
@@ -142,7 +142,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
                     e.target.value.split(' ')[1];
                 }
 
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
             />
           </Box>
@@ -155,7 +155,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
                 if (userInfo.userPassportDto !== undefined) {
                   userInfo.userPassportDto.passportDate = e.target.value;
                 }
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
             />
           </Box>
@@ -169,7 +169,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
                   userInfo.userPassportDto.passportKp = e.target.value;
                 }
                 console.log(userInfo.userPassportDto?.passportKp);
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
             />
           </Box>
@@ -183,7 +183,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
                   userInfo.userPassportDto.passportIssued = e.target.value;
                 }
 
-                setUserInfo(userInfo);
+                onSubmit(userInfo);
               }}
             />
           </Box>
