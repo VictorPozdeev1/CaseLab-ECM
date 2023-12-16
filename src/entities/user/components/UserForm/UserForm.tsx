@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction, type FC } from 'react';
+import { type FC } from 'react';
 import styles from './UserForm.module.css';
 import { Service, type UserReplyDto, type UserUpdateDto } from '@api';
 import { observer } from 'mobx-react-lite';
@@ -15,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 interface EditingUserFormProps {
   userInfo: UserReplyDto;
-  setUserInfo: Dispatch<SetStateAction<UserReplyDto>>;
+  setUserInfo: (userData: UserReplyDto) => void;
   onCancel: () => void;
 }
 
