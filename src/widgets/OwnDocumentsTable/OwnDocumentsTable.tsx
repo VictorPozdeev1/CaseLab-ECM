@@ -8,7 +8,7 @@ import {
 import { observer } from 'mobx-react-lite';
 
 import { type DocumentDto } from '@api';
-import { statusChips } from '@entities/document';
+import { statusChips, downloadDocumentFile } from '@entities/document';
 import styles from './OwnDocumentsTable.module.css';
 
 /*
@@ -66,6 +66,9 @@ export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = observer(
         rows={documentRows}
         columns={columns}
         getRowClassName={(_) => styles.tableRowText}
+        onRowDoubleClick={(params) => {
+          downloadDocumentFile(Number(params.id));
+        }}
       />
     );
   },
