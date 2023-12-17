@@ -104,9 +104,11 @@ class DocTypes {
           agreementType,
           name: agreementName,
         });
-        attributesArray.forEach((attr) => {
-          void this.addAttributeForType(docTypeId, attr.id as number);
-        });
+        // пока отключу добавление атрибутов, т.к. на севрере работает не корректно
+
+        // attributesArray.forEach((attr) => {
+        //   void this.addAttributeForType(docTypeId, attr.id as number);
+        // });
       });
     } catch (e) {
       console.log(e);
