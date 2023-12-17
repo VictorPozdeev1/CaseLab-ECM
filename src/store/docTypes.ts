@@ -3,8 +3,8 @@ import {
   Service,
   type DocTypeDto,
   type DocTypeCreateDto,
+  type DocAttributeDto,
 } from '@api/generated';
-
 class DocTypes {
   constructor() {
     makeAutoObservable(this);
@@ -43,7 +43,10 @@ class DocTypes {
   async createDocType(newType: DocTypeCreateDto): Promise<void> {
     try {
       const response = await Service.createDocType(newType);
-      this.docTypes?.push(response);
+      console.log(response);
+      runInAction(() => {
+        this.docTypes?.push({ ...response, attributes: [] });
+      });
     } catch (e) {
       console.log(e);
     }
@@ -83,6 +86,28 @@ class DocTypes {
     try {
       const res = await Service.getDocTypesByNameLike(nameSubstring);
       this.filteredDocTypes = res;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  /// /todo переписать как только бекэнд добавит запрос в api для добавления к типу сразу массива атрибутов
+  async updateDocType(
+    docTypeId: number,
+    agreementName: string,
+    attributesArray: DocAttributeDto[],
+    agreementType?: string,
+  ): Promise<void> {
+    try {
+      runInAction(() => {
+        void this.updateDocTypeById(docTypeId, {
+          agreementType,
+          name: agreementName,
+        });
+        attributesArray.forEach((attr) => {
+          void this.addAttributeForType(docTypeId, attr.id as number);
+        });
+      });
     } catch (e) {
       console.log(e);
     }

@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { type FC } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -9,55 +9,20 @@ import { Box } from '@mui/material';
 // import { type DocAttributeDtoWithSelected } from '@api/generated/models/DocAttributeDtoWithSelected';
 import { observer } from 'mobx-react-lite';
 import { type DocAttributeDto } from '@api/generated';
-// import { toJS } from 'mobx';
+import React from 'react';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-// interface PropType {
-//   typeAttributesId: number[] | undefined;
-// }
-// interface PropType {
-//   typeAttributes: DocAttributeDto[] | undefined;
-//   setTypeAttributes: React.Dispatch<
-//     React.SetStateAction<DocAttributeDto[] | undefined>
-//   >;
-//   allAttributes: DocAttributeDto[] | undefined;
-// }
-
 interface PropType {
-  // typeAttributes: DocAttributeDto[] | undefined;
-  // setTypeAttributes: React.Dispatch<
-  //   React.SetStateAction<DocAttributeDto[] | undefined>
-  // >;
-  typeAttributesRef: React.MutableRefObject<number[] | undefined>;
+  typeAttributes: DocAttributeDto[] | undefined;
+  setTypeAttributes: (newAttr: DocAttributeDto[]) => void;
   allAttributes: DocAttributeDto[] | undefined;
 }
 
 export const AgreementTypesAttributesList: FC<PropType> = observer(
-  // ({ typeAttributes, setTypeAttributes, allAttributes }) => {
-  ({ typeAttributesRef, allAttributes }) => {
-    const [typeAttributes, setTypeAttributes] = useState<
-      DocAttributeDto[] | undefined
-    >(
-      allAttributes?.filter(
-        (el) => typeAttributesRef?.current?.includes(el.id as number),
-      ),
-    );
-
-    // useEffect(() => {
-    //   setTypeAttributes(
-    //     allAttributes?.filter(
-    //       (el) => typeAttributesRef?.current?.includes(el.id as number),
-    //     ),
-    //   );
-    // }, []);
-
-    // allAttributes?.forEach((el) => {
-    //   console.log(toJS(el));
-    // });
-
-    console.log(typeAttributes);
+  ({ typeAttributes, setTypeAttributes, allAttributes }) => {
+    // console.log(typeAttributes);
 
     const content =
       allAttributes == null && allAttributes === undefined ? (
@@ -70,27 +35,28 @@ export const AgreementTypesAttributesList: FC<PropType> = observer(
           disableCloseOnSelect
           value={typeAttributes}
           getOptionLabel={(option) => option.name as string}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
           renderOption={(props, option) => (
-            <>
+            <React.Fragment key={option.id}>
               <li {...props}>
                 <Checkbox
                   icon={icon}
+                  key={`Checkbox${option.id}`}
                   checkedIcon={checkedIcon}
                   style={{ marginRight: 8 }}
-                  key={option.id}
                   checked={typeAttributes?.some(
                     (attr) => attr.id === option.id,
                   )}
-                  // checked={typeAttributes
-                  //   ?.map((el) => el.id)
-                  //   .includes(option.id)}
                 />
                 {option.name}
               </li>
-              <div style={{ fontSize: '10px', marginLeft: '25px' }}>
+              <div
+                style={{ fontSize: '10px', marginLeft: '25px' }}
+                key={`Checkbox${option.id}`}
+              >
                 {option.type}
               </div>
-            </>
+            </React.Fragment>
           )}
           style={{ width: 500 }}
           renderInput={(params) => (
@@ -104,13 +70,12 @@ export const AgreementTypesAttributesList: FC<PropType> = observer(
             event: React.SyntheticEvent<Element, Event>,
             newValue: DocAttributeDto[],
           ) => {
-            setTypeAttributes(() => newValue);
-            console.log(newValue);
-            typeAttributesRef.current = newValue.map((el) => el.id) as number[];
+            setTypeAttributes(newValue);
+            // console.log(newValue);
+            // typeAttributesRef.current = newValue.map((el) => el.id) as number[];
           }}
         />
       );
-    // console.log(toJS(typeAttributesRef.current));
     return <>{content}</>;
   },
 );

@@ -26,7 +26,6 @@ class AttributesStore {
   async createAttribute(requestBody: DocAttributeDto): Promise<void> {
     try {
       await Service.createAttribute(requestBody);
-      // this.attributes?.push(res);
       runInAction(() => {
         void this.getAttributes();
       });
