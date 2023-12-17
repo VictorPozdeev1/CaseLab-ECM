@@ -4,7 +4,8 @@ import {
   type DocTypeDto,
   type DocTypeCreateDto,
   type DocAttributeDto,
-} from '@api/generated';
+} from '@api';
+
 class DocTypes {
   constructor() {
     makeAutoObservable(this);

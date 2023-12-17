@@ -1,14 +1,13 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { Service } from '@api/generated';
-import { type DocAttributeDto } from '@api/generated';
-import { type DocAttributeDtoWithSelected } from '@api/generated/models/DocAttributeDtoWithSelected';
+import { Service } from '@api';
+import { type DocAttributeDto } from '@api';
+
 class AttributesStore {
   constructor() {
     makeAutoObservable(this);
   }
 
   attributes?: DocAttributeDto[];
-  attributesWithSelectProp?: DocAttributeDtoWithSelected[];
 
   filteredAttributes?: DocAttributeDto[];
 

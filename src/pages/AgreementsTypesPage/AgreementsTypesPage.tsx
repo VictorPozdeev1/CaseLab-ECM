@@ -1,12 +1,12 @@
 import { type FC, useEffect, useState } from 'react';
 import { Container, Fab } from '@mui/material';
 import { attributesStore, docTypesStore } from '@store/index';
-import { AgreementTypeElement } from '@components/AgreementTypeElement/AgreementTypeElement';
 import { observer } from 'mobx-react-lite';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { AgreementTypePopup } from '@components/AgreementTypePopup/AgreementTypePopup';
-import { BtnsGroup } from '@components/BtnsGroup/BtnsGroup';
-import { type DocTypeCreateDto } from '@api/generated';
+import { type DocTypeCreateDto } from '@api';
+import { AgreementTypeElement } from '@widgets/AgreementTypeWidget/components/AgreementTypeElement/AgreementTypeElement';
+import { AgreementTypePopup } from '@widgets/AgreementTypeWidget/components/AgreementTypePopup/AgreementTypePopup';
+import { BtnsGroup } from '@widgets/AgreementTypeWidget/components/BtnsGroup/BtnsGroup';
 
 export type agreementType = 'EVERYONE' | 'ANYONE' | 'QORUUM';
 
@@ -63,7 +63,6 @@ export const AgreementsTypesPage: FC = observer(() => {
               setIsOpenPopup(false);
             }}
             onSave={() => {
-              console.log(newTypeValue);
               void docTypesStore.createDocType({
                 name: newTypeValue.name,
                 agreementType: newTypeValue.agreementType,

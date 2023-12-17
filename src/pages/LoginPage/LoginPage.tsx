@@ -1,8 +1,9 @@
 import { type FC, useState } from 'react';
-import { currentUserStore } from '@store/index';
+import { currentSessionStore } from '@store/index';
 import { useLocation, useNavigate } from 'react-router-dom';
-import logo from './logo.png';
 import styles from './LoginPage.module.css';
+import { Box, Button, TextField } from '@mui/material';
+import Logo from '@shared/components/Logo/Logo';
 
 export const LoginPage: FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -14,10 +15,30 @@ export const LoginPage: FC = () => {
   const [messageType, setMessageType] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const getDisabled = (
+    loginVal: string,
+    passwordVal: string,
+  ): { disabled?: boolean } => {
+    if (loginVal === '' || passwordVal === '') return { disabled: true };
+    return {};
+  };
+
   return (
-    <div className={styles.container}>
-      <div className={styles.form}>
-        <img src={logo} alt="Росатом" className={styles.image} />
+    <Box
+      display={'flex'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      minHeight={'96vh'}
+      fontFamily={'Roboto'}
+    >
+      <Box
+        display={'flex'}
+        flexDirection={'column'}
+        alignItems={'center'}
+        gap={'44px'}
+        padding={'50px'}
+      >
+        <Logo size="medium" />
         {message != null && (
           <div
             className={`${styles.message} ${
@@ -29,64 +50,104 @@ export const LoginPage: FC = () => {
             {message}
           </div>
         )}
-        <form
-          style={loginInProgress ? { opacity: 0.7, pointerEvents: 'none' } : {}}
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!loginInProgress) {
-              setLoginInProgress(true);
-              currentUserStore
-                .login(email, password)
-                .then((loginSucceeded) => {
-                  if (loginSucceeded) {
-                    setMessage('Вход выполнен успешно');
-                    setMessageType('success');
-                    setTimeout(() => {
-                      navigate(redirectBackUrl);
-                    }, 1000);
-                  } else {
-                    setMessage(
-                      'Произошла ошибка при аутентификации. Пожалуйста, попробуйте еще раз.',
-                    );
-                    setMessageType('error');
-                  }
-                })
-                .catch((error) => {
-                  console.error('Ошибка при аутентификации:', error);
-                })
-                .finally(() => {
-                  setLoginInProgress(false);
-                });
+        <Box width={'80%'}>
+          <form
+            style={
+              loginInProgress ? { opacity: 0.7, pointerEvents: 'none' } : {}
             }
-          }}
-        >
-          <input
-            placeholder="Логин"
-            type="text"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!loginInProgress) {
+                setLoginInProgress(true);
+                currentSessionStore
+                  .login(email, password)
+                  .then((loginSucceeded) => {
+                    if (loginSucceeded) {
+                      setMessage('Вход выполнен успешно');
+                      setMessageType('success');
+                      setTimeout(() => {
+                        navigate(redirectBackUrl);
+                      }, 1000);
+                    } else {
+                      setMessage(
+                        'Произошла ошибка при аутентификации. Пожалуйста, попробуйте еще раз.',
+                      );
+                      setMessageType('error');
+                    }
+                  })
+                  .catch((error) => {
+                    console.error('Ошибка при аутентификации:', error);
+                  })
+                  .finally(() => {
+                    setLoginInProgress(false);
+                  });
+              }
             }}
-            className={styles.input}
-          />
-          <input
-            placeholder="Пароль"
-            type="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            className={styles.input}
-          />
-          <div className={styles.checkbox}>
+          >
+            <TextField
+              label="Логин"
+              type="text"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              InputProps={{
+                style: {
+                  borderRadius: '8px',
+                },
+              }}
+              sx={{
+                width: '100%',
+                marginBottom: '20px',
+              }}
+            />
+            <TextField
+              label="Пароль"
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              InputProps={{
+                style: {
+                  borderRadius: '8px',
+                },
+              }}
+              sx={{
+                width: '100%',
+                marginBottom: '44px',
+                borderRadius: '8px',
+              }}
+            />
+            {/* <div className={styles.checkbox}>
             <input type="checkbox" id="rememberUser" />
             <label htmlFor="rememberUser">Запомнить меня</label>
-          </div>
-          <button type="submit" className={styles.button}>
-            Войти
-          </button>
-        </form>
-      </div>
-    </div>
+          </div> */}
+            <Button
+              {...getDisabled(email, password)}
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{
+                textTransform: 'none',
+                fontSize: '16px',
+                width: '100%',
+                boxShadow: 'none',
+                height: '56px',
+                borderRadius: '8px',
+                ':hover': {
+                  boxShadow: 'none',
+                },
+                ':disabled': {
+                  boxShadow: 'none',
+                },
+              }}
+            >
+              Войти
+            </Button>
+          </form>
+        </Box>
+      </Box>
+    </Box>
   );
 };
