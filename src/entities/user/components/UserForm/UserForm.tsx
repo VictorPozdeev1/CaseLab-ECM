@@ -1,6 +1,5 @@
-import { type Dispatch, type SetStateAction, type FC } from 'react';
+import { type FC } from 'react';
 import styles from './UserForm.module.css';
-import { Service, type UserReplyDto, type UserUpdateDto } from '@api';
 import { observer } from 'mobx-react-lite';
 import {
   Box,
@@ -12,15 +11,16 @@ import {
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { type User } from '@entities/user/User';
 
 interface EditingUserFormProps {
-  userInfo: UserReplyDto;
-  setUserInfo: Dispatch<SetStateAction<UserReplyDto>>;
+  userInfo: User;
+  onSubmit: (userData: User) => void;
   onCancel: () => void;
 }
 
 export const UserForm: FC<EditingUserFormProps> = observer(
-  ({ userInfo, onCancel, setUserInfo }) => {
+  ({ userInfo, onCancel, onSubmit }) => {
     return (
       <Dialog open={true} sx={{ width: '688px', margin: '0 auto' }}>
         <DialogActions>
@@ -38,15 +38,33 @@ export const UserForm: FC<EditingUserFormProps> = observer(
           }}
         >
           <Box className={styles.inputBox}>
-            <Typography className={styles.label}>ФИО*</Typography>
+            <Typography className={styles.label}>Фамилия</Typography>
             <TextField
               sx={{ width: '446px' }}
               onChange={(e) => {
-                userInfo.fullName = e.target.value;
-
-                setUserInfo(userInfo);
+                userInfo.lastName = e.target.value;
               }}
-              defaultValue={userInfo.fullName}
+              defaultValue={userInfo.lastName}
+            />
+          </Box>
+          <Box className={styles.inputBox}>
+            <Typography className={styles.label}>Имя</Typography>
+            <TextField
+              sx={{ width: '446px' }}
+              onChange={(e) => {
+                userInfo.firstName = e.target.value;
+              }}
+              defaultValue={userInfo.firstName}
+            />
+          </Box>
+          <Box className={styles.inputBox}>
+            <Typography className={styles.label}>Отчество</Typography>
+            <TextField
+              sx={{ width: '446px' }}
+              onChange={(e) => {
+                userInfo.patronymic = e.target.value;
+              }}
+              defaultValue={userInfo.patronymic}
             />
           </Box>
           <Box className={styles.inputBox}>
@@ -55,8 +73,6 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               sx={{ width: '446px' }}
               onChange={(e) => {
                 userInfo.dateOfBirth = e.target.value;
-
-                setUserInfo(userInfo);
               }}
               defaultValue={userInfo.dateOfBirth}
             />
@@ -68,8 +84,6 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               defaultValue={userInfo.email}
               onChange={(e) => {
                 userInfo.email = e.target.value;
-
-                setUserInfo(userInfo);
               }}
             />
           </Box>
@@ -77,13 +91,11 @@ export const UserForm: FC<EditingUserFormProps> = observer(
             <Typography className={styles.label}> Оргинизация </Typography>
             <TextField
               sx={{ width: '446px' }}
-              defaultValue={userInfo.orgDto?.name}
+              defaultValue={userInfo.organizationName}
               onChange={(e) => {
-                if (userInfo.orgDto !== undefined) {
-                  userInfo.orgDto.name = e.target.value;
+                if (userInfo.organizationName !== undefined) {
+                  userInfo.organizationName = e.target.value;
                 }
-
-                setUserInfo(userInfo);
               }}
             />
           </Box>
@@ -94,8 +106,6 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               defaultValue={userInfo.phone}
               onChange={(e) => {
                 userInfo.phone = e.target.value;
-
-                setUserInfo(userInfo);
               }}
             />
           </Box>
@@ -106,8 +116,6 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               defaultValue={userInfo.post}
               onChange={(e) => {
                 userInfo.post = e.target.value;
-
-                setUserInfo(userInfo);
               }}
             />
           </Box>
@@ -118,8 +126,6 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               defaultValue={userInfo.role}
               onChange={(e) => {
                 userInfo.role = e.target.value;
-
-                setUserInfo(userInfo);
               }}
             />
           </Box>
@@ -130,19 +136,11 @@ export const UserForm: FC<EditingUserFormProps> = observer(
             <TextField
               sx={{ width: '446px' }}
               defaultValue={
-                userInfo.userPassportDto?.passportSeries +
-                ' ' +
-                userInfo.userPassportDto?.passportNumber
+                userInfo.passportSeries + ' ' + userInfo.passportNumber
               }
               onChange={(e) => {
-                if (userInfo.userPassportDto !== undefined) {
-                  userInfo.userPassportDto.passportSeries =
-                    e.target.value.split(' ')[0];
-                  userInfo.userPassportDto.passportNumber =
-                    e.target.value.split(' ')[1];
-                }
-
-                setUserInfo(userInfo);
+                userInfo.passportSeries = e.target.value.split(' ')[0];
+                userInfo.passportNumber = e.target.value.split(' ')[1];
               }}
             />
           </Box>
@@ -150,12 +148,9 @@ export const UserForm: FC<EditingUserFormProps> = observer(
             <Typography className={styles.label}>Дата выдачи</Typography>
             <TextField
               sx={{ width: '446px' }}
-              defaultValue={userInfo.userPassportDto?.passportDate}
+              defaultValue={userInfo.passportDate}
               onChange={(e) => {
-                if (userInfo.userPassportDto !== undefined) {
-                  userInfo.userPassportDto.passportDate = e.target.value;
-                }
-                setUserInfo(userInfo);
+                userInfo.passportDate = e.target.value;
               }}
             />
           </Box>
@@ -163,13 +158,9 @@ export const UserForm: FC<EditingUserFormProps> = observer(
             <Typography className={styles.label}>Код подразделения</Typography>
             <TextField
               sx={{ width: '446px' }}
-              defaultValue={userInfo.userPassportDto?.passportKp}
+              defaultValue={userInfo.passportKp}
               onChange={(e) => {
-                if (userInfo.userPassportDto !== undefined) {
-                  userInfo.userPassportDto.passportKp = e.target.value;
-                }
-                console.log(userInfo.userPassportDto?.passportKp);
-                setUserInfo(userInfo);
+                userInfo.passportKp = e.target.value;
               }}
             />
           </Box>
@@ -177,13 +168,9 @@ export const UserForm: FC<EditingUserFormProps> = observer(
             <Typography className={styles.label}>Паспорт выдан</Typography>
             <TextField
               sx={{ width: '446px' }}
-              defaultValue={userInfo.userPassportDto?.passportIssued}
+              defaultValue={userInfo.passportIssued}
               onChange={(e) => {
-                if (userInfo.userPassportDto !== undefined) {
-                  userInfo.userPassportDto.passportIssued = e.target.value;
-                }
-
-                setUserInfo(userInfo);
+                userInfo.passportIssued = e.target.value;
               }}
             />
           </Box>
@@ -201,45 +188,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
             variant="contained"
             className={styles.button}
             onClick={() => {
-              const newUserInfo: UserUpdateDto = {};
-              newUserInfo.lastName = userInfo.fullName?.split(' ')[2];
-              newUserInfo.firstName = userInfo.fullName?.split(' ')[0];
-              newUserInfo.patronymic = userInfo.fullName?.split(' ')[1];
-              newUserInfo.dateOfBirth = userInfo.dateOfBirth;
-              newUserInfo.email = userInfo.email;
-              newUserInfo.phone = userInfo.phone;
-              newUserInfo.passportSeries =
-                userInfo.userPassportDto?.passportSeries;
-              newUserInfo.passportNumber =
-                userInfo.userPassportDto?.passportNumber;
-              newUserInfo.passportIssued =
-                userInfo.userPassportDto?.passportIssued;
-              newUserInfo.passportDate = userInfo.userPassportDto?.passportDate;
-
-              newUserInfo.passportKp = userInfo.userPassportDto?.passportKp;
-              Service.getAllOrgs()
-                .then((res) => {
-                  res.forEach((org) => {
-                    if (org.name === userInfo.orgDto?.name) {
-                      newUserInfo.organizationId = org.id;
-                    }
-                  });
-                })
-                .catch((e) => {
-                  console.log(e);
-                });
-
-              newUserInfo.role = userInfo.role;
-              newUserInfo.post = userInfo.post;
-
-              console.log(newUserInfo);
-              Service.updateUser(userInfo.id as number, newUserInfo)
-                .then((res) => {
-                  console.log(res);
-                })
-                .catch((e) => {
-                  console.log(e);
-                });
+              onSubmit(userInfo);
             }}
           >
             Подтвердить
