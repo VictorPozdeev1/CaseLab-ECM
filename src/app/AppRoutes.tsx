@@ -12,6 +12,7 @@ import { OwnDocumentsPage } from '@pages/OwnDocumentsPage/OwnDocumentsPage';
 import { MyCompanyAdministrationPage } from '@pages/MyCompanyAdministrationPage/MyCompanyAdministrationPage';
 import { SpecificCompanyAdministrationPage } from '@pages/SpecificCompanyAdministrationPage/SpecificCompanyAdministrationPage';
 import { Page404 } from '@pages/Page404';
+import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
 
 // Роут users надо будет сделать вложенным
 
@@ -32,6 +33,7 @@ const AppRoutes: FC = () => {
       >
         <Route index element={<HomePage />} />
         <Route path="myDocuments" element={<OwnDocumentsPage />} />
+        <Route path="documentView" element={<DocumentViewPage />} />
         <Route
           path="page1"
           element={
