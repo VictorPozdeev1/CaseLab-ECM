@@ -67,7 +67,7 @@ export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = observer(
         columns={columns}
         getRowClassName={(_) => styles.tableRowText}
         onRowDoubleClick={(params) => {
-          downloadDocumentFile(Number(params.id));
+          void downloadDocumentFile(Number(params.id));
         }}
       />
     );

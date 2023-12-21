@@ -1,6 +1,6 @@
 import { documentsStore } from '@store/index';
 
-export function downloadDocumentFile(id: number): void {
+export async function downloadDocumentFile(id: number): Promise<void> {
   if (Number.isNaN(id)) throw new Error('Document id is NaN');
   const documentToDownload = documentsStore.ownDocuments?.find(
     (d) => d.id === id,
@@ -10,7 +10,8 @@ export function downloadDocumentFile(id: number): void {
 
   /*
   В интернете есть какие-то обсуждения генерации нормальных минио-урлов бэкендом. Например: https://stackoverflow.com/questions/66192029/how-to-get-the-file-link-after-successfully-uploading-in-minio
-  Но, в принципе, сейчас оно работает и так.
+  Там, вероятно, можно будет загружать файлы без логина.
+  Сейчас - требуется логин в MinIO.
   */
 
   const url = new URL(
