@@ -11,7 +11,7 @@ class AttributesStore {
 
   filteredAttributes?: DocAttributeDto[];
 
-  async getAttributes(page?: number, sortBy?: string): Promise<void> {
+  async loadAllAttributes(page?: number, sortBy?: string): Promise<void> {
     try {
       const response = await Service.getAllDocTypes1(page, sortBy);
       runInAction(() => {
@@ -26,14 +26,14 @@ class AttributesStore {
     try {
       await Service.createAttribute(requestBody);
       runInAction(() => {
-        void this.getAttributes();
+        void this.loadAllAttributes();
       });
     } catch (e) {
       console.log(e);
     }
   }
 
-  async getAttributeById(id: number): Promise<DocAttributeDto | undefined> {
+  async loadAttributeById(id: number): Promise<DocAttributeDto | undefined> {
     try {
       const res = await Service.getAttribute(id);
       return res;
@@ -69,7 +69,7 @@ class AttributesStore {
     }
   }
 
-  async getDocAttributesByNameSubstring(nameSubstring: string): Promise<void> {
+  async loadDocAttributesByNameSubstring(nameSubstring: string): Promise<void> {
     try {
       const res = await Service.getDocAttributesByNameLike(nameSubstring);
       runInAction(() => {

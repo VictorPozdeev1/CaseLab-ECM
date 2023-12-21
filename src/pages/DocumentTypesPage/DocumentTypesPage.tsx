@@ -10,10 +10,10 @@ import { BtnsGroup } from '@widgets/AgreementTypeWidget/components/BtnsGroup/Btn
 
 export type agreementType = 'EVERYONE' | 'ANYONE' | 'QORUUM';
 
-export const AgreementsTypesPage: FC = observer(() => {
+export const DocumentTypesPage: FC = observer(() => {
   useEffect(() => {
-    void docTypesStore.getAllDocTypes();
-    void attributesStore.getAttributes();
+    void docTypesStore.loadAllDocTypes();
+    void attributesStore.loadAllAttributes();
   }, []);
 
   const [isOpenPopup, setIsOpenPopup] = useState(false);

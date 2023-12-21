@@ -14,7 +14,7 @@ class DocTypes {
   docTypes?: DocTypeDto[];
   filteredDocTypes?: DocTypeDto[];
 
-  async getAllDocTypes(page?: number, sortBy?: string): Promise<void> {
+  async loadAllDocTypes(page?: number, sortBy?: string): Promise<void> {
     try {
       const response = await Service.getAllDocTypes(page, sortBy);
       runInAction(() => {
@@ -53,7 +53,7 @@ class DocTypes {
     }
   }
 
-  async getDocTypeById(id: number): Promise<DocTypeDto | undefined> {
+  async loadDocTypeById(id: number): Promise<DocTypeDto | undefined> {
     try {
       const res = await Service.getDocType(id);
       return res;
@@ -83,7 +83,7 @@ class DocTypes {
     }
   }
 
-  async getDocTypesByNameSubstring(nameSubstring: string): Promise<void> {
+  async loadDocTypesByNameSubstring(nameSubstring: string): Promise<void> {
     try {
       const res = await Service.getDocTypesByNameLike(nameSubstring);
       this.filteredDocTypes = res;

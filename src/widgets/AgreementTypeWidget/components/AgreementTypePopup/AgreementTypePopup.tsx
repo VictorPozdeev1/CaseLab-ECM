@@ -8,7 +8,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { type agreementType } from '@pages/AgreementsTypesPage/AgreementsTypesPage';
+import { type agreementType } from '@pages/DocumentTypesPage/DocumentTypesPage';
 import { type FC } from 'react';
 // import { useState, type FC } from 'react';
 
