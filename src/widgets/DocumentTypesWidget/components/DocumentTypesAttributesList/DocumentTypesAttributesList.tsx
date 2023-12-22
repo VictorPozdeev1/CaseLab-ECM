@@ -20,7 +20,7 @@ interface PropType {
   allAttributes: DocAttributeDto[] | undefined;
 }
 
-export const AgreementTypesAttributesList: FC<PropType> = observer(
+export const DocumentTypesAttributesList: FC<PropType> = observer(
   ({ typeAttributes, setTypeAttributes, allAttributes }) => {
     // console.log(typeAttributes);
 

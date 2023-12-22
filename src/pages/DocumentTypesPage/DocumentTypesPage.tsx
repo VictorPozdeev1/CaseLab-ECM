@@ -4,9 +4,9 @@ import { attributesStore, docTypesStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { type DocTypeCreateDto } from '@api';
-import { AgreementTypeElement } from '@widgets/AgreementTypeWidget/components/AgreementTypeElement/AgreementTypeElement';
-import { AgreementTypePopup } from '@widgets/AgreementTypeWidget/components/AgreementTypePopup/AgreementTypePopup';
-import { BtnsGroup } from '@widgets/AgreementTypeWidget/components/BtnsGroup/BtnsGroup';
+import { DocumentTypesElement } from '@widgets/DocumentTypesWidget/components/DocumentTypesElement/DocumentTypesElement';
+import { DocumentTypesPopup } from '@widgets/DocumentTypesWidget/components/DocumentTypesPopup/DocumentTypesPopup';
+import { BtnsGroup } from '@widgets/DocumentTypesWidget/components/BtnsGroup/BtnsGroup';
 
 export type agreementType = 'EVERYONE' | 'ANYONE' | 'QORUUM';
 
@@ -24,7 +24,7 @@ export const DocumentTypesPage: FC = observer(() => {
 
   const AgreementTypeElements = docTypesStore.docTypes?.map((type) => {
     return (
-      <AgreementTypeElement
+      <DocumentTypesElement
         key={type.id}
         type={type}
         allAttributes={attributesStore.attributes}
@@ -49,7 +49,7 @@ export const DocumentTypesPage: FC = observer(() => {
       }}
     >
       <Container>
-        <AgreementTypePopup
+        <DocumentTypesPopup
           isOpen={isOpenPopup}
           onClose={() => {
             setIsOpenPopup(false);
@@ -70,7 +70,7 @@ export const DocumentTypesPage: FC = observer(() => {
               setIsOpenPopup(false);
             }}
           />
-        </AgreementTypePopup>
+        </DocumentTypesPopup>
 
         <Fab
           color="primary"

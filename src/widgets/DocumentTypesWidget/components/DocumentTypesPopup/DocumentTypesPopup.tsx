@@ -46,7 +46,7 @@ const menuItems = agreementTypes.map((el) => {
   );
 });
 
-export const AgreementTypePopup: FC<PopupProps> = ({
+export const DocumentTypesPopup: FC<PopupProps> = ({
   isOpen,
   onClose,
   children,

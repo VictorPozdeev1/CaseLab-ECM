@@ -4,11 +4,11 @@ import { Delete } from '@mui/icons-material';
 import { observer } from 'mobx-react-lite';
 import FormControl from '@mui/material/FormControl';
 import { docTypesStore } from '@store/index';
-import { AgreementTypesAccordion } from '../AgreementTypesAccordion/AgreementTypesAccordion';
 import { type DocAttributeDto, type DocTypeDto } from '@api';
-import { AgreementTypesAttributesList } from '../AgreementTypesAttributesList/AgreementTypesAttributesList';
 import { BtnsGroup } from '../BtnsGroup/BtnsGroup';
 import { DeletePopup } from '../DeletePopup/DeletePopup';
+import { DocumentTypesAccordion } from '../DocumentTypesAccordion/DocumentTypesAccordion';
+import { DocumentTypesAttributesList } from '../DocumentTypesAttributesList/DocumentTypesAttributesList';
 
 interface PropType {
   key: number | undefined;
@@ -16,7 +16,7 @@ interface PropType {
   allAttributes: DocAttributeDto[] | undefined;
 }
 
-export const AgreementTypeElement: FC<PropType> = observer(
+export const DocumentTypesElement: FC<PropType> = observer(
   ({ type, allAttributes }) => {
     const [typeAttributes, setTypeAttributes] = useState<
       DocAttributeDto[] | undefined
@@ -110,13 +110,13 @@ export const AgreementTypeElement: FC<PropType> = observer(
           /> */}
         </FormControl>
         <Box>
-          <AgreementTypesAccordion>
-            <AgreementTypesAttributesList
+          <DocumentTypesAccordion>
+            <DocumentTypesAttributesList
               typeAttributes={typeAttributes as DocAttributeDto[]}
               setTypeAttributes={callbacks.setAttributes}
               allAttributes={allAttributes}
             />
-          </AgreementTypesAccordion>
+          </DocumentTypesAccordion>
           <BtnsGroup
             onSave={callbacks.onSave}
             onCancel={callbacks.onCancel}

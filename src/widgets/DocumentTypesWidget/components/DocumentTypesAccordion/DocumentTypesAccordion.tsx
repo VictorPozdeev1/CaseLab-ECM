@@ -11,7 +11,7 @@ interface PropType {
   children?: JSX.Element;
 }
 
-export const AgreementTypesAccordion: FC<PropType> = ({ children }) => {
+export const DocumentTypesAccordion: FC<PropType> = ({ children }) => {
   return (
     <Accordion>
       <AccordionSummary
