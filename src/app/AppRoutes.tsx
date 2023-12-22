@@ -31,7 +31,14 @@ const AppRoutes: FC = () => {
         }
       >
         <Route index element={<HomePage />} />
-        <Route path="myDocuments" element={<OwnDocumentsPage />} />
+        <Route
+          path="myDocuments"
+          element={
+            <RequireRoleCheck role="USER">
+              <OwnDocumentsPage />
+            </RequireRoleCheck>
+          }
+        />
         <Route path="documentView" element={<DocumentViewPage />} />
         <Route
           path="page1"
