@@ -13,8 +13,7 @@ import { MyCompanyAdministrationPage } from '@pages/MyCompanyAdministrationPage/
 import { SpecificCompanyAdministrationPage } from '@pages/SpecificCompanyAdministrationPage/SpecificCompanyAdministrationPage';
 import { Page404 } from '@pages/Page404';
 import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
-
-// Роут users надо будет сделать вложенным
+import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
 
 const AppRoutes: FC = () => {
   return (
@@ -48,6 +47,14 @@ const AppRoutes: FC = () => {
           element={
             <RequireRoleCheck role="SYSTEM_ADMIN">
               <AdminPage />
+            </RequireRoleCheck>
+          }
+        />
+        <Route
+          path="documentTypes"
+          element={
+            <RequireRoleCheck role="SYSTEM_ADMIN">
+              <DocumentTypesPage />
             </RequireRoleCheck>
           }
         />
