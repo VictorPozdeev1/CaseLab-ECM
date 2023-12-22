@@ -14,7 +14,6 @@ import { SpecificCompanyAdministrationPage } from '@pages/SpecificCompanyAdminis
 import { Page404 } from '@pages/Page404';
 import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
 import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
-// Роут users надо будет сделать вложенным
 
 const AppRoutes: FC = () => {
   return (
