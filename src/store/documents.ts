@@ -42,7 +42,7 @@ class DocumentsStore {
     try {
       if (currentSession.userData !== undefined) {
         const res = await Service.createDocument({
-          idOrganization: currentSession.userData.organizationId,
+          idOrganization: currentSession.userData?.organizationId as number,
           docTypId: docTypeId,
           docAttributeValueCreateDtos: Array.from(
             attributeValues,

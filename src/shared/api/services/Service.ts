@@ -145,7 +145,7 @@ export class Service {
    * Все атрибуты с пагинацией и сортировкой
    * @param page Номер страницы
    * @param sortBy Сортировка
-   
+
    * @returns DocAttributeDto OK
    * @throws ApiError
    */
@@ -953,7 +953,7 @@ export class Service {
    * @returns any OK
    * @throws ApiError
    */
-  public static getUserInfo(): CancelablePromise<Record<string, any>> {
+  public static getUserInfo(): CancelablePromise<UserReplyDto> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/auth/info',

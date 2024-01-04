@@ -12,31 +12,31 @@ export type UserReplyDto = {
   /**
    * ID пользователя
    */
-  id?: number;
+  id: number;
   /**
    * ФИО
    */
-  fullName?: string;
+  fullName: string;
   /**
    * Дата рождения
    */
-  dateOfBirth?: string;
+  dateOfBirth: string;
   /**
    * Email
    */
-  email?: string;
+  email: string;
   /**
    * Телефон
    */
-  phone?: string;
+  phone: string;
   /**
    * Описание
    */
-  post?: string;
+  post: string;
   /**
    * Роль
    */
-  role?: string;
-  userPassportDto?: UserPassportDto;
-  orgDto?: OrgDto;
+  role: string;
+  userPassportDto: UserPassportDto;
+  orgDto: OrgDto;
 };

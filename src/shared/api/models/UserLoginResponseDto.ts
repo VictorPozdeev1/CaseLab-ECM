@@ -2,6 +2,7 @@
 
 /* eslint-disable */
 export type CurrentUserData = {
+  id: number;
   dateOfBirth: string;
   email: string;
   firstName: string;
