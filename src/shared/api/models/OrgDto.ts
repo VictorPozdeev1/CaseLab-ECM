@@ -9,13 +9,13 @@ export type OrgDto = {
   /**
    * ID организации
    */
-  id?: number;
+  id: number;
   /**
    * Название
    */
-  name?: string;
+  name: string;
   /**
    * ИНН
    */
-  inn?: string;
+  inn: string;
 };

@@ -1,6 +1,10 @@
 import { makeAutoObservable } from 'mobx';
 import type { CurrentUserData } from '@api/models/UserLoginResponseDto';
+import { type Organization } from './Organization';
 
+export type CurrentUserArgs = Omit<CurrentUserData, 'organizationId'> & {
+  organization?: Organization;
+};
 export class CurrentUser {
   id: number;
   email: string;
@@ -9,9 +13,9 @@ export class CurrentUser {
   patronymic: string;
   dateOfBirth: string;
   role: string;
-  organizationId: number;
   phone: string;
   post: string;
+  organization?: Organization;
   constructor({
     id,
     email,
@@ -20,10 +24,10 @@ export class CurrentUser {
     patronymic,
     dateOfBirth,
     role,
-    organizationId,
     phone,
     post,
-  }: CurrentUserData) {
+    organization,
+  }: CurrentUserArgs) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
@@ -31,9 +35,9 @@ export class CurrentUser {
     this.patronymic = patronymic;
     this.dateOfBirth = dateOfBirth;
     this.role = role;
-    this.organizationId = organizationId;
     this.phone = phone;
     this.post = post;
+    this.organization = organization;
     makeAutoObservable(this);
   }
 

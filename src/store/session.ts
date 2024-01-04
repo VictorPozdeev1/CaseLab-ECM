@@ -1,7 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { OpenAPI, Service } from '@api';
+import { OpenAPI, type OrgDto, Service } from '@api';
 import type { CurrentUserData } from '@api/models/UserLoginResponseDto';
-import { CurrentUser } from './models/CurrentUser';
+import { CurrentUser, type CurrentUserArgs } from './models/CurrentUser';
+import { Organization } from './models/Organization';
 
 const SESSION_DATA = 'sessionData';
 
@@ -33,21 +34,21 @@ const parseFullName = (fullName: string): FullName => {
 class Session {
   private _token: string | null;
   userData: CurrentUser | null;
-  protected _rememberUser: boolean;
+  protected _isUserMemorized: boolean;
   constructor() {
     this._token = null;
     this.userData = null;
-    this._rememberUser = true; // todo Брать из формы логина
+    this._isUserMemorized = true; // todo Брать из формы логина
     this._init();
     makeAutoObservable(this);
   }
 
-  private _init(): void {
+  protected _init(): void {
     const savedSessionDataString = localStorage.getItem(SESSION_DATA);
     if (savedSessionDataString !== null) {
       const { token } = JSON.parse(savedSessionDataString);
       this.token = token;
-      this.getUser().catch((e) => {
+      this._fetchUser().catch((e) => {
         console.error(e);
       });
     }
@@ -71,35 +72,15 @@ class Session {
     OpenAPI.TOKEN = token as string;
   }
 
-  get rememberUser(): boolean {
-    return this._rememberUser;
+  get isUserMemorized(): boolean {
+    return this._isUserMemorized;
   }
 
-  set rememberUser(value: boolean) {
-    this._rememberUser = value;
+  set isUserMemorized(value: boolean) {
+    this._isUserMemorized = value;
   }
 
-  async login(email: string, password: string): Promise<boolean> {
-    try {
-      const { user, token } = await Service.login({ email, password });
-      runInAction(() => {
-        this.token = token;
-        this.userData = new CurrentUser(user);
-      });
-      if (this.rememberUser) {
-        localStorage.setItem(
-          SESSION_DATA,
-          JSON.stringify({ token: this.token }),
-        );
-      }
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  }
-
-  async getUser(): Promise<void> {
+  protected async _fetchUser(): Promise<void> {
     try {
       const response = await Service.getUserInfo();
 
@@ -108,11 +89,51 @@ class Session {
         this.userData = new CurrentUser({
           ...currentUserName,
           ...response,
-          organizationId: response.orgDto?.id as number,
-        } satisfies CurrentUserData);
+          organization: response.orgDto,
+        } satisfies CurrentUserArgs);
       });
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  protected async _fetchOrganization(id: number): Promise<void> {
+    try {
+      const response = await Service.getOrg(id);
+
+      runInAction(() => {
+        if (this.userData === null) return;
+        this.userData.organization = new Organization({
+          ...response,
+        } satisfies OrgDto);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async login(email: string, password: string): Promise<boolean> {
+    try {
+      const { user, token } = await Service.login({ email, password });
+      runInAction(() => {
+        this.token = token;
+
+        this.userData = new CurrentUser(user);
+      });
+
+      await this._fetchOrganization(user.organizationId);
+
+      if (this.isUserMemorized) {
+        localStorage.setItem(
+          SESSION_DATA,
+          JSON.stringify({ token: this.token }),
+        );
+      }
+
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
     }
   }
 

@@ -3,7 +3,6 @@ import { type FC } from 'react';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-// import rosatomIcon from '@assets/rosatomLogo.svg';
 import Logo from '@shared/components/Logo/Logo';
 import { AppBar, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -31,7 +30,9 @@ export const Header: FC = observer(() => {
           <Logo hasText={true} size={'small'} />
         </Link>
         <Typography variant="h5" fontWeight={'bold'}>
-          Название Организации
+          {currentSessionStore.userData?.organization !== undefined
+            ? currentSessionStore.userData?.organization.name
+            : 'Название Организации'}
         </Typography>
         <Box
           sx={{
