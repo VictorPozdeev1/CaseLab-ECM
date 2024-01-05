@@ -44,7 +44,7 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
               <AddRounded />
             </Button>
           </Box>
-          <UsersTable />
+          <UsersTable companyId={companyId} />
         </Box>
       </Container>
     );

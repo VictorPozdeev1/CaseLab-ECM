@@ -89,13 +89,16 @@ export const UserForm: FC<EditingUserFormProps> = observer(
           </Box>
           <Box className={styles.inputBox}>
             <Typography className={styles.label}> Оргинизация </Typography>
+            {/* todo: Сделать селектом */}
             <TextField
               sx={{ width: '446px' }}
-              defaultValue={userInfo.organizationName}
+              defaultValue={
+                'id=' + userInfo.organizationId + '. Сделать селектом!'
+              }
               onChange={(e) => {
-                if (userInfo.organizationName !== undefined) {
-                  userInfo.organizationName = e.target.value;
-                }
+                // if (userInfo.organizationName !== undefined) {
+                //   userInfo.organizationName = e.target.value;
+                // }
               }}
             />
           </Box>
@@ -129,7 +132,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
               }}
             />
           </Box>
-          <Box className={styles.inputBox}>
+          {/* <Box className={styles.inputBox}>
             <Typography className={styles.label}>
               Паспорт серия/номер
             </Typography>
@@ -173,7 +176,7 @@ export const UserForm: FC<EditingUserFormProps> = observer(
                 userInfo.passportIssued = e.target.value;
               }}
             />
-          </Box>
+          </Box> */}
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button

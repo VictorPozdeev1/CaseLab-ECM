@@ -1,4 +1,4 @@
-import React, { type FC } from 'react';
+import React, { useEffect, type FC } from 'react';
 import {
   TableContainer,
   Table,
@@ -12,6 +12,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { CreateRounded } from '@mui/icons-material';
+import model from './model';
 
 const TableCells: string[] = ['ФИО', 'Должность', 'Роль', 'Email'];
 
@@ -19,21 +20,29 @@ interface ITableData {
   id: number;
   name: string;
   post: string;
-  role: 'Пользователь' | 'Администратор';
+  role: string; // 'Пользователь' | 'Администратор';
   email: string;
 }
 
-const TableData: ITableData[] = [
-  {
-    id: 1,
-    name: 'Петров П. И.',
-    post: 'Менеджер',
-    role: 'Пользователь',
-    email: 'ivanov@mail.ru',
-  },
-];
+interface UsersTableProps {
+  companyId: number;
+}
 
-export const UsersTable: FC = (): JSX.Element => {
+export const UsersTable: FC<UsersTableProps> = ({ companyId }): JSX.Element => {
+  useEffect(() => {
+    void model.loadCompanyUsers(companyId);
+  }, [companyId]);
+
+  const users = model.usersByCompany.get(companyId);
+  if (users === undefined) return <div>users === undefined</div>; // Loader?
+  const tableData: ITableData[] = users.map((u) => ({
+    id: u.id,
+    name: u.shortName,
+    post: u.post,
+    role: u.role,
+    email: u.email,
+  }));
+
   return (
     <TableContainer>
       <Table>
@@ -49,7 +58,7 @@ export const UsersTable: FC = (): JSX.Element => {
           })}
         </TableHead>
         <TableBody>
-          {TableData.map((el) => {
+          {tableData.map((el) => {
             return (
               <TableRow key={el.id}>
                 <TableCell>{el.name}</TableCell>
