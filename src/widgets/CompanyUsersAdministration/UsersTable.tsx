@@ -1,4 +1,4 @@
-import React, { useEffect, type FC } from 'react';
+import { type FC } from 'react';
 import {
   TableContainer,
   Table,
@@ -12,7 +12,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { CreateRounded } from '@mui/icons-material';
-import model from './model';
+import { type User } from '@entities/user';
 
 const TableCells: string[] = ['ФИО', 'Должность', 'Роль', 'Email'];
 
@@ -25,16 +25,10 @@ interface ITableData {
 }
 
 interface UsersTableProps {
-  companyId: number;
+  users: User[];
 }
 
-export const UsersTable: FC<UsersTableProps> = ({ companyId }): JSX.Element => {
-  useEffect(() => {
-    void model.loadCompanyUsers(companyId);
-  }, [companyId]);
-
-  const users = model.usersByCompany.get(companyId);
-  if (users === undefined) return <div>users === undefined</div>; // Loader?
+export const UsersTable: FC<UsersTableProps> = ({ users }): JSX.Element => {
   const tableData: ITableData[] = users.map((u) => ({
     id: u.id,
     name: u.shortName,

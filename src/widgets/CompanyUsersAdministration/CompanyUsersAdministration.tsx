@@ -1,14 +1,19 @@
-import { type FC } from 'react';
-
-// import { currentUserStore } from '@store/index';
-// import { usersStore } from '@store/index';
+import { useEffect, type FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, Button, Container, Typography } from '@mui/material';
 import { AddRounded } from '@mui/icons-material';
 import { UsersTable } from './UsersTable';
+import model from './model';
 
 export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
   ({ companyId }) => {
+    useEffect(() => {
+      void model.loadCompanyUsers(companyId);
+    }, [companyId]);
+
+    const users = model.usersByCompany.get(companyId);
+    if (users === undefined) return <div>users === undefined</div>; // Loader?
+
     return (
       <Container maxWidth={'lg'}>
         <Box padding={'16px'}>
@@ -44,7 +49,7 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
               <AddRounded />
             </Button>
           </Box>
-          <UsersTable companyId={companyId} />
+          <UsersTable users={users} />
         </Box>
       </Container>
     );
