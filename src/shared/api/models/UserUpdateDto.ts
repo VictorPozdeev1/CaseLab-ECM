@@ -7,9 +7,6 @@
  */
 export type UserUpdateDto = {
   /**
-   * ID пользователя
-   */
-  id?: number;
   /**
    * Фамилия
    */

@@ -12,8 +12,8 @@ import { OwnDocumentsPage } from '@pages/OwnDocumentsPage/OwnDocumentsPage';
 import { MyCompanyAdministrationPage } from '@pages/MyCompanyAdministrationPage/MyCompanyAdministrationPage';
 import { SpecificCompanyAdministrationPage } from '@pages/SpecificCompanyAdministrationPage/SpecificCompanyAdministrationPage';
 import { Page404 } from '@pages/Page404';
-
-// Роут users надо будет сделать вложенным
+import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
+import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
 
 const AppRoutes: FC = () => {
   return (
@@ -31,7 +31,15 @@ const AppRoutes: FC = () => {
         }
       >
         <Route index element={<HomePage />} />
-        <Route path="myDocuments" element={<OwnDocumentsPage />} />
+        <Route
+          path="myDocuments"
+          element={
+            <RequireRoleCheck role="USER">
+              <OwnDocumentsPage />
+            </RequireRoleCheck>
+          }
+        />
+        <Route path="documentView" element={<DocumentViewPage />} />
         <Route
           path="page1"
           element={
@@ -46,6 +54,14 @@ const AppRoutes: FC = () => {
           element={
             <RequireRoleCheck role="SYSTEM_ADMIN">
               <AdminPage />
+            </RequireRoleCheck>
+          }
+        />
+        <Route
+          path="documentTypes"
+          element={
+            <RequireRoleCheck role="SYSTEM_ADMIN">
+              <DocumentTypesPage />
             </RequireRoleCheck>
           }
         />

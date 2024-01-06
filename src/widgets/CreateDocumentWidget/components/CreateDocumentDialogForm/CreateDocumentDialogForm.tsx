@@ -37,7 +37,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
 
     // todo это надо как-то переделать по-человечески
     useEffect(() => {
-      void docTypesStore.getAllDocTypes();
+      void docTypesStore.loadAllDocTypes();
     }, []);
 
     const columns: GridColDef[] = [
