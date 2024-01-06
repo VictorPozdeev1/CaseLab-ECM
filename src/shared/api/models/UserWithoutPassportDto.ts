@@ -5,9 +5,9 @@
 import type { OrgDto } from './OrgDto';
 
 /**
- * Ответ на получение пользователя
+ * Владелец токена
  */
-export type UserReplyDto = {
+export type UserWithoutPassportDto = {
   /**
    * ID пользователя
    */
@@ -23,7 +23,7 @@ export type UserReplyDto = {
   /**
    * Отчество
    */
-  patronymic?: string;
+  patronymic: string;
   /**
    * Дата рождения
    */
@@ -33,15 +33,15 @@ export type UserReplyDto = {
    */
   email: string;
   /**
-   * Телефон
+   * Номер телефона
    */
   phone: string;
   /**
-   * Описание
+   * Описание пользователя
    */
   post: string;
   /**
-   * Роль
+   * Роль пользователя
    */
   role: string;
   organization: OrgDto;
