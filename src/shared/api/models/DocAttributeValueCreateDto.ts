@@ -6,12 +6,12 @@
  * Список атрибутов
  */
 export type DocAttributeValueCreateDto = {
-  /**
-   * ID атрибута
-   */
-  attributeId: number;
-  /**
-   * Значение
-   */
-  value: string;
+    /**
+     * ID атрибута
+     */
+    attributeId: number;
+    /**
+     * Значение
+     */
+    value: string;
 };

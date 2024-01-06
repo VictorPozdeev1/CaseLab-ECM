@@ -8,7 +8,7 @@ import type { DocAttribute } from './DocAttribute';
  * Список атрибутов
  */
 export type DocAttributeValues = {
-  valueId?: number;
-  value?: string;
-  attribute?: DocAttribute;
+    valueId?: number;
+    value?: string;
+    attribute?: DocAttribute;
 };

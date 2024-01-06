@@ -6,8 +6,12 @@
  * DTO изменения типа
  */
 export type DocTypeUpdateRequestDto = {
-  /**
-   * Название типа
-   */
-  name?: string;
+    /**
+     * Название типа
+     */
+    name?: string;
+    /**
+     * Список уникальных идентификаторов атрибутов
+     */
+    attributes?: Array<number>;
 };

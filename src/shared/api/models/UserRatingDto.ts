@@ -6,24 +6,28 @@
  * Рейтинг пользователя
  */
 export type UserRatingDto = {
-  /**
-   * ID пользователя
-   */
-  id?: number;
-  /**
-   * Фамилия
-   */
-  lastName?: string;
-  /**
-   * Имя
-   */
-  firstName?: string;
-  /**
-   * Email
-   */
-  email?: string;
-  /**
-   * Количество созданных документов
-   */
-  createdDocuments?: number;
+    /**
+     * ID пользователя
+     */
+    id: number;
+    /**
+     * Фамилия
+     */
+    lastName: string;
+    /**
+     * Имя
+     */
+    firstName: string;
+    /**
+     * Отчество
+     */
+    patronymic?: string;
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Количество созданных документов
+     */
+    createdDocuments: number;
 };

@@ -8,16 +8,16 @@ import type { DocAttributeValueCreateDto } from './DocAttributeValueCreateDto';
  * DTO создания объекта
  */
 export type DocumentCreateDto = {
-  /**
-   * ID организации
-   */
-  idOrganization: number;
-  /**
-   * Тип документа
-   */
-  docTypId: number;
-  /**
-   * Список атрибутов
-   */
-  docAttributeValueCreateDtos: Array<DocAttributeValueCreateDto>;
+    /**
+     * Тип документа
+     */
+    docTypeId: number;
+    /**
+     * Пользовательское название документа
+     */
+    title: string;
+    /**
+     * Список атрибутов
+     */
+    attributeValues: Array<DocAttributeValueCreateDto>;
 };

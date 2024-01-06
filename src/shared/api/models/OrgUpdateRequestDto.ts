@@ -6,8 +6,12 @@
  * Запрос на обновление организации
  */
 export type OrgUpdateRequestDto = {
-  /**
-   * Название
-   */
-  name?: string;
+    /**
+     * Название
+     */
+    name?: string;
+    /**
+     * ID сотрудника, получающего по-умолчанию документы на согласование
+     */
+    defaultRecipient?: number;
 };

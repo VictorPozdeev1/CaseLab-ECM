@@ -3,15 +3,15 @@
 /* eslint-disable */
 
 /**
- * DTO Учетных данных пользователя
+ * Учетные данные пользователя
  */
 export type UserCredentialsDto = {
-  /**
-   * Email
-   */
-  email?: string;
-  /**
-   * Пароль
-   */
-  password?: string;
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Пароль
+     */
+    password: string;
 };
