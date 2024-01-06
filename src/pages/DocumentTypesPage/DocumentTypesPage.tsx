@@ -3,23 +3,24 @@ import { Container, Fab } from '@mui/material';
 import { attributesStore, docTypesStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { type DocTypeCreateDto } from '@api';
+import { DocTypeCreateDto } from '@api';
 import { DocumentTypesElement } from '@widgets/DocumentTypesWidget/components/DocumentTypesElement/DocumentTypesElement';
 import { DocumentTypesPopup } from '@widgets/DocumentTypesWidget/components/DocumentTypesPopup/DocumentTypesPopup';
 import { BtnsGroup } from '@widgets/DocumentTypesWidget/components/BtnsGroup/BtnsGroup';
-
-export type agreementType = 'EVERYONE' | 'ANYONE' | 'QORUUM';
+import session from '@store/session';
 
 export const DocumentTypesPage: FC = observer(() => {
   useEffect(() => {
-    void docTypesStore.loadAllDocTypes();
-    void attributesStore.loadAllAttributes();
+    void docTypesStore.loadAllForMyCompany();
+    void attributesStore.loadAllForMyCompany();
   }, []);
 
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const [newTypeValue, setNewTypeValue] = useState<DocTypeCreateDto>({
-    agreementType: 'EVERYONE',
+    agreementType: DocTypeCreateDto.agreementType.EVERYONE,
     name: '',
+    organizationId: session.currentUserCompany, // ?
+    attributes: [],
   });
 
   const AgreementTypeElements = docTypesStore.docTypes?.map((type) => {
@@ -66,6 +67,8 @@ export const DocumentTypesPage: FC = observer(() => {
               void docTypesStore.createDocType({
                 name: newTypeValue.name,
                 agreementType: newTypeValue.agreementType,
+                organizationId: session.currentUserCompany, // todo
+                attributes: [], // todo
               });
               setIsOpenPopup(false);
             }}

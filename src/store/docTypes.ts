@@ -4,7 +4,12 @@ import {
   type DocTypeDto,
   type DocTypeCreateDto,
   type DocAttributeDto,
+  type DocTypeUpdateRequestDto,
 } from '@api';
+
+import session from './session';
+
+// Мб, нужны отдельные сторы для страницы редактирования типов документов и для формы создания документа. Надо подумать позже.
 
 class DocTypes {
   constructor() {
@@ -14,11 +19,16 @@ class DocTypes {
   docTypes?: DocTypeDto[];
   filteredDocTypes?: DocTypeDto[];
 
-  async loadAllDocTypes(page?: number, sortBy?: string): Promise<void> {
+  async loadAllForMyCompany(): Promise<void> {
     try {
-      const response = await Service.getAllDocTypes(page, sortBy);
+      const response = await Service.getAllDocTypes(
+        0,
+        1000,
+        undefined,
+        session.currentUserCompany,
+      );
       runInAction(() => {
-        this.docTypes = response;
+        this.docTypes = response.content;
       });
     } catch (e) {
       console.log(e);
@@ -73,7 +83,7 @@ class DocTypes {
 
   async updateDocTypeById(
     id: number,
-    updType: DocTypeCreateDto,
+    updType: DocTypeUpdateRequestDto,
   ): Promise<void> {
     try {
       const res = await Service.updateDocType(id, updType);
@@ -97,12 +107,12 @@ class DocTypes {
     docTypeId: number,
     agreementName: string,
     attributesArray: DocAttributeDto[],
-    agreementType?: string,
+    // agreementType?: string,                   // Этого пока нет в апи - если это надо, то написать бэкендерам
   ): Promise<void> {
     try {
       runInAction(() => {
         void this.updateDocTypeById(docTypeId, {
-          agreementType,
+          // agreementType,
           name: agreementName,
         });
         // пока отключу добавление атрибутов, т.к. на севрере работает не корректно

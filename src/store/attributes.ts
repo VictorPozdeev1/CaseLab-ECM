@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Service } from '@api';
 import { type DocAttributeDto } from '@api';
+import session from './session';
 
 class AttributesStore {
   constructor() {
@@ -11,11 +12,16 @@ class AttributesStore {
 
   filteredAttributes?: DocAttributeDto[];
 
-  async loadAllAttributes(page?: number, sortBy?: string): Promise<void> {
+  async loadAllForMyCompany(): Promise<void> {
     try {
-      const response = await Service.getAllDocTypes1(page, sortBy);
+      const response = await Service.getAllDocTypes1(
+        0,
+        1000,
+        undefined,
+        session.userData?.organization.id,
+      );
       runInAction(() => {
-        this.attributes = response;
+        this.attributes = response.content;
       });
     } catch (e) {
       console.log(e);
@@ -26,7 +32,7 @@ class AttributesStore {
     try {
       await Service.createAttribute(requestBody);
       runInAction(() => {
-        void this.loadAllAttributes();
+        void this.loadAllForMyCompany();
       });
     } catch (e) {
       console.log(e);

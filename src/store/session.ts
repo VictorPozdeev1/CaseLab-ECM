@@ -1,11 +1,9 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { OpenAPI, Service } from '@api';
-import type {
-  CurrentUserData,
-  UserLoginResponseDto,
-} from '@api/models/UserLoginResponseDto';
+import type { UserWithoutPassportDto, AuthTokenDto } from '@api';
 
-type SessionData = UserLoginResponseDto;
+type SessionData = AuthTokenDto;
+type CurrentUserData = UserWithoutPassportDto;
 
 const SESSION_DATA = 'sessionData';
 
@@ -35,6 +33,13 @@ class Session {
 
   get userData(): CurrentUserData | undefined {
     return this._state?.user;
+  }
+
+  get currentUserCompany(): number {
+    const result = this._state?.user.organization.id;
+    if (typeof result !== 'number')
+      throw new Error('currentUserCompany ===', result);
+    return result;
   }
 
   get roles(): string[] {

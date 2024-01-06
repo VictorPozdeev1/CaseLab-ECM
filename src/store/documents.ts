@@ -1,16 +1,19 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { type DocumentDto, Service } from '@api';
+import { Service } from '@api';
 import currentSession from './session';
+import { type Document } from '@entities/document';
+
+// Видимо, никакого общего стора документов быть не должно, а каждый модуль должен иметь свой стор (и там может быть всего одна загруженная страничка с документами)
 
 class DocumentsStore {
   constructor() {
     makeAutoObservable(this);
   }
 
-  documents?: DocumentDto[];
+  documents?: Document[];
 
   // todo сделать норм
-  get ownDocuments(): DocumentDto[] | undefined {
+  get ownDocuments(): Document[] | undefined {
     return this.documents;
   }
 
@@ -24,7 +27,7 @@ class DocumentsStore {
         creatorId,
       );
       runInAction(() => {
-        this.documents = response.map((d) => ({
+        this.documents = response.content?.map((d) => ({
           ...d,
           date: new Date(d.date as unknown as string),
         }));
@@ -42,9 +45,9 @@ class DocumentsStore {
     try {
       if (currentSession.userData !== undefined) {
         const res = await Service.createDocument({
-          idOrganization: currentSession.userData.organizationId,
-          docTypId: docTypeId,
-          docAttributeValueCreateDtos: Array.from(
+          docTypeId,
+          title: 'Добавить пользовательское название документа',
+          attributeValues: Array.from(
             attributeValues,
             ([attributeId, value]) => ({ attributeId, value }),
           ),
