@@ -19,7 +19,7 @@ export const DocumentTypesPage: FC = observer(() => {
   const [newTypeValue, setNewTypeValue] = useState<DocTypeCreateDto>({
     agreementType: DocTypeCreateDto.agreementType.EVERYONE,
     name: '',
-    organizationId: session.currentUserCompany, // ?
+    organizationId: session.currentUserCompanyId, // ?
     attributes: [],
   });
 
@@ -67,7 +67,7 @@ export const DocumentTypesPage: FC = observer(() => {
               void docTypesStore.createDocType({
                 name: newTypeValue.name,
                 agreementType: newTypeValue.agreementType,
-                organizationId: session.currentUserCompany, // todo
+                organizationId: session.currentUserCompanyId, // todo
                 attributes: [], // todo
               });
               setIsOpenPopup(false);

@@ -35,10 +35,10 @@ class Session {
     return this._state?.user;
   }
 
-  get currentUserCompany(): number {
+  get currentUserCompanyId(): number {
     const result = this._state?.user.organization.id;
     if (typeof result !== 'number')
-      throw new Error('currentUserCompany ===', result);
+      throw new Error('currentUserCompanyId ===', result);
     return result;
   }
 

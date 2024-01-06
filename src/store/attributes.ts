@@ -18,7 +18,7 @@ class AttributesStore {
         0,
         1000,
         undefined,
-        session.userData?.organization.id,
+        session.currentUserCompanyId,
       );
       runInAction(() => {
         this.attributes = response.content;

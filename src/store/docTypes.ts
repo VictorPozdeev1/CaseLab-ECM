@@ -25,7 +25,7 @@ class DocTypes {
         0,
         1000,
         undefined,
-        session.currentUserCompany,
+        session.currentUserCompanyId,
       );
       runInAction(() => {
         this.docTypes = response.content;
