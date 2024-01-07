@@ -31,7 +31,9 @@ export class User {
 
   get shortName(): string {
     return `${this.lastName} ${this.firstName[0]}.${
-      this.patronymic !== undefined ? ' ' + this.patronymic[0] + '.' : ''
+      typeof this.patronymic === 'string' && this.patronymic.length > 0
+        ? ' ' + this.patronymic[0] + '.'
+        : ''
     }`;
   }
 
