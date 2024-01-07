@@ -43,7 +43,7 @@ class DocumentsStore {
     attributeValues: Map<number, string>,
   ): Promise<void> {
     try {
-      if (currentSession.userData !== undefined) {
+      if (currentSession.currentUserData !== undefined) {
         const res = await Service.createDocument({
           docTypeId,
           title: 'Добавить пользовательское название документа',
