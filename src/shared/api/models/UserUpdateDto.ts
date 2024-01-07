@@ -45,7 +45,7 @@ export type UserUpdateDto = {
   /**
    * Дата выдачи паспорта
    */
-  passportDate: string;
+  passportDate?: string;
   /**
    * Код подразделения
    */

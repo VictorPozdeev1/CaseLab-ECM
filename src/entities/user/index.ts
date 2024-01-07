@@ -1,2 +1,2 @@
 export { User } from './User';
-export { UserForm } from './components/UserForm/UserForm';
+export { UserForm, type UserFormProps } from './components/UserForm/UserForm';

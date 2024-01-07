@@ -1,7 +1,8 @@
 import { type UserReplyDto } from '@api';
 
 export class User {
-  constructor(apiResponse: UserReplyDto) {
+  constructor(apiResponse?: UserReplyDto) {
+    if (apiResponse === undefined) return;
     this.id = apiResponse.id;
     this.firstName = apiResponse.firstName;
     this.lastName = apiResponse.lastName;
@@ -14,16 +15,16 @@ export class User {
     this.post = apiResponse.post;
   }
 
-  id: number;
-  lastName: string;
-  firstName: string;
-  patronymic?: string;
-  dateOfBirth: string;
-  email: string;
-  phone: string;
-  organizationId: number;
-  role: string;
-  post: string;
+  id: number = -1;
+  lastName: string = '';
+  firstName: string = '';
+  patronymic?: string = '';
+  dateOfBirth: string = '';
+  email: string = '';
+  phone: string = '';
+  organizationId: number = -1;
+  role: string = '';
+  post: string = '';
 
   get initials(): string {
     return `${this.firstName[0]}${this.lastName[0]}`.toUpperCase();
