@@ -3,12 +3,13 @@ import { type FC } from 'react';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-// import rosatomIcon from '@assets/rosatomLogo.svg';
 import Logo from '@shared/components/Logo/Logo';
 import { AppBar, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { currentSessionStore } from '@store/index';
+import { observer } from 'mobx-react-lite';
 
-export const Header: FC = () => {
+export const Header: FC = observer(() => {
   return (
     <AppBar
       elevation={0}
@@ -29,7 +30,7 @@ export const Header: FC = () => {
           <Logo hasText={true} size={'small'} />
         </Link>
         <Typography variant="h5" fontWeight={'bold'}>
-          Название Организации
+          {currentSessionStore.currentUserCompanyName}
         </Typography>
         <Box
           sx={{
@@ -45,9 +46,14 @@ export const Header: FC = () => {
               gap: '8px',
             }}
           >
-            <Avatar sizes="40px" alt="Иванов И. И." src="/path/to/avatar.jpg" />
+            <Avatar
+              sizes="40px"
+              title={currentSessionStore.currentUserData.fullName}
+            >
+              {currentSessionStore.currentUserData.initials}
+            </Avatar>
             <Typography variant="h6" sx={{ fontSize: '16px' }}>
-              Иванов И. И.
+              {currentSessionStore.currentUserData.shortName}
             </Typography>
           </Box>
           <LogoutButton />
@@ -55,4 +61,4 @@ export const Header: FC = () => {
       </Container>
     </AppBar>
   );
-};
+});

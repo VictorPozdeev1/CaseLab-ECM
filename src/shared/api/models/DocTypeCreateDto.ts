@@ -9,9 +9,28 @@ export type DocTypeCreateDto = {
   /**
    * Название типа
    */
-  name?: string;
+  name: string;
   /**
-   * Тип согласования
+   * Для согласования документа требуется: EVERYONE - все получатели, ANYONE - хотя бы один, QUORUM - не менее 50% получателей.
    */
-  agreementType?: string;
+  agreementType: DocTypeCreateDto.agreementType;
+  /**
+   * Организация
+   */
+  organizationId: number;
+  /**
+   * Список уникальных идентификаторов атрибутов
+   */
+  attributes: Array<number>;
 };
+
+export namespace DocTypeCreateDto {
+  /**
+   * Для согласования документа требуется: EVERYONE - все получатели, ANYONE - хотя бы один, QUORUM - не менее 50% получателей.
+   */
+  export enum agreementType {
+    EVERYONE = 'EVERYONE',
+    ANYONE = 'ANYONE',
+    QUORUM = 'QUORUM',
+  }
+}

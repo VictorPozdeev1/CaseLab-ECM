@@ -9,25 +9,25 @@ export type DocumentChangesDto = {
   /**
    * ID изменения
    */
-  id?: number;
+  id: number;
   /**
    * ID документа
    */
-  documentId?: number;
+  documentId: number;
   /**
    * Дата изменения
    */
-  dateChange?: string;
+  dateChange: string;
   /**
    * Изменения
    */
-  changes?: string;
+  changes: string;
   /**
    * Предыдущая версия
    */
-  previousVersion?: string;
+  previousVersion: string;
   /**
    * ID автора изменения
    */
-  userChangerId?: number;
+  userChangerId: number;
 };

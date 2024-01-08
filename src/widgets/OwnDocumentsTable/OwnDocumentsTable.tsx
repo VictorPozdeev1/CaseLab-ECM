@@ -7,7 +7,7 @@ import {
 } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
 
-import { type DocumentDto } from '@api';
+import { type Document } from '@entities/document';
 import { statusChips, downloadDocumentFile } from '@entities/document';
 import styles from './OwnDocumentsTable.module.css';
 
@@ -17,7 +17,7 @@ import styles from './OwnDocumentsTable.module.css';
 */
 
 interface OwnDocumentsTableProps {
-  documents?: DocumentDto[];
+  documents?: Document[];
 }
 
 const columns: GridColDef[] = [

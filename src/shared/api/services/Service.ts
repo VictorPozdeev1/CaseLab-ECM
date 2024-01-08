@@ -1,6 +1,7 @@
 /* generated using openapi-typescript-codegen -- do no edit */
 /* istanbul ignore file */
 /* eslint-disable */
+import type { AuthTokenDto } from '../models/AuthTokenDto';
 import type { CountOrgDto } from '../models/CountOrgDto';
 import type { CountUsersDto } from '../models/CountUsersDto';
 import type { DocAttributeCreateDto } from '../models/DocAttributeCreateDto';
@@ -18,12 +19,18 @@ import type { DocumentUpdateDto } from '../models/DocumentUpdateDto';
 import type { OrgCreateRequestDto } from '../models/OrgCreateRequestDto';
 import type { OrgDto } from '../models/OrgDto';
 import type { OrgUpdateRequestDto } from '../models/OrgUpdateRequestDto';
+import type { PageDocAttributeDto } from '../models/PageDocAttributeDto';
+import type { PageDocTypeDto } from '../models/PageDocTypeDto';
+import type { PageDocumentChangesDto } from '../models/PageDocumentChangesDto';
+import type { PageDocumentDto } from '../models/PageDocumentDto';
+import type { PageOrgDto } from '../models/PageOrgDto';
+import type { PageUserReplyDto } from '../models/PageUserReplyDto';
+import type { PasswordDto } from '../models/PasswordDto';
 import type { UserCreateDto } from '../models/UserCreateDto';
 import type { UserCredentialsDto } from '../models/UserCredentialsDto';
 import type { UserRatingDto } from '../models/UserRatingDto';
 import type { UserReplyDto } from '../models/UserReplyDto';
 import type { UserUpdateDto } from '../models/UserUpdateDto';
-import type { UserLoginResponseDto } from '../models/UserLoginResponseDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -43,7 +50,7 @@ export class Service {
   ): CancelablePromise<DocTypeDto> {
     return __request(OpenAPI, {
       method: 'PUT',
-      url: '/v1/doctypes/{docTypeId}/attributes/{docAttributeId}',
+      url: '/v2/doctypes/{docTypeId}/attributes/{docAttributeId}',
       path: {
         docTypeId: docTypeId,
         docAttributeId: docAttributeId,
@@ -52,14 +59,92 @@ export class Service {
   }
 
   /**
-   * Получить все организации
-   * @returns OrgDto OK
+   * Получить всех пользователей
+   * @param page Zero-based page index (0..N)
+   * @param size The size of the page to be returned
+   * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+   * @param orgId ID организации
+   * @returns PageUserReplyDto OK
    * @throws ApiError
    */
-  public static getAllOrgs(): CancelablePromise<Array<OrgDto>> {
+  public static getAllUsers(
+    page?: number,
+    size: number = 20,
+    sort?: Array<string>,
+    orgId?: number,
+  ): CancelablePromise<PageUserReplyDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/v1/org',
+      url: '/v2/users',
+      query: {
+        page: page,
+        size: size,
+        sort: sort,
+        org_id: orgId,
+      },
+    });
+  }
+
+  /**
+   * Добавить пользователя
+   * @param requestBody
+   * @returns UserReplyDto Created
+   * @throws ApiError
+   */
+  public static createUser(
+    requestBody: UserCreateDto,
+  ): CancelablePromise<UserReplyDto> {
+    return __request(OpenAPI, {
+      method: 'POST',
+      url: '/v2/users',
+      body: requestBody,
+      mediaType: 'application/json',
+    });
+  }
+
+  /**
+   * Установить пароль для пользователя
+   * @param userId ID пользователя
+   * @param requestBody
+   * @returns any OK
+   * @throws ApiError
+   */
+  public static setUserPassword(
+    userId: number,
+    requestBody: PasswordDto,
+  ): CancelablePromise<any> {
+    return __request(OpenAPI, {
+      method: 'POST',
+      url: '/v2/users/password/{userId}',
+      path: {
+        userId: userId,
+      },
+      body: requestBody,
+      mediaType: 'application/json',
+    });
+  }
+
+  /**
+   * Получить все организации
+   * @param page Zero-based page index (0..N)
+   * @param size The size of the page to be returned
+   * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+   * @returns PageOrgDto OK
+   * @throws ApiError
+   */
+  public static getAllOrgs(
+    page?: number,
+    size: number = 20,
+    sort?: Array<string>,
+  ): CancelablePromise<PageOrgDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/org',
+      query: {
+        page: page,
+        size: size,
+        sort: sort,
+      },
     });
   }
 
@@ -74,107 +159,7 @@ export class Service {
   ): CancelablePromise<OrgDto> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/v1/org',
-      body: requestBody,
-      mediaType: 'application/json',
-    });
-  }
-
-  /**
-   * Создать запрос на согласование
-   * @param documentId ID документа
-   * @param recipientId ID получателя
-   * @returns DocProcessDto OK
-   * @throws ApiError
-   */
-  public static createNewProcess(
-    documentId: number,
-    recipientId: number,
-  ): CancelablePromise<DocProcessDto> {
-    return __request(OpenAPI, {
-      method: 'POST',
-      url: '/v1/document/{documentId}/recipient/{recipientId}/new-process',
-      path: {
-        documentId: documentId,
-        recipientId: recipientId,
-      },
-    });
-  }
-
-  /**
-   * Получить все типы
-   * Все типы с пагинацией и сортировкой
-   * @param page Номер страницы
-   * @param sortBy Сортировка
-   * @returns DocTypeDto OK
-   * @throws ApiError
-   */
-  public static getAllDocTypes(
-    page?: number,
-    sortBy?: string,
-  ): CancelablePromise<Array<DocTypeDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/doctypes',
-      query: {
-        page: page,
-        sortBy: sortBy,
-      },
-    });
-  }
-
-  /**
-   * Создать тип
-   * @param requestBody
-   * @returns DocTypeDto Created
-   * @throws ApiError
-   */
-  public static createDocType(
-    requestBody: DocTypeCreateDto,
-  ): CancelablePromise<DocTypeDto> {
-    return __request(OpenAPI, {
-      method: 'POST',
-      url: '/v1/doctypes',
-      body: requestBody,
-      mediaType: 'application/json',
-    });
-  }
-
-  /**
-   * Получить все атрибуты
-   * Все атрибуты с пагинацией и сортировкой
-   * @param page Номер страницы
-   * @param sortBy Сортировка
-   
-   * @returns DocAttributeDto OK
-   * @throws ApiError
-   */
-  public static getAllDocTypes1(
-    page?: number,
-    sortBy?: string,
-  ): CancelablePromise<Array<DocAttributeDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/docattributes',
-      query: {
-        page: page,
-        sortBy: sortBy,
-      },
-    });
-  }
-
-  /**
-   * Создать атрибут
-   * @param requestBody
-   * @returns DocAttributeDto Created
-   * @throws ApiError
-   */
-  public static createAttribute(
-    requestBody: DocAttributeCreateDto,
-  ): CancelablePromise<DocAttributeDto> {
-    return __request(OpenAPI, {
-      method: 'POST',
-      url: '/v1/docattributes',
+      url: '/v2/org',
       body: requestBody,
       mediaType: 'application/json',
     });
@@ -186,12 +171,13 @@ export class Service {
    * @param rangeStart Начало интервала
    * @param rangeEnd Конец интервала
    * @param creatorId ID создателя документа
-   * @param from Номер страницы
-   * @param size Количество элементов на странице
+   * @param page Zero-based page index (0..N)
+   * @param size The size of the page to be returned
+   * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
    * @param typeId ID типа документа
    * @param attributeId ID атрибута документа
    * @param attributeValue Значение атрибута
-   * @returns DocumentDto OK
+   * @returns PageDocumentDto OK
    * @throws ApiError
    */
   public static findDocuments(
@@ -199,22 +185,24 @@ export class Service {
     rangeStart?: string,
     rangeEnd?: string,
     creatorId?: number,
-    from?: number,
-    size: number = 10,
+    page?: number,
+    size: number = 20,
+    sort?: Array<string>,
     typeId?: number,
     attributeId?: number,
     attributeValue?: string,
-  ): CancelablePromise<Array<DocumentDto>> {
+  ): CancelablePromise<PageDocumentDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/document',
+      url: '/v2/document',
       query: {
         text: text,
         rangeStart: rangeStart,
         rangeEnd: rangeEnd,
         creatorId: creatorId,
-        from: from,
+        page: page,
         size: size,
+        sort: sort,
         typeId: typeId,
         attributeId: attributeId,
         attributeValue: attributeValue,
@@ -233,7 +221,139 @@ export class Service {
   ): CancelablePromise<DocumentDto> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/document',
+      url: '/v2/document',
+      body: requestBody,
+      mediaType: 'application/json',
+    });
+  }
+
+  /**
+   * Создать запрос на согласование
+   * @param documentId ID документа
+   * @param recipientId ID получателя
+   * @returns DocProcessDto OK
+   * @throws ApiError
+   */
+  public static createNewProcess(
+    documentId: number,
+    recipientId: number,
+  ): CancelablePromise<DocProcessDto> {
+    return __request(OpenAPI, {
+      method: 'POST',
+      url: '/v2/document/{documentId}/recipient/{recipientId}/new-process',
+      path: {
+        documentId: documentId,
+        recipientId: recipientId,
+      },
+    });
+  }
+
+  /**
+   * Создать запрос на согласование с учетом компании получателя
+   * @param documentId ID документа
+   * @param companyId ID компании получателя
+   * @returns DocProcessDto OK
+   * @throws ApiError
+   */
+  public static createNewProcessWithCompany(
+    documentId: number,
+    companyId: number,
+  ): CancelablePromise<DocProcessDto> {
+    return __request(OpenAPI, {
+      method: 'POST',
+      url: '/v2/document/{documentId}/company/{companyId}/new-process',
+      path: {
+        documentId: documentId,
+        companyId: companyId,
+      },
+    });
+  }
+
+  /**
+   * Получить все типы
+   * Все типы с пагинацией и сортировкой
+   * @param page Zero-based page index (0..N)
+   * @param size The size of the page to be returned
+   * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+   * @param orgId ID организации
+   * @returns PageDocTypeDto OK
+   * @throws ApiError
+   */
+  public static getAllDocTypes(
+    page?: number,
+    size: number = 20,
+    sort?: Array<string>,
+    orgId?: number,
+  ): CancelablePromise<PageDocTypeDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/doctypes',
+      query: {
+        page: page,
+        size: size,
+        sort: sort,
+        org_id: orgId,
+      },
+    });
+  }
+
+  /**
+   * Создать тип
+   * @param requestBody
+   * @returns DocTypeDto Created
+   * @throws ApiError
+   */
+  public static createDocType(
+    requestBody: DocTypeCreateDto,
+  ): CancelablePromise<DocTypeDto> {
+    return __request(OpenAPI, {
+      method: 'POST',
+      url: '/v2/doctypes',
+      body: requestBody,
+      mediaType: 'application/json',
+    });
+  }
+
+  /**
+   * Получить все атрибуты
+   * Все атрибуты с пагинацией и сортировкой
+   * @param page Zero-based page index (0..N)
+   * @param size The size of the page to be returned
+   * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+   * @param orgId ID организации
+   * @returns PageDocAttributeDto OK
+   * @throws ApiError
+   */
+  public static getAllDocTypes1(
+    page?: number,
+    size: number = 20,
+    sort?: Array<string>,
+    orgId?: number,
+  ): CancelablePromise<PageDocAttributeDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/docattributes',
+      query: {
+        page: page,
+        size: size,
+        sort: sort,
+        org_id: orgId,
+      },
+    });
+  }
+
+  /**
+   * Создать атрибут
+   * @param requestBody
+   * @returns DocAttributeDto Created
+   * @throws ApiError
+   */
+  public static createAttribute(
+    requestBody: DocAttributeCreateDto,
+  ): CancelablePromise<DocAttributeDto> {
+    return __request(OpenAPI, {
+      method: 'POST',
+      url: '/v2/docattributes',
       body: requestBody,
       mediaType: 'application/json',
     });
@@ -242,44 +362,69 @@ export class Service {
   /**
    * Авторизация
    * @param requestBody
-   * @returns any Accepted
+   * @returns AuthTokenDto OK
    * @throws ApiError
    */
   public static login(
     requestBody: UserCredentialsDto,
-  ): CancelablePromise<UserLoginResponseDto> {
+  ): CancelablePromise<AuthTokenDto> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/auth/login',
+      url: '/v2/auth/login',
       body: requestBody,
       mediaType: 'application/json',
     });
   }
 
   /**
-   * Получить всех пользователей
+   * Получить пользователя по ID
+   * @param userId ID пользователя
    * @returns UserReplyDto OK
    * @throws ApiError
    */
-  public static getAllUsers(): CancelablePromise<Array<UserReplyDto>> {
+  public static getUser(userId: number): CancelablePromise<UserReplyDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/admin/users',
+      url: '/v2/users/{userId}',
+      path: {
+        userId: userId,
+      },
     });
   }
 
   /**
-   * Добавить пользователя
-   * @param requestBody
-   * @returns UserReplyDto Created
+   * Удалить пользователя
+   * @param userId ID пользователя
+   * @returns void
    * @throws ApiError
    */
-  public static createUser(
-    requestBody: UserCreateDto,
+  public static deleteUser(userId: number): CancelablePromise<void> {
+    return __request(OpenAPI, {
+      method: 'DELETE',
+      url: '/v2/users/{userId}',
+      path: {
+        userId: userId,
+      },
+    });
+  }
+
+  /**
+   * Изменить пользователя
+   * @param userId ID пользователя
+   * @param requestBody
+   * @returns UserReplyDto OK
+   * @throws ApiError
+   */
+  public static updateUser(
+    userId: number,
+    requestBody: UserUpdateDto,
   ): CancelablePromise<UserReplyDto> {
     return __request(OpenAPI, {
-      method: 'POST',
-      url: '/admin/users',
+      method: 'PATCH',
+      url: '/v2/users/{userId}',
+      path: {
+        userId: userId,
+      },
       body: requestBody,
       mediaType: 'application/json',
     });
@@ -294,7 +439,7 @@ export class Service {
   public static getOrg(orgId: number): CancelablePromise<OrgDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/v1/org/{orgId}',
+      url: '/v2/org/{orgId}',
       path: {
         orgId: orgId,
       },
@@ -310,7 +455,7 @@ export class Service {
   public static deleteOrg(orgId: number): CancelablePromise<OrgDto> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/v1/org/{orgId}',
+      url: '/v2/org/{orgId}',
       path: {
         orgId: orgId,
       },
@@ -318,7 +463,8 @@ export class Service {
   }
 
   /**
-   * Изменить организацию
+   * Изменить организацию.
+   * При запросе от ADMIN по указанной компании, для остальных ролей обновиться своя компания.
    * @param orgId ID организации
    * @param requestBody
    * @returns OrgDto OK
@@ -330,9 +476,65 @@ export class Service {
   ): CancelablePromise<OrgDto> {
     return __request(OpenAPI, {
       method: 'PATCH',
-      url: '/v1/org/{orgId}',
+      url: '/v2/org/{orgId}',
       path: {
         orgId: orgId,
+      },
+      body: requestBody,
+      mediaType: 'application/json',
+    });
+  }
+
+  /**
+   * Получить документ по ID
+   * @param documentId ID документа
+   * @returns DocumentDto OK
+   * @throws ApiError
+   */
+  public static getDocumentById(
+    documentId: number,
+  ): CancelablePromise<DocumentDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/document/{documentId}',
+      path: {
+        documentId: documentId,
+      },
+    });
+  }
+
+  /**
+   * Удалить документ
+   * @param documentId ID документа
+   * @returns any OK
+   * @throws ApiError
+   */
+  public static deleteDocument(documentId: number): CancelablePromise<any> {
+    return __request(OpenAPI, {
+      method: 'DELETE',
+      url: '/v2/document/{documentId}',
+      path: {
+        documentId: documentId,
+      },
+    });
+  }
+
+  /**
+   * Изменить документ
+   * @param documentId ID документа
+   * @param requestBody
+   * @returns DocumentDto OK
+   * @throws ApiError
+   */
+  public static updateDocument(
+    documentId: number,
+    requestBody: DocumentUpdateDto,
+  ): CancelablePromise<DocumentDto> {
+    return __request(OpenAPI, {
+      method: 'PATCH',
+      url: '/v2/document/{documentId}',
+      path: {
+        documentId: documentId,
       },
       body: requestBody,
       mediaType: 'application/json',
@@ -352,7 +554,7 @@ export class Service {
   ): CancelablePromise<DocProcessDto> {
     return __request(OpenAPI, {
       method: 'PATCH',
-      url: '/v1/document/processes/{processId}/send-to-correction',
+      url: '/v2/document/processes/{processId}/send-to-correction',
       path: {
         processId: processId,
       },
@@ -375,7 +577,7 @@ export class Service {
   ): CancelablePromise<DocProcessDto> {
     return __request(OpenAPI, {
       method: 'PATCH',
-      url: '/v1/document/processes/{processId}/send-to-approve',
+      url: '/v2/document/processes/{processId}/send-to-approve',
       path: {
         processId: processId,
       },
@@ -398,8 +600,34 @@ export class Service {
   ): CancelablePromise<DocProcessDto> {
     return __request(OpenAPI, {
       method: 'PATCH',
-      url: '/v1/document/processes/{processId}/reject',
+      url: '/v2/document/processes/{processId}/reject',
       path: {
+        processId: processId,
+      },
+      query: {
+        comment: comment,
+      },
+    });
+  }
+
+  /**
+   * Делегировать согласование документа
+   * @param recipientId ID сотрудника
+   * @param processId ID процесса
+   * @param comment Комментарий
+   * @returns DocProcessDto OK
+   * @throws ApiError
+   */
+  public static delegateToOtherUser(
+    recipientId: number,
+    processId: any,
+    comment?: any,
+  ): CancelablePromise<DocProcessDto> {
+    return __request(OpenAPI, {
+      method: 'PATCH',
+      url: '/v2/document/processes/{processId}/delegate-to-other-user/{recipientId}',
+      path: {
+        recipientId: recipientId,
         processId: processId,
       },
       query: {
@@ -421,7 +649,7 @@ export class Service {
   ): CancelablePromise<DocProcessDto> {
     return __request(OpenAPI, {
       method: 'PATCH',
-      url: '/v1/document/processes/{processId}/approve',
+      url: '/v2/document/processes/{processId}/approve',
       path: {
         processId: processId,
       },
@@ -440,7 +668,7 @@ export class Service {
   public static getDocType(docTypeId: number): CancelablePromise<DocTypeDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/v1/doctypes/{docTypeId}',
+      url: '/v2/doctypes/{docTypeId}',
       path: {
         docTypeId: docTypeId,
       },
@@ -456,7 +684,7 @@ export class Service {
   public static deleteDocType(docTypeId: number): CancelablePromise<void> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/v1/doctypes/{docTypeId}',
+      url: '/v2/doctypes/{docTypeId}',
       path: {
         docTypeId: docTypeId,
       },
@@ -476,7 +704,7 @@ export class Service {
   ): CancelablePromise<DocTypeDto> {
     return __request(OpenAPI, {
       method: 'PATCH',
-      url: '/v1/doctypes/{docTypeId}',
+      url: '/v2/doctypes/{docTypeId}',
       path: {
         docTypeId: docTypeId,
       },
@@ -496,7 +724,7 @@ export class Service {
   ): CancelablePromise<DocAttributeDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/v1/docattributes/{docAttributeId}',
+      url: '/v2/docattributes/{docAttributeId}',
       path: {
         docAttributeId: docAttributeId,
       },
@@ -514,7 +742,7 @@ export class Service {
   ): CancelablePromise<void> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/v1/docattributes/{docAttributeId}',
+      url: '/v2/docattributes/{docAttributeId}',
       path: {
         docAttributeId: docAttributeId,
       },
@@ -534,429 +762,12 @@ export class Service {
   ): CancelablePromise<DocAttributeDto> {
     return __request(OpenAPI, {
       method: 'PATCH',
-      url: '/v1/docattributes/{docAttributeId}',
+      url: '/v2/docattributes/{docAttributeId}',
       path: {
         docAttributeId: docAttributeId,
       },
       body: requestBody,
       mediaType: 'application/json',
-    });
-  }
-
-  /**
-   * Получить документ по ID
-   * @param documentId ID документа
-   * @returns DocumentDto OK
-   * @throws ApiError
-   */
-  public static getDocumentById(
-    documentId: number,
-  ): CancelablePromise<DocumentDto> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/document/{documentId}',
-      path: {
-        documentId: documentId,
-      },
-    });
-  }
-
-  /**
-   * Удалить документ
-   * @param documentId ID документа
-   * @returns any OK
-   * @throws ApiError
-   */
-  public static deleteDocument(documentId: number): CancelablePromise<any> {
-    return __request(OpenAPI, {
-      method: 'DELETE',
-      url: '/document/{documentId}',
-      path: {
-        documentId: documentId,
-      },
-    });
-  }
-
-  /**
-   * Изменить документ
-   * @param documentId ID документа
-   * @param requestBody
-   * @returns DocumentDto OK
-   * @throws ApiError
-   */
-  public static updateDocument(
-    documentId: number,
-    requestBody: DocumentUpdateDto,
-  ): CancelablePromise<DocumentDto> {
-    return __request(OpenAPI, {
-      method: 'PATCH',
-      url: '/document/{documentId}',
-      path: {
-        documentId: documentId,
-      },
-      body: requestBody,
-      mediaType: 'application/json',
-    });
-  }
-
-  /**
-   * Получить пользователя по ID
-   * @param userId ID пользователя
-   * @returns UserReplyDto OK
-   * @throws ApiError
-   */
-  public static getUser(userId: number): CancelablePromise<UserReplyDto> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/admin/users/{userId}',
-      path: {
-        userId: userId,
-      },
-    });
-  }
-
-  /**
-   * Удалить пользователя
-   * @param userId ID пользователя
-   * @returns void
-   * @throws ApiError
-   */
-  public static deleteUser(userId: number): CancelablePromise<void> {
-    return __request(OpenAPI, {
-      method: 'DELETE',
-      url: '/admin/users/{userId}',
-      path: {
-        userId: userId,
-      },
-    });
-  }
-
-  /**
-   * Изменить пользователя
-   * @param userId ID пользователя
-   * @param requestBody
-   * @returns UserReplyDto OK
-   * @throws ApiError
-   */
-  public static updateUser(
-    userId: number,
-    requestBody: UserUpdateDto,
-  ): CancelablePromise<UserReplyDto> {
-    return __request(OpenAPI, {
-      method: 'PATCH',
-      url: '/admin/users/{userId}',
-      path: {
-        userId: userId,
-      },
-      body: requestBody,
-      mediaType: 'application/json',
-    });
-  }
-
-  /**
-   * Установить пароль для пользователя
-   * @param password Пароль пользователя
-   * @param userId ID пользователя
-   * @returns any OK
-   * @throws ApiError
-   */
-  public static setUserPassword(
-    password: string,
-    userId: number,
-  ): CancelablePromise<Record<string, any>> {
-    return __request(OpenAPI, {
-      method: 'PATCH',
-      url: '/admin/users/password/{userId}',
-      path: {
-        userId: userId,
-      },
-      query: {
-        password: password,
-      },
-    });
-  }
-
-  /**
-   * Поиск организации по подстроке в имени
-   * @param name Подстрока в имени
-   * @returns OrgDto OK
-   * @throws ApiError
-   */
-  public static getOrgsByNameLike(
-    name: string,
-  ): CancelablePromise<Array<OrgDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/org/name/{name}',
-      path: {
-        name: name,
-      },
-    });
-  }
-
-  /**
-   * Посмотреть все процессы по документу
-   * @param documentId ID документа
-   * @returns DocProcessDto OK
-   * @throws ApiError
-   */
-  public static findProcessByDocumentId(
-    documentId: number,
-  ): CancelablePromise<Array<DocProcessDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/document/{documentId}/processes',
-      path: {
-        documentId: documentId,
-      },
-    });
-  }
-
-  /**
-   * Получить процесс по ID
-   * @param processId ID документа
-   * @returns DocProcessDto OK
-   * @throws ApiError
-   */
-  public static findProcessById(
-    processId: number,
-  ): CancelablePromise<DocProcessDto> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/document/processes/{processId}',
-      path: {
-        processId: processId,
-      },
-    });
-  }
-
-  /**
-   * Удалить процесс
-   * @param processId ID процесса
-   * @returns void
-   * @throws ApiError
-   */
-  public static deleteProcess(processId: number): CancelablePromise<void> {
-    return __request(OpenAPI, {
-      method: 'DELETE',
-      url: '/v1/document/processes/{processId}',
-      path: {
-        processId: processId,
-      },
-    });
-  }
-
-  /**
-   * Получить все процессы, где текущий пользователь является отправителем
-   * @returns DocProcessDto OK
-   * @throws ApiError
-   */
-  public static findOutgoingProcesses(): CancelablePromise<
-    Array<DocProcessDto>
-  > {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/document/processes/outgoing',
-    });
-  }
-
-  /**
-   * Получить все процессы, где текущий пользователь является получателем
-   * @returns DocProcessDto OK
-   * @throws ApiError
-   */
-  public static findIncomingProcesses(): CancelablePromise<
-    Array<DocProcessDto>
-  > {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/document/processes/incoming',
-    });
-  }
-
-  /**
-   * Поиск типа по подстроке в имени
-   * @param name Подстрока имени
-   * @returns DocTypeDto OK
-   * @throws ApiError
-   */
-  public static getDocTypesByNameLike(
-    name: string,
-  ): CancelablePromise<Array<DocTypeDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/doctypes/name/{name}',
-      path: {
-        name: name,
-      },
-    });
-  }
-
-  /**
-   * Поиск атрибута по подстроке в имени
-   * @param name Подстрока имени
-   * @returns DocAttributeDto OK
-   * @throws ApiError
-   */
-  public static getDocAttributesByNameLike(
-    name: string,
-  ): CancelablePromise<Array<DocAttributeDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/docattributes/name/{name}',
-      path: {
-        name: name,
-      },
-    });
-  }
-
-  /**
-   * Получить кол-во пользователей
-   * @returns CountUsersDto OK
-   * @throws ApiError
-   */
-  public static countUsers(): CancelablePromise<CountUsersDto> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/statistic/users/count',
-    });
-  }
-
-  /**
-   * Получить рейтинг активных пользователей по организации
-   * @param orgId ID организации
-   * @returns UserRatingDto OK
-   * @throws ApiError
-   */
-  public static getRating(
-    orgId: number,
-  ): CancelablePromise<Array<UserRatingDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/statistic/userRating/{orgId}',
-      path: {
-        orgId: orgId,
-      },
-    });
-  }
-
-  /**
-   * Получить кол-во организаций
-   * @returns CountOrgDto OK
-   * @throws ApiError
-   */
-  public static countOrg(): CancelablePromise<CountOrgDto> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/statistic/organisation/count',
-    });
-  }
-
-  /**
-   * Получить список самых активных организаций
-   * @returns OrgDto OK
-   * @throws ApiError
-   */
-  public static getActiveOrganization(): CancelablePromise<Array<OrgDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/statistic/getActiveOrganization',
-    });
-  }
-
-  /**
-   * Получить общее кол-во документов
-   * @returns DocStatisticDTO OK
-   * @throws ApiError
-   */
-  public static getCount(): CancelablePromise<DocStatisticDTO> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/statistic/documents/getCount',
-    });
-  }
-
-  /**
-   * Получить кол-во документов со статусом
-   * @param status Наименование статуса
-   * @returns DocStatisticDTO OK
-   * @throws ApiError
-   */
-  public static getCountByStatus(
-    status: string,
-  ): CancelablePromise<DocStatisticDTO> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/statistic/documents/getCountByStatus/{status}',
-      path: {
-        status: status,
-      },
-    });
-  }
-
-  /**
-   * Получить историю изменений по ID
-   * @param documentId ID документа
-   * @returns DocumentChangesDto OK
-   * @throws ApiError
-   */
-  public static findDocChangesByDocumentId(
-    documentId: number,
-  ): CancelablePromise<Array<DocumentChangesDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/document/{documentId}/changes',
-      path: {
-        documentId: documentId,
-      },
-    });
-  }
-
-  /**
-   * Получить изменения документа по ID
-   * @param documentChangesId ID изменения документа
-   * @returns DocumentChangesDto OK
-   * @throws ApiError
-   */
-  public static findDocChangesById(
-    documentChangesId: number,
-  ): CancelablePromise<DocumentChangesDto> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/document/changesById/{documentChangesId}',
-      path: {
-        documentChangesId: documentChangesId,
-      },
-    });
-  }
-
-  /**
-   * Получить документы измененные пользователем
-   * @param creatorId ID создателя документа
-   * @returns DocumentChangesDto OK
-   * @throws ApiError
-   */
-  public static findDocChangesByUserId(
-    creatorId: number,
-  ): CancelablePromise<Array<DocumentChangesDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/document/changesByCreator/{creatorId}',
-      path: {
-        creatorId: creatorId,
-      },
-    });
-  }
-
-  /**
-   * Получить информацию о пользователе по токену авторизации
-   * @returns any OK
-   * @throws ApiError
-   */
-  public static getUserInfo(): CancelablePromise<Record<string, any>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/auth/info',
     });
   }
 
@@ -969,7 +780,7 @@ export class Service {
   public static getUserByPhone(phone: string): CancelablePromise<UserReplyDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/admin/users/phone/{phone}',
+      url: '/v2/users/phone/{phone}',
       path: {
         phone: phone,
       },
@@ -987,7 +798,7 @@ export class Service {
   ): CancelablePromise<UserReplyDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/admin/users/passport/{passport}',
+      url: '/v2/users/passport/{passport}',
       path: {
         passport: passport,
       },
@@ -995,28 +806,46 @@ export class Service {
   }
 
   /**
+   * Получить всех пользователей по организации
+   * @param orgId Id организации
+   * @returns UserReplyDto OK
+   * @throws ApiError
+   */
+  public static getUsersByOrganization(
+    orgId: number,
+  ): CancelablePromise<Array<UserReplyDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/users/organization/{orgId}',
+      path: {
+        orgId: orgId,
+      },
+    });
+  }
+
+  /**
    * Получить всех пользователей с сортировкой и пагинацией
    * @param ids
-   * @param sort Сортировка
-   * @param from Номер страницы
-   * @param size Количество элементов на странице
-   * @returns UserReplyDto OK
+   * @param page Zero-based page index (0..N)
+   * @param size The size of the page to be returned
+   * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+   * @returns PageUserReplyDto OK
    * @throws ApiError
    */
   public static getUsers(
     ids?: Array<number>,
-    sort: string = '',
-    from?: number,
-    size: number = 10,
-  ): CancelablePromise<Array<UserReplyDto>> {
+    page?: number,
+    size: number = 20,
+    sort?: Array<string>,
+  ): CancelablePromise<PageUserReplyDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/admin/users/ids',
+      url: '/v2/users/ids',
       query: {
         ids: ids,
-        sort: sort,
-        from: from,
+        page: page,
         size: size,
+        sort: sort,
       },
     });
   }
@@ -1030,10 +859,313 @@ export class Service {
   public static getUserByEmail(email: string): CancelablePromise<UserReplyDto> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/admin/users/email/{email}',
+      url: '/v2/users/email/{email}',
       path: {
         email: email,
       },
+    });
+  }
+
+  /**
+   * Получить кол-во пользователей
+   * При запросе от ADMIN поиск будет проходить по всей базе, для остальных ролей поиск внутри своей компании
+   * @returns CountUsersDto OK
+   * @throws ApiError
+   */
+  public static countUsers(): CancelablePromise<CountUsersDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/statistic/users/count',
+    });
+  }
+
+  /**
+   * Получить рейтинг активных пользователей по организации.
+   * При запросе от ADMIN по указанной компании, для остальных ролей поиск внутри своей компании
+   * @param orgId ID организации
+   * @returns UserRatingDto OK
+   * @throws ApiError
+   */
+  public static getRating(
+    orgId: number,
+  ): CancelablePromise<Array<UserRatingDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/statistic/userRating/{orgId}',
+      path: {
+        orgId: orgId,
+      },
+    });
+  }
+
+  /**
+   * Получить кол-во организаций
+   * @returns CountOrgDto OK
+   * @throws ApiError
+   */
+  public static countOrg(): CancelablePromise<CountOrgDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/statistic/organisation/count',
+    });
+  }
+
+  /**
+   * Получить список самых активных организаций
+   * @returns OrgDto OK
+   * @throws ApiError
+   */
+  public static getActiveOrganization(): CancelablePromise<Array<OrgDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/statistic/getActiveOrganization',
+    });
+  }
+
+  /**
+   * Получить общее кол-во документов.
+   * при запросе от ADMIN поиск будет проходить по всей базе, для остальных ролей поиск внутри своей компании
+   * @returns DocStatisticDTO OK
+   * @throws ApiError
+   */
+  public static getCount(): CancelablePromise<DocStatisticDTO> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/statistic/documents/getCount',
+    });
+  }
+
+  /**
+   * Получить кол-во документов со статусом
+   * При запросе от ADMIN поиск будет проходить по всей базе, для остальных ролей поиск внутри своей компании
+   * @param status Наименование статуса
+   * @returns DocStatisticDTO OK
+   * @throws ApiError
+   */
+  public static getCountByStatus(
+    status: string,
+  ): CancelablePromise<DocStatisticDTO> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/statistic/documents/getCountByStatus/{status}',
+      path: {
+        status: status,
+      },
+    });
+  }
+
+  /**
+   * Поиск организации по подстроке в имени
+   * @param name Подстрока в имени
+   * @returns OrgDto OK
+   * @throws ApiError
+   */
+  public static getOrgsByNameLike(
+    name: string,
+  ): CancelablePromise<Array<OrgDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/org/name/{name}',
+      path: {
+        name: name,
+      },
+    });
+  }
+
+  /**
+   * Посмотреть все процессы по документу
+   * @param documentId ID документа
+   * @returns DocProcessDto OK
+   * @throws ApiError
+   */
+  public static findProcessByDocumentId(
+    documentId: number,
+  ): CancelablePromise<Array<DocProcessDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/document/{documentId}/processes',
+      path: {
+        documentId: documentId,
+      },
+    });
+  }
+
+  /**
+   * Получить историю изменений по ID
+   * @param documentId ID документа
+   * @param page Zero-based page index (0..N)
+   * @param size The size of the page to be returned
+   * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+   * @param orgId ID организации
+   * @returns PageDocumentChangesDto OK
+   * @throws ApiError
+   */
+  public static findDocChangesByDocumentId(
+    documentId: number,
+    page?: number,
+    size: number = 20,
+    sort?: Array<string>,
+    orgId?: number,
+  ): CancelablePromise<PageDocumentChangesDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/document/{documentId}/changes',
+      path: {
+        documentId: documentId,
+      },
+      query: {
+        page: page,
+        size: size,
+        sort: sort,
+        org_id: orgId,
+      },
+    });
+  }
+
+  /**
+   * Получить процесс по ID
+   * @param processId ID документа
+   * @returns DocProcessDto OK
+   * @throws ApiError
+   */
+  public static findProcessById(
+    processId: number,
+  ): CancelablePromise<DocProcessDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/document/processes/{processId}',
+      path: {
+        processId: processId,
+      },
+    });
+  }
+
+  /**
+   * Удалить процесс
+   * @param processId ID процесса
+   * @returns void
+   * @throws ApiError
+   */
+  public static deleteProcess(processId: number): CancelablePromise<void> {
+    return __request(OpenAPI, {
+      method: 'DELETE',
+      url: '/v2/document/processes/{processId}',
+      path: {
+        processId: processId,
+      },
+    });
+  }
+
+  /**
+   * Получить все процессы, где текущий пользователь является отправителем
+   * @returns DocProcessDto OK
+   * @throws ApiError
+   */
+  public static findOutgoingProcesses(): CancelablePromise<
+    Array<DocProcessDto>
+  > {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/document/processes/outgoing',
+    });
+  }
+
+  /**
+   * Получить все процессы, где текущий пользователь является получателем
+   * @returns DocProcessDto OK
+   * @throws ApiError
+   */
+  public static findIncomingProcesses(): CancelablePromise<
+    Array<DocProcessDto>
+  > {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/document/processes/incoming',
+    });
+  }
+
+  /**
+   * Получить изменения документа по ID
+   * @param documentChangesId ID изменения документа
+   * @returns DocumentChangesDto OK
+   * @throws ApiError
+   */
+  public static findDocChangesById(
+    documentChangesId: number,
+  ): CancelablePromise<DocumentChangesDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/document/changesById/{documentChangesId}',
+      path: {
+        documentChangesId: documentChangesId,
+      },
+    });
+  }
+
+  /**
+   * Получить документы измененные пользователем
+   * @param creatorId ID создателя документа
+   * @returns DocumentChangesDto OK
+   * @throws ApiError
+   */
+  public static findDocChangesByUserId(
+    creatorId: number,
+  ): CancelablePromise<Array<DocumentChangesDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/document/changesByCreator/{creatorId}',
+      path: {
+        creatorId: creatorId,
+      },
+    });
+  }
+
+  /**
+   * Поиск типа по подстроке в имени
+   * @param name Подстрока имени
+   * @returns DocTypeDto OK
+   * @throws ApiError
+   */
+  public static getDocTypesByNameLike(
+    name: string,
+  ): CancelablePromise<Array<DocTypeDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/doctypes/name/{name}',
+      path: {
+        name: name,
+      },
+    });
+  }
+
+  /**
+   * Поиск атрибута по подстроке в имени.
+   * при запросе от ADMIN поиск будет проходить по всей базе, для остальных ролей поиск атрибутов проходит внутри своей организации
+   * @param name Подстрока имени
+   * @returns DocAttributeDto OK
+   * @throws ApiError
+   */
+  public static getDocAttributesByNameLike(
+    name: string,
+  ): CancelablePromise<Array<DocAttributeDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/docattributes/name/{name}',
+      path: {
+        name: name,
+      },
+    });
+  }
+
+  /**
+   * Получить информацию о пользователе по токену авторизации
+   * @returns UserReplyDto OK
+   * @throws ApiError
+   */
+  public static getUserInfo(): CancelablePromise<UserReplyDto> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/auth/info',
     });
   }
 }

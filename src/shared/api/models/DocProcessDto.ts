@@ -9,25 +9,29 @@ export type DocProcessDto = {
   /**
    * ID процесса
    */
-  id?: number;
+  id: number;
   /**
    * Документ
    */
-  document?: number;
+  document: number;
   /**
    * Отправитель
    */
-  sender?: number;
+  sender: number;
   /**
    * Получатель
    */
-  recipient?: number;
+  recipientUserId: number;
+  /**
+   * Организация получатель
+   */
+  recipientOrganizationId: number;
   /**
    * Статус
    */
-  status?: string;
+  status: string;
   /**
    * Комментарий
    */
-  comment?: string;
+  comment: string;
 };

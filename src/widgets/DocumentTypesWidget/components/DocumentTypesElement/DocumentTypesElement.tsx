@@ -49,7 +49,7 @@ export const DocumentTypesElement: FC<PropType> = observer(
         PrevTypeValuesRef.current.docTitle = typeDocTitle as string;
         setIsVisibleBtn(false);
         void docTypesStore.updateDocType(
-          type.id as number,
+          type.id,
           typeDocTitle as string,
           typeAttributes as DocAttributeDto[],
         );
@@ -127,7 +127,7 @@ export const DocumentTypesElement: FC<PropType> = observer(
           isOpen={isOpenDeletePopup}
           onSubmit={() => {
             console.log('submit');
-            void docTypesStore.deleteDocTypeById(type?.id as number);
+            void docTypesStore.deleteDocTypeById(type?.id);
           }}
           onClose={() => {
             setIsOpenDeletePopup(false);

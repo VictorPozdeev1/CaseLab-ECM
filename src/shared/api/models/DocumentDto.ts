@@ -8,11 +8,18 @@ import type { DocAttributeValues } from './DocAttributeValues';
  * Документ
  */
 export type DocumentDto = {
+  /**
+   * ID документа
+   */
   id: number;
   /**
    * Название
    */
   name: string;
+  /**
+   * Пользовательское название документа
+   */
+  title: string;
   /**
    * Путь документа
    */
@@ -20,7 +27,7 @@ export type DocumentDto = {
   /**
    * Дата последнего обновления
    */
-  date: Date;
+  date: string;
   /**
    * ID организации
    */
@@ -28,7 +35,7 @@ export type DocumentDto = {
   /**
    * ID создателя
    */
-  ownerId?: number;
+  ownerId: number;
   /**
    * Тип документа
    */
@@ -40,5 +47,5 @@ export type DocumentDto = {
   /**
    * Статус
    */
-  finalDocStatus?: string;
+  finalDocStatus: string;
 };

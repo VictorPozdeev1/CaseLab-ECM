@@ -9,13 +9,17 @@ export type DocAttributeDto = {
   /**
    * ID атрибута
    */
-  id?: number;
+  id: number;
   /**
    * Наименование атрибута
    */
-  name?: string;
+  name: string;
   /**
    * Тип атрибута
    */
-  type?: string;
+  type: string;
+  /**
+   * Организация атрибута
+   */
+  organizationId: number;
 };

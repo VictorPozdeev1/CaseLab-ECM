@@ -9,5 +9,5 @@ export type CountOrgDto = {
   /**
    * Количество организаций
    */
-  countOrganization?: number;
+  countOrganization: number;
 };

@@ -10,4 +10,8 @@ export type OrgUpdateRequestDto = {
    * Название
    */
   name?: string;
+  /**
+   * ID сотрудника, получающего по-умолчанию документы на согласование
+   */
+  defaultRecipient?: number;
 };

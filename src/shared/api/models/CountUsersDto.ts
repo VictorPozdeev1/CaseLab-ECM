@@ -9,5 +9,5 @@ export type CountUsersDto = {
   /**
    * Количество пользователей
    */
-  countUser?: number;
+  countUser: number;
 };
