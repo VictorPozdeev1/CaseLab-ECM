@@ -1,7 +1,6 @@
 import { useEffect, type FC, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, Button, Container, Typography } from '@mui/material';
-import { AddRounded } from '@mui/icons-material';
 
 import { User, UserForm, type UserFormProps } from '@entities/user';
 
@@ -78,17 +77,18 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
                 */}
                 Список сотрудников организации с id = {companyId} (доделать!)
               </Typography>
+            </Box>
+            <Box sx={{ mb: '1rem' }}>
               <Button
                 type="submit"
                 variant="contained"
                 color="primary"
                 sx={{
                   textTransform: 'none',
-                  width: '40px',
+                  width: 'fit-content',
                   height: '40px',
                   boxShadow: 'none',
-                  borderRadius: '50%',
-                  padding: '0 !important',
+                  borderRadius: '20px',
                   minWidth: '40px',
                   ':hover': {
                     boxShadow: 'none',
@@ -99,7 +99,7 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
                 }}
                 onClick={addUserClickHandler}
               >
-                <AddRounded />
+                <Typography>Добавить сотрудника</Typography>
               </Button>
             </Box>
             <UsersTable users={users} onEditUserClick={editUserClickHandler} />
