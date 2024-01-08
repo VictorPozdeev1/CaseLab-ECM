@@ -71,7 +71,12 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
               gap={'16px'}
             >
               <Typography variant="h5" fontWeight={'bold'}>
-                Список пользователей организации {companyId}
+                {/* todo
+                 Тут будет написано либо "моей организации", либо "организации <Название>".
+                 Но это быстро не сделать, сделаю позже.
+                 (надо, чтоб виджет знал о своём типе, и модель тоже - и обращалась к разным эндпойнтам.)
+                */}
+                Список сотрудников организации с id = {companyId} (доделать!)
               </Typography>
               <Button
                 type="submit"
