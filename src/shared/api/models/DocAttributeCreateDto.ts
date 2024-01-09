@@ -9,9 +9,13 @@ export type DocAttributeCreateDto = {
   /**
    * Название атрибута
    */
-  name?: string;
+  name: string;
   /**
    * Тип атрибута
    */
-  type?: string;
+  type: string;
+  /**
+   * ID организации атрибута
+   */
+  organizationId: number;
 };

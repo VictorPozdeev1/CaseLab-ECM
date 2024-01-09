@@ -2,11 +2,9 @@
 /* istanbul ignore file */
 /* eslint-disable */
 
-import type { UserOrganization } from './UserOrganization';
-
-export type DocAttribute = {
+export type UserOrganization = {
   id?: number;
+  inn?: string;
   name?: string;
-  type?: string;
-  organization?: UserOrganization;
+  defaultRecipient?: number;
 };

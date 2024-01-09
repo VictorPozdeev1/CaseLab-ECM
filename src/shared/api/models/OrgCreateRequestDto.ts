@@ -3,15 +3,15 @@
 /* eslint-disable */
 
 /**
- * DTO создания организации
+ * Запрос на создание организации
  */
 export type OrgCreateRequestDto = {
   /**
    * Название
    */
-  name?: string;
+  name: string;
   /**
    * ИНН
    */
-  inn?: string;
+  inn: string;
 };

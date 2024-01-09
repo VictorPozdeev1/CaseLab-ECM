@@ -1,7 +1,7 @@
 import currentSessionStore from './session';
 import documentsStore from './documents';
 import attributesStore from './attributes';
-import docTypesStore from './docTypes';
+import docTypesStore from './documentTypes';
 import { injectStores } from '@mobx-devtools/tools';
 
 injectStores({

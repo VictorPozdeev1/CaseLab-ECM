@@ -9,13 +9,17 @@ export type OrgDto = {
   /**
    * ID организации
    */
-  id?: number;
+  id: number;
   /**
    * Название
    */
-  name?: string;
+  name: string;
   /**
    * ИНН
    */
-  inn?: string;
+  inn: string;
+  /**
+   * ID сотрудника, получающего по-умолчанию документы на согласование
+   */
+  defaultRecipient: number;
 };

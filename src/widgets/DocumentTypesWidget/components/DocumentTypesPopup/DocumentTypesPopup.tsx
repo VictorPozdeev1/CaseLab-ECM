@@ -8,7 +8,6 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { type agreementType } from '@pages/DocumentTypesPage/DocumentTypesPage';
 import { type FC } from 'react';
 // import { useState, type FC } from 'react';
 
@@ -100,7 +99,7 @@ export const DocumentTypesPopup: FC<PopupProps> = ({
             setNewTypeValue(() => {
               return {
                 ...newTypeValue,
-                agreementType: e.target.value as agreementType,
+                agreementType: e.target.value as DocTypeCreateDto.agreementType,
               };
             });
           }}

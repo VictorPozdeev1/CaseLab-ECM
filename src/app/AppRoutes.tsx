@@ -65,25 +65,25 @@ const AppRoutes: FC = () => {
             </RequireRoleCheck>
           }
         />
+        <Route
+          path="myCompany"
+          element={
+            <RequireRoleCheck role="COMPANY_ADMIN">
+              <MyCompanyAdministrationPage />
+            </RequireRoleCheck>
+          }
+        />
+        <Route
+          path="company/:companyId"
+          element={
+            <RequireRoleCheck role="SYSTEM_ADMIN">
+              <SpecificCompanyAdministrationPage />
+            </RequireRoleCheck>
+          }
+        />
+        <Route path="forbidden" element={<ForbiddenPage />} />
+        <Route path="*" element={<Page404 />} />
       </Route>
-      <Route path="forbidden" element={<ForbiddenPage />} />
-      <Route path="*" element={<Page404 />} />
-      <Route
-        path="myCompany"
-        element={
-          <RequireRoleCheck role="COMPANY_ADMIN">
-            <MyCompanyAdministrationPage />
-          </RequireRoleCheck>
-        }
-      />
-      <Route
-        path="company/:companyId"
-        element={
-          <RequireRoleCheck role="SYSTEM_ADMIN">
-            <SpecificCompanyAdministrationPage />
-          </RequireRoleCheck>
-        }
-      />
     </Routes>
   );
 };

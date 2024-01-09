@@ -32,7 +32,7 @@ export const DocumentTypesAttributesList: FC<PropType> = observer(
           options={allAttributes}
           disableCloseOnSelect
           value={typeAttributes}
-          getOptionLabel={(option) => option.name as string}
+          getOptionLabel={(option) => option.name}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           renderOption={(props, option) => (
             <React.Fragment key={option.id}>
