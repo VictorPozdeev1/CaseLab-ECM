@@ -12,6 +12,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { EditRounded } from '@mui/icons-material';
+import PasswordIcon from '@mui/icons-material/Password';
 import { type User } from '@entities/user';
 import { observer } from 'mobx-react-lite';
 
@@ -28,10 +29,11 @@ interface ITableData {
 interface UsersTableProps {
   users: User[];
   onEditUserClick: (userToEditId: number) => void;
+  onEditUserClickPass: (userToEditId: number) => void;
 }
 
 export const UsersTable: FC<UsersTableProps> = observer(
-  ({ users, onEditUserClick }): JSX.Element => {
+  ({ users, onEditUserClick, onEditUserClickPass }): JSX.Element => {
     const tableData: ITableData[] = users.map((u) => ({
       id: u.id,
       name: u.shortName,
@@ -74,13 +76,22 @@ export const UsersTable: FC<UsersTableProps> = observer(
                       alignItems={'center'}
                     >
                       {el.email}
-                      <IconButton
-                        onClick={() => {
-                          onEditUserClick(el.id);
-                        }}
-                      >
-                        <EditRounded />
-                      </IconButton>
+                      <Box>
+                        <IconButton
+                          onClick={() => {
+                            onEditUserClick(el.id);
+                          }}
+                        >
+                          <EditRounded />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => {
+                            onEditUserClickPass(el.id);
+                          }}
+                        >
+                          <PasswordIcon />
+                        </IconButton>
+                      </Box>
                     </Box>
                   </TableCell>
                 </TableRow>
