@@ -15,7 +15,7 @@ export const Header: FC = observer(() => {
       elevation={0}
       color="transparent"
       position="relative"
-      sx={{ padding: 2 }}
+      sx={{ pt: 2, pb: 2 }}
     >
       <Container
         disableGutters
