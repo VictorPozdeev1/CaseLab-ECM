@@ -9,5 +9,5 @@ export type DocStatisticDTO = {
   /**
    * Количество
    */
-  count?: number;
+  count: number;
 };

@@ -9,21 +9,25 @@ export type UserRatingDto = {
   /**
    * ID пользователя
    */
-  id?: number;
+  id: number;
   /**
    * Фамилия
    */
-  lastName?: string;
+  lastName: string;
   /**
    * Имя
    */
-  firstName?: string;
+  firstName: string;
+  /**
+   * Отчество
+   */
+  patronymic?: string;
   /**
    * Email
    */
-  email?: string;
+  email: string;
   /**
    * Количество созданных документов
    */
-  createdDocuments?: number;
+  createdDocuments: number;
 };

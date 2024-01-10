@@ -13,6 +13,10 @@ export type DocumentUpdateDto = {
    */
   name?: string;
   /**
+   * Пользовательское название документа
+   */
+  title?: string;
+  /**
    * Путь документа
    */
   documentPath?: string;

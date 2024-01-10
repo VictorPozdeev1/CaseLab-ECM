@@ -9,15 +9,15 @@ import type { DocAttributeValueCreateDto } from './DocAttributeValueCreateDto';
  */
 export type DocumentCreateDto = {
   /**
-   * ID организации
-   */
-  idOrganization: number;
-  /**
    * Тип документа
    */
-  docTypId: number;
+  docTypeId: number;
+  /**
+   * Пользовательское название документа
+   */
+  title: string;
   /**
    * Список атрибутов
    */
-  docAttributeValueCreateDtos: Array<DocAttributeValueCreateDto>;
+  attributeValues: Array<DocAttributeValueCreateDto>;
 };

@@ -3,10 +3,9 @@
 /* eslint-disable */
 
 /**
- * DTO изменения пользователя
+ * Данные для обновления пользователя
  */
 export type UserUpdateDto = {
-  /**
   /**
    * Фамилия
    */
@@ -22,7 +21,7 @@ export type UserUpdateDto = {
   /**
    * Дата рождения
    */
-  dateOfBirth?: string;
+  dateOfBirth: string;
   /**
    * Email
    */
