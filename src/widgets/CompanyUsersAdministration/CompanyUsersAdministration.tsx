@@ -1,9 +1,12 @@
 import { useEffect, type FC, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, Button, Container, Typography } from '@mui/material';
-
+import { type PasswordDto, Service } from '@api';
 import { User, UserForm, type UserFormProps } from '@entities/user';
-
+import {
+  type UserPassFormProps,
+  UserPasswordForm,
+} from '@entities/user/components/UserPasswordForm/UserPasswordForm';
 import { UsersTable } from './UsersTable';
 import userStores, { type UserStore } from './model';
 
@@ -19,7 +22,7 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
     }, [companyId]);
 
     const [userFormProps, setUserFormProps] = useState<UserFormProps>();
-
+    const [userPassFormProps, setPassFormProps] = useState<UserPassFormProps>();
     const users = model.users;
     if (users === undefined) return <div>users === undefined</div>; // Loader?
 
@@ -55,6 +58,25 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
             .catch(() => {}) /* Оставить форму открытой и показать ошибку */
             .finally(); /* Разблокировать форму */
           setUserFormProps(undefined);
+        },
+      });
+    };
+
+    const editUserClickPass = (userToEditId: number): void => {
+      setPassFormProps({
+        userInitialInfo: model.users.find((u) => u.id === userToEditId) as User,
+        onCancel: () => {
+          setPassFormProps(undefined);
+        },
+        onSubmit: (password: string) => {
+          /* Заблокировать форму */
+          Service.setUserPassword(userToEditId, {
+            password,
+          } as unknown as PasswordDto)
+            .then() /* Закрыть форму */
+            .catch(() => {}) /* Оставить форму открытой и показать ошибку */
+            .finally();
+          setPassFormProps(undefined);
         },
       });
     };
@@ -102,10 +124,17 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
                 <Typography>Добавить сотрудника</Typography>
               </Button>
             </Box>
-            <UsersTable users={users} onEditUserClick={editUserClickHandler} />
+            <UsersTable
+              users={users}
+              onEditUserClick={editUserClickHandler}
+              onEditUserClickPass={editUserClickPass}
+            />
           </Box>
         </Container>
         {userFormProps !== undefined && <UserForm {...userFormProps} />}
+        {userPassFormProps !== undefined && (
+          <UserPasswordForm {...userPassFormProps} />
+        )}
       </>
     );
   },
