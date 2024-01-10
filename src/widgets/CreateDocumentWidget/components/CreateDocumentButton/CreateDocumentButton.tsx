@@ -34,6 +34,7 @@ export const CreateDocumentButton: FC<ButtonProps> = ({ onClick }) => {
           alignItems: 'center',
           gap: 'var(--borderRadius, 4px)',
           borderRadius: 'var(--none, 0px)',
+          boxShadow: 'none',
         }}
       >
         <AddIcon></AddIcon>

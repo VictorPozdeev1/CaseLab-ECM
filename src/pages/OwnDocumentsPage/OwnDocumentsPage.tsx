@@ -1,7 +1,7 @@
 import { useEffect, type FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
-import { Typography, Container, Box } from '@mui/material';
+import { Container, Box, Tabs, Tab } from '@mui/material';
 
 import { documentsStore } from '@store/index';
 import { CreateDocumentWidget } from '@widgets/CreateDocumentWidget';
@@ -43,16 +43,18 @@ export const OwnDocumentsPage: FC = observer(() => {
           lineHeight: '133.4%',
         }}
       >
-        <Typography
+        <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            borderBottom: 1,
+            borderColor: 'divider',
           }}
-          variant="h5"
         >
-          Мои Документы
-        </Typography>
+          <Tabs>
+            <Tab label="Мои документы" />
+            <Tab label="Документы организации" />
+            <Tab label="Процессы" />
+          </Tabs>
+        </Box>
         <CreateDocumentWidget />
       </Box>
       <Box style={{ alignSelf: 'stretch' }}>

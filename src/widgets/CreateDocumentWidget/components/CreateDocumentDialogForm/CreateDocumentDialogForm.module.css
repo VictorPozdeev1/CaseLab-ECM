@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 600px;
+  width: 720px;
 }
 
 .dialogTitle {
@@ -23,11 +23,11 @@
 }
 
 .inputGroup {
+  padding-top: 16px;
   display: flex;
-  padding: var(--none, 0px);
-  align-items: flex-start;
-  gap: var(--paddings-pad-1, 8px);
-  align-self: stretch;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .documentNameInput {
@@ -35,7 +35,7 @@
   height: 56px;
   flex-direction: column;
   align-items: stretch;
-  flex: 1 0 0;
+  width: 38%;
 }
 
 .documentTypeSelect {
@@ -44,6 +44,5 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--none, 0px);
-  align-self: stretch;
-  flex: 1 0 0;
+  width: 100%;
 }
