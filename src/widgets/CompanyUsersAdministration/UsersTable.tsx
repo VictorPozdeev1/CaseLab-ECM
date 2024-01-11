@@ -8,8 +8,9 @@ import {
   Typography,
   TableRow,
   Box,
-  Chip,
   IconButton,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { EditRounded } from '@mui/icons-material';
 import PasswordIcon from '@mui/icons-material/Password';
@@ -30,10 +31,16 @@ interface UsersTableProps {
   users: User[];
   onEditUserClick: (userToEditId: number) => void;
   onEditUserClickPass: (userToEditId: number) => void;
+  onEditUserRole: (userData: User) => void;
 }
 
 export const UsersTable: FC<UsersTableProps> = observer(
-  ({ users, onEditUserClick, onEditUserClickPass }): JSX.Element => {
+  ({
+    users,
+    onEditUserClick,
+    onEditUserClickPass,
+    onEditUserRole,
+  }): JSX.Element => {
     const tableData: ITableData[] = users.map((u) => ({
       id: u.id,
       name: u.shortName,
@@ -41,7 +48,7 @@ export const UsersTable: FC<UsersTableProps> = observer(
       role: u.role,
       email: u.email,
     }));
-
+    const roles = ['USER', 'COMPANY_ADMIN', 'ADMIN'];
     return (
       <TableContainer>
         <Table>
@@ -67,7 +74,29 @@ export const UsersTable: FC<UsersTableProps> = observer(
                     <Typography variant="body2">{el.post}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Chip sx={{ color: '#0000007A' }} label={el.role} />
+                    <Select
+                      defaultValue={el.role}
+                      sx={{ width: '150px' }}
+                      displayEmpty
+                      inputProps={{ 'aria-label': 'Without label' }}
+                      onChange={(e) => {
+                        el.role = e.target.value;
+                        onEditUserRole(
+                          users.find((u) => {
+                            u.role = e.target.value;
+                            return u.id === el.id;
+                          }) as User,
+                        );
+                      }}
+                    >
+                      {roles.map((el, i) => {
+                        return (
+                          <MenuItem key={i} value={el}>
+                            {el}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
                   </TableCell>
                   <TableCell>
                     <Box

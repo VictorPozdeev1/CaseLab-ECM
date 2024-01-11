@@ -27,7 +27,7 @@ export class UserStore {
       passportIssued: new Date().toISOString(),
       passportKp: '333999',
       passportNumber: '345987',
-      passportSeries: '3453',
+      passportSeries: '3454',
     };
     const response = await api.updateUser(newData.id, requestDto);
     const index = this.users.findIndex((u) => u.id === newData.id);

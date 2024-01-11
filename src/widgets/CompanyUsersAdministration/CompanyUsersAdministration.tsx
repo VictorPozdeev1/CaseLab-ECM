@@ -81,6 +81,14 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
       });
     };
 
+    const editUserRole = (userData: User): void => {
+      model
+        .updateUser(userData)
+        .then() /* Закрыть форму */
+        .catch(() => {}) /* Оставить форму открытой и показать ошибку */
+        .finally();
+    };
+
     return (
       <>
         <Container maxWidth={'lg'}>
@@ -128,6 +136,7 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
               users={users}
               onEditUserClick={editUserClickHandler}
               onEditUserClickPass={editUserClickPass}
+              onEditUserRole={editUserRole}
             />
           </Box>
         </Container>
