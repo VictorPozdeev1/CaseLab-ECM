@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import { RequireAuth } from '@processes/RequireAuth/RequireAuth';
-import { RequireRoleCheck } from '@processes/RequireRoleCheck/RequireRoleCheck';
+import { RequirePermissionCheck } from '@processes/RequirePermissionCheck/RequirePermissionCheck';
 import { LoginPage } from '@pages/LoginPage/LoginPage';
 import { HomePage } from '@pages/HomePage/HomePage';
 import { Page1 } from '@pages/Page1/Page1';
@@ -33,9 +33,9 @@ const AppRoutes: FC = () => {
         <Route
           path="myDocuments"
           element={
-            <RequireRoleCheck role="USER">
+            <RequirePermissionCheck permission="USER">
               <OwnDocumentsPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route path="documentView" element={<DocumentViewPage />} />
@@ -44,33 +44,33 @@ const AppRoutes: FC = () => {
         <Route
           path="systemadmin"
           element={
-            <RequireRoleCheck role="SYSTEM_ADMIN">
+            <RequirePermissionCheck permission="SYSTEM_ADMIN">
               <AdminPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route
           path="documentTypes"
           element={
-            <RequireRoleCheck role="SYSTEM_ADMIN">
+            <RequirePermissionCheck permission="SYSTEM_ADMIN">
               <DocumentTypesPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route
           path="myCompany"
           element={
-            <RequireRoleCheck role="COMPANY_ADMIN">
+            <RequirePermissionCheck permission="COMPANY_ADMIN">
               <MyCompanyAdministrationPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route
           path="company/:companyId"
           element={
-            <RequireRoleCheck role="SYSTEM_ADMIN">
+            <RequirePermissionCheck permission="SYSTEM_ADMIN">
               <SpecificCompanyAdministrationPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route path="forbidden" element={<ForbiddenPage />} />

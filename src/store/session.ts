@@ -51,7 +51,7 @@ class Session {
     return result;
   }
 
-  get roles(): string[] {
+  get permissions(): string[] {
     if (this._state?.user?.role === undefined) return [];
     return (
       rolesMapping[this._state.user.role as keyof typeof rolesMapping] ?? []
