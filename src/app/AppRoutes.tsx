@@ -14,6 +14,7 @@ import { Page404 } from '@pages/Page404';
 import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
 import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
 import { ColumnLayout } from '@shared/layouts/ColumnLayout';
+import { Permissions } from '@store/session';
 
 const AppRoutes: FC = () => {
   return (
@@ -33,7 +34,7 @@ const AppRoutes: FC = () => {
         <Route
           path="myDocuments"
           element={
-            <RequirePermissionCheck permission="USER">
+            <RequirePermissionCheck permission={Permissions.USER}>
               <OwnDocumentsPage />
             </RequirePermissionCheck>
           }
@@ -44,7 +45,7 @@ const AppRoutes: FC = () => {
         <Route
           path="systemadmin"
           element={
-            <RequirePermissionCheck permission="SYSTEM_ADMIN">
+            <RequirePermissionCheck permission={Permissions.SYSTEM_ADMIN}>
               <AdminPage />
             </RequirePermissionCheck>
           }
@@ -52,7 +53,7 @@ const AppRoutes: FC = () => {
         <Route
           path="documentTypes"
           element={
-            <RequirePermissionCheck permission="SYSTEM_ADMIN">
+            <RequirePermissionCheck permission={Permissions.SYSTEM_ADMIN}>
               <DocumentTypesPage />
             </RequirePermissionCheck>
           }
@@ -60,7 +61,7 @@ const AppRoutes: FC = () => {
         <Route
           path="myCompany"
           element={
-            <RequirePermissionCheck permission="COMPANY_ADMIN">
+            <RequirePermissionCheck permission={Permissions.COMPANY_ADMIN}>
               <MyCompanyAdministrationPage />
             </RequirePermissionCheck>
           }
@@ -68,7 +69,7 @@ const AppRoutes: FC = () => {
         <Route
           path="company/:companyId"
           element={
-            <RequirePermissionCheck permission="SYSTEM_ADMIN">
+            <RequirePermissionCheck permission={Permissions.SYSTEM_ADMIN}>
               <SpecificCompanyAdministrationPage />
             </RequirePermissionCheck>
           }

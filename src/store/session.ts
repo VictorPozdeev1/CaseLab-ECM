@@ -1,16 +1,22 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { OpenAPI, Service } from '@api';
 import type { AuthTokenDto } from '@api';
-import { User } from '@entities/user';
+import { User, type Roles } from '@entities/user';
 
 type SessionData = AuthTokenDto;
 
 const SESSION_DATA = 'sessionData';
 
-const rolesPermissions = {
-  ADMIN: ['SYSTEM_ADMIN'],
-  COMPANY_ADMIN: ['COMPANY_ADMIN'],
-  USER: ['USER'],
+export enum Permissions {
+  SYSTEM_ADMIN,
+  COMPANY_ADMIN,
+  USER,
+}
+
+const rolesPermissions: Record<Roles, Permissions[]> = {
+  ADMIN: [Permissions.SYSTEM_ADMIN],
+  COMPANY_ADMIN: [Permissions.COMPANY_ADMIN],
+  USER: [Permissions.USER],
 };
 
 const REMEMBER_ME = true; // todo Брать из формы логина
@@ -52,7 +58,7 @@ class Session {
     return result;
   }
 
-  get permissions(): string[] {
+  get permissions(): Permissions[] {
     if (this._state?.user?.role === undefined) return [];
     return (
       rolesPermissions[
