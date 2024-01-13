@@ -84,8 +84,8 @@ export const CompanyUsersAdministration: FC<{ companyId: number }> = observer(
     const editUserRole = (userData: User): void => {
       model
         .updateUser(userData)
-        .then() /* Закрыть форму */
-        .catch(() => {}) /* Оставить форму открытой и показать ошибку */
+        .then()
+        .catch(() => {})
         .finally();
     };
 

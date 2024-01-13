@@ -11,6 +11,7 @@ import {
   IconButton,
   Select,
   MenuItem,
+  FormControl,
 } from '@mui/material';
 import { EditRounded } from '@mui/icons-material';
 import PasswordIcon from '@mui/icons-material/Password';
@@ -74,29 +75,31 @@ export const UsersTable: FC<UsersTableProps> = observer(
                     <Typography variant="body2">{el.post}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Select
-                      defaultValue={el.role}
-                      sx={{ width: '150px' }}
-                      displayEmpty
-                      inputProps={{ 'aria-label': 'Without label' }}
-                      onChange={(e) => {
-                        el.role = e.target.value;
-                        onEditUserRole(
-                          users.find((u) => {
-                            u.role = e.target.value;
-                            return u.id === el.id;
-                          }) as User,
-                        );
-                      }}
-                    >
-                      {roles.map((el, i) => {
-                        return (
-                          <MenuItem key={i} value={el}>
-                            {el}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
+                    <FormControl variant="standard">
+                      <Select
+                        defaultValue={el.role}
+                        sx={{ width: '150px' }}
+                        displayEmpty
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        onChange={(e) => {
+                          el.role = e.target.value;
+                          onEditUserRole(
+                            users.find((u) => {
+                              u.role = e.target.value;
+                              return u.id === el.id;
+                            }) as User,
+                          );
+                        }}
+                      >
+                        {roles.map((el, i) => {
+                          return (
+                            <MenuItem key={i} value={el}>
+                              {el}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
                   </TableCell>
                   <TableCell>
                     <Box
