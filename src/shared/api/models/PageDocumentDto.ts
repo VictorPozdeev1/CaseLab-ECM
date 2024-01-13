@@ -7,15 +7,15 @@ import type { PageableObject } from './PageableObject';
 import type { SortObject } from './SortObject';
 
 export type PageDocumentDto = {
-  totalElements?: number;
-  totalPages?: number;
-  pageable?: PageableObject;
-  numberOfElements?: number;
-  first?: boolean;
-  last?: boolean;
-  sort?: SortObject;
-  size?: number;
-  content?: Array<DocumentDto>;
-  number?: number;
-  empty?: boolean;
+    totalPages?: number;
+    totalElements?: number;
+    pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
+    numberOfElements?: number;
+    sort?: SortObject;
+    size?: number;
+    content?: Array<DocumentDto>;
+    number?: number;
+    empty?: boolean;
 };

@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 export type SortObject = {
-  unsorted?: boolean;
-  sorted?: boolean;
-  empty?: boolean;
+    unsorted?: boolean;
+    sorted?: boolean;
+    empty?: boolean;
 };

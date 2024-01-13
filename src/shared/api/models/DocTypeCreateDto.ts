@@ -6,31 +6,34 @@
  * DTO создания типа
  */
 export type DocTypeCreateDto = {
-  /**
-   * Название типа
-   */
-  name: string;
-  /**
-   * Для согласования документа требуется: EVERYONE - все получатели, ANYONE - хотя бы один, QUORUM - не менее 50% получателей.
-   */
-  agreementType: DocTypeCreateDto.agreementType;
-  /**
-   * Организация
-   */
-  organizationId: number;
-  /**
-   * Список уникальных идентификаторов атрибутов
-   */
-  attributes: Array<number>;
+    /**
+     * Название типа
+     */
+    name: string;
+    /**
+     * Для согласования документа требуется: EVERYONE - все получатели, ANYONE - хотя бы один, QUORUM - не менее 50% получателей.
+     */
+    agreementType: DocTypeCreateDto.agreementType;
+    /**
+     * Организация
+     */
+    organizationId: number;
+    /**
+     * Список уникальных идентификаторов атрибутов
+     */
+    attributes: Array<number>;
 };
 
 export namespace DocTypeCreateDto {
-  /**
-   * Для согласования документа требуется: EVERYONE - все получатели, ANYONE - хотя бы один, QUORUM - не менее 50% получателей.
-   */
-  export enum agreementType {
-    EVERYONE = 'EVERYONE',
-    ANYONE = 'ANYONE',
-    QUORUM = 'QUORUM',
-  }
+
+    /**
+     * Для согласования документа требуется: EVERYONE - все получатели, ANYONE - хотя бы один, QUORUM - не менее 50% получателей.
+     */
+    export enum agreementType {
+        EVERYONE = 'EVERYONE',
+        ANYONE = 'ANYONE',
+        QUORUM = 'QUORUM',
+    }
+
+
 }

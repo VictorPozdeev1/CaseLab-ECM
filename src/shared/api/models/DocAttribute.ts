@@ -5,8 +5,8 @@
 import type { UserOrganization } from './UserOrganization';
 
 export type DocAttribute = {
-  id?: number;
-  name?: string;
-  type?: string;
-  organization?: UserOrganization;
+    id?: number;
+    name?: string;
+    type?: string;
+    organization?: UserOrganization;
 };

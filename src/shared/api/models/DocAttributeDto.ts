@@ -6,20 +6,20 @@
  * Атрибут документа
  */
 export type DocAttributeDto = {
-  /**
-   * ID атрибута
-   */
-  id: number;
-  /**
-   * Наименование атрибута
-   */
-  name: string;
-  /**
-   * Тип атрибута
-   */
-  type: string;
-  /**
-   * Организация атрибута
-   */
-  organizationId: number;
+    /**
+     * ID атрибута
+     */
+    id: number;
+    /**
+     * Наименование атрибута
+     */
+    name: string;
+    /**
+     * Тип атрибута
+     */
+    type: string;
+    /**
+     * Организация атрибута
+     */
+    organizationId: number;
 };

@@ -6,12 +6,12 @@
  * Учетные данные пользователя
  */
 export type UserCredentialsDto = {
-  /**
-   * Email
-   */
-  email: string;
-  /**
-   * Пароль
-   */
-  password: string;
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Пароль
+     */
+    password: string;
 };

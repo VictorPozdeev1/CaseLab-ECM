@@ -6,8 +6,8 @@
  * Кол-во пользователей
  */
 export type CountUsersDto = {
-  /**
-   * Количество пользователей
-   */
-  countUser: number;
+    /**
+     * Количество пользователей
+     */
+    countUser: number;
 };

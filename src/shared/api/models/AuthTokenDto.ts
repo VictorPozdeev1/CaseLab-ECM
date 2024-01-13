@@ -8,9 +8,9 @@ import type { UserWithoutPassportDto } from './UserWithoutPassportDto';
  * Токен авторизации и информация о пользователе
  */
 export type AuthTokenDto = {
-  /**
-   * JWT токен доступа
-   */
-  token: string;
-  user: UserWithoutPassportDto;
+    /**
+     * JWT токен доступа
+     */
+    token: string;
+    user: UserWithoutPassportDto;
 };
