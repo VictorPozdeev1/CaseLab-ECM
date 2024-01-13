@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import { MenuItem, Select } from '@mui/material';
 
-import { Roles } from '@entities/user/consts/roles';
+import { Roles } from '@entities/user';
 
 export const Page1: FC = () => {
   return (
