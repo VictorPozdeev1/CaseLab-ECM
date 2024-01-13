@@ -40,14 +40,7 @@ const AppRoutes: FC = () => {
           }
         />
         <Route path="documentView" element={<DocumentViewPage />} />
-        <Route
-          path="page1"
-          element={
-            <RequireRoleCheck role="USER">
-              <Page1 />
-            </RequireRoleCheck>
-          }
-        />
+        <Route path="page1" element={<Page1 />} />
 
         <Route
           path="systemadmin"
