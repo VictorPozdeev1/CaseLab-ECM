@@ -806,24 +806,6 @@ export class Service {
   }
 
   /**
-   * Получить всех пользователей по организации
-   * @param orgId Id организации
-   * @returns UserReplyDto OK
-   * @throws ApiError
-   */
-  public static getUsersByOrganization(
-    orgId: number,
-  ): CancelablePromise<Array<UserReplyDto>> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v2/users/organization/{orgId}',
-      path: {
-        orgId: orgId,
-      },
-    });
-  }
-
-  /**
    * Получить всех пользователей с сортировкой и пагинацией
    * @param ids
    * @param page Zero-based page index (0..N)
@@ -955,6 +937,60 @@ export class Service {
   }
 
   /**
+   * Получить всех пользователей по организации
+   * @param orgId Id организации
+   * @returns UserReplyDto OK
+   * @throws ApiError
+   */
+  public static getUsersByOrganization(
+    orgId: number,
+  ): CancelablePromise<Array<UserReplyDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/org/{orgId}/users',
+      path: {
+        orgId: orgId,
+      },
+    });
+  }
+
+  /**
+   * Получить все типы по организации
+   * @param orgId Id организации
+   * @returns DocTypeDto OK
+   * @throws ApiError
+   */
+  public static getDocTypesByOrganization(
+    orgId: number,
+  ): CancelablePromise<Array<DocTypeDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/org/{orgId}/doctypes',
+      path: {
+        orgId: orgId,
+      },
+    });
+  }
+
+  /**
+   * Получить все атрибуты по организации
+   * @param orgId Id организации
+   * @returns DocAttributeDto OK
+   * @throws ApiError
+   */
+  public static getAttributesByOrganization(
+    orgId: number,
+  ): CancelablePromise<Array<DocAttributeDto>> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/org/{orgId}/docattributes',
+      path: {
+        orgId: orgId,
+      },
+    });
+  }
+
+  /**
    * Поиск организации по подстроке в имени
    * @param name Подстрока в имени
    * @returns OrgDto OK
@@ -969,6 +1005,48 @@ export class Service {
       path: {
         name: name,
       },
+    });
+  }
+
+  /**
+   * Получить всех пользователей по своей организации
+   * @returns UserReplyDto OK
+   * @throws ApiError
+   */
+  public static getUsersMyOrganization(): CancelablePromise<
+    Array<UserReplyDto>
+  > {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/org/my/users',
+    });
+  }
+
+  /**
+   * Получить все типы по своей организации
+   * @returns DocTypeDto OK
+   * @throws ApiError
+   */
+  public static getDocTypesMyOrganization(): CancelablePromise<
+    Array<DocTypeDto>
+  > {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/org/my/doctypes',
+    });
+  }
+
+  /**
+   * Получить все атрибуты по своей организации
+   * @returns DocAttributeDto OK
+   * @throws ApiError
+   */
+  public static getAttributesMyOrganization(): CancelablePromise<
+    Array<DocAttributeDto>
+  > {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v2/org/my/docattributes',
     });
   }
 

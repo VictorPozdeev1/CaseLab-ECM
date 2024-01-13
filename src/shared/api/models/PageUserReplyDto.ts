@@ -7,12 +7,12 @@ import type { SortObject } from './SortObject';
 import type { UserReplyDto } from './UserReplyDto';
 
 export type PageUserReplyDto = {
-  totalElements?: number;
   totalPages?: number;
+  totalElements?: number;
   pageable?: PageableObject;
-  numberOfElements?: number;
   first?: boolean;
   last?: boolean;
+  numberOfElements?: number;
   sort?: SortObject;
   size?: number;
   content?: Array<UserReplyDto>;

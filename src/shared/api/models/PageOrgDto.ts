@@ -7,12 +7,12 @@ import type { PageableObject } from './PageableObject';
 import type { SortObject } from './SortObject';
 
 export type PageOrgDto = {
-  totalElements?: number;
   totalPages?: number;
+  totalElements?: number;
   pageable?: PageableObject;
-  numberOfElements?: number;
   first?: boolean;
   last?: boolean;
+  numberOfElements?: number;
   sort?: SortObject;
   size?: number;
   content?: Array<OrgDto>;
