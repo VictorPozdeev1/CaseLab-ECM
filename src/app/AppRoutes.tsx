@@ -3,7 +3,6 @@ import { Outlet, Route, Routes } from 'react-router-dom';
 import { RequireAuth } from '@processes/RequireAuth/RequireAuth';
 import { RequireRoleCheck } from '@processes/RequireRoleCheck/RequireRoleCheck';
 import { LoginPage } from '@pages/LoginPage/LoginPage';
-import { Header } from '@widgets/Header/Header';
 import { HomePage } from '@pages/HomePage/HomePage';
 import { Page1 } from '@pages/Page1/Page1';
 import { AdminPage } from '@pages/AdminPage/AdminPage';
@@ -14,6 +13,7 @@ import { SpecificCompanyAdministrationPage } from '@pages/SpecificCompanyAdminis
 import { Page404 } from '@pages/Page404';
 import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
 import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
+import { ColumnLayout } from '@shared/layouts/ColumnLayout';
 
 const AppRoutes: FC = () => {
   return (
@@ -23,10 +23,9 @@ const AppRoutes: FC = () => {
         path="/"
         element={
           <RequireAuth>
-            <>
-              <Header />
+            <ColumnLayout>
               <Outlet />
-            </>
+            </ColumnLayout>
           </RequireAuth>
         }
       >
