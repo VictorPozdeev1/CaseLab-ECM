@@ -6,12 +6,12 @@
  * Запрос на создание организации
  */
 export type OrgCreateRequestDto = {
-    /**
-     * Название
-     */
-    name: string;
-    /**
-     * ИНН
-     */
-    inn: string;
+  /**
+   * Название
+   */
+  name: string;
+  /**
+   * ИНН
+   */
+  inn: string;
 };

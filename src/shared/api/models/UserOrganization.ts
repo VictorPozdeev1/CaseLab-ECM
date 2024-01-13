@@ -3,8 +3,8 @@
 /* eslint-disable */
 
 export type UserOrganization = {
-    id?: number;
-    inn?: string;
-    name?: string;
-    defaultRecipient?: number;
+  id?: number;
+  inn?: string;
+  name?: string;
+  defaultRecipient?: number;
 };

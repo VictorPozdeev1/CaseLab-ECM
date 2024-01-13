@@ -6,8 +6,8 @@
  * Статистика по документам
  */
 export type DocStatisticDTO = {
-    /**
-     * Количество
-     */
-    count: number;
+  /**
+   * Количество
+   */
+  count: number;
 };

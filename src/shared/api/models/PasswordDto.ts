@@ -6,8 +6,8 @@
  * Пароль пользователя
  */
 export type PasswordDto = {
-    /**
-     * Пароль
-     */
-    password: string;
+  /**
+   * Пароль
+   */
+  password: string;
 };

@@ -6,12 +6,12 @@
  * DTO изменения типа
  */
 export type DocAttributeUpdateRequestDto = {
-    /**
-     * Название атрибута
-     */
-    name?: string;
-    /**
-     * Тип атрибута
-     */
-    type?: string;
+  /**
+   * Название атрибута
+   */
+  name?: string;
+  /**
+   * Тип атрибута
+   */
+  type?: string;
 };
