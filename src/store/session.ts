@@ -7,8 +7,9 @@ type SessionData = AuthTokenDto;
 
 const SESSION_DATA = 'sessionData';
 
-const rolesMapping = {
-  ADMIN: ['COMPANY_ADMIN', 'SYSTEM_ADMIN'],
+const rolesPermissions = {
+  ADMIN: ['SYSTEM_ADMIN'],
+  COMPANY_ADMIN: ['COMPANY_ADMIN'],
   USER: ['USER'],
 };
 
@@ -54,7 +55,9 @@ class Session {
   get permissions(): string[] {
     if (this._state?.user?.role === undefined) return [];
     return (
-      rolesMapping[this._state.user.role as keyof typeof rolesMapping] ?? []
+      rolesPermissions[
+        this._state.user.role as keyof typeof rolesPermissions
+      ] ?? []
     );
   }
 
