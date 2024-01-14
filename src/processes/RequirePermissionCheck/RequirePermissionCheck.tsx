@@ -8,10 +8,10 @@ import { type Permissions } from '@store/session';
 const RequirePermissionCheck: FC<{
   permission: Permissions;
   children: JSX.Element;
-}> = observer(({ permission: role, children }) => {
+}> = observer(({ permission, children }) => {
   const currentLocation = useLocation();
 
-  if (!currentSessionStore.permissions.includes(role)) {
+  if (!currentSessionStore.permissions.includes(permission)) {
     return (
       <Navigate to="/Forbidden" state={{ previousLocation: currentLocation }} />
     );

@@ -1,19 +1,25 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { Service as api, type UserCreateDto, type UserUpdateDto } from '@api';
+import {
+  Service as api,
+  type UserReplyDto,
+  type UserCreateDto,
+  type UserUpdateDto,
+} from '@api';
 import { User } from '@entities/user';
+import sessionStore from '@store/session';
 
-export class UserStore {
+export class CompanyUsersModel {
   constructor() {
     makeAutoObservable(this);
   }
 
   users: User[] = [];
 
-  async loadCompanyUsers(companyId: number): Promise<void> {
-    const newUserList = (await api.getUsersByOrganization(companyId)).map(
-      (u) => new User(u),
-    );
+  async _loadCompanyUsers(
+    usersLoader: () => Promise<UserReplyDto[]>,
+  ): Promise<void> {
+    const newUserList = (await usersLoader()).map((u) => new User(u));
     runInAction(() => {
       this.users = newUserList;
     });
@@ -26,8 +32,9 @@ export class UserStore {
       passportDate: new Date().toISOString(),
       passportIssued: new Date().toISOString(),
       passportKp: '333999',
-      passportNumber: '345987',
+      passportNumber: (Date.now() % 1000000).toString(),
       passportSeries: '3453',
+      // Возможно, стоило бы проставлять здесь companyId
     };
     const response = await api.updateUser(newData.id, requestDto);
     const index = this.users.findIndex((u) => u.id === newData.id);
@@ -41,29 +48,49 @@ export class UserStore {
       passportDate: new Date().toISOString(),
       passportIssued: new Date().toISOString(),
       passportKp: '333999',
-      passportNumber: '345987',
+      passportNumber: (Date.now() % 1000000).toString(),
       passportSeries: '3453',
+      // Возможно, стоило бы проставлять здесь companyId
     };
     const response = await api.createUser(requestDto);
     runInAction(() => this.users.push(new User(response)));
   }
 }
 
-class UsersByCompanies {
+class Companies {
   constructor() {
     makeAutoObservable(this);
   }
 
-  _usersByCompany: Map<number, UserStore> = new Map<number, UserStore>();
+  _usersByCompany: Map<number, CompanyUsersModel> = new Map<
+    number,
+    CompanyUsersModel
+  >();
 
-  getUserStoreForCompany(companyId: number): UserStore {
+  getCustomCompanyUsersStore(companyId: number): CompanyUsersModel {
     let result = this._usersByCompany.get(companyId);
     if (result === undefined) {
-      result = new UserStore();
+      result = new CompanyUsersModel();
+      void result._loadCompanyUsers(() =>
+        api.getUsersByOrganization(companyId),
+      );
+      this._usersByCompany.set(companyId, result);
+    }
+    return result;
+  }
+
+  get myCompanyUsersStore(): CompanyUsersModel {
+    const companyId = sessionStore.currentUserCompanyId;
+    let result = this._usersByCompany.get(companyId);
+    if (result === undefined) {
+      result = new CompanyUsersModel();
+      void result._loadCompanyUsers(() =>
+        api.getUsersByOrganization(companyId),
+      );
       this._usersByCompany.set(companyId, result);
     }
     return result;
   }
 }
 
-export default new UsersByCompanies();
+export default new Companies();
