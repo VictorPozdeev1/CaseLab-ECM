@@ -8,15 +8,27 @@ type SessionData = AuthTokenDto;
 const SESSION_DATA = 'sessionData';
 
 export enum Permissions {
+  MY_DOCUMENTS,
+  DOCUMENT_TYPES,
+  MY_COMPANY_CONTROL_PANEL,
+  CUSTOM_COMPANY_CONTROL_PANEL,
   SYSTEM_ADMIN,
   COMPANY_ADMIN,
   USER,
 }
 
 const rolesPermissions: Record<Roles, Permissions[]> = {
-  ADMIN: [Permissions.SYSTEM_ADMIN],
-  COMPANY_ADMIN: [Permissions.COMPANY_ADMIN],
-  USER: [Permissions.USER],
+  ADMIN: [
+    Permissions.SYSTEM_ADMIN,
+    Permissions.DOCUMENT_TYPES,
+    Permissions.MY_COMPANY_CONTROL_PANEL,
+  ],
+  COMPANY_ADMIN: [
+    Permissions.COMPANY_ADMIN,
+    Permissions.MY_COMPANY_CONTROL_PANEL,
+    Permissions.CUSTOM_COMPANY_CONTROL_PANEL,
+  ],
+  USER: [Permissions.USER, Permissions.MY_DOCUMENTS],
 };
 
 const REMEMBER_ME = true; // todo Брать из формы логина
