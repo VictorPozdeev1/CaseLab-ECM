@@ -34,7 +34,7 @@ const AppRoutes: FC = () => {
         <Route
           path="myDocuments"
           element={
-            <RequirePermissionCheck permission={Permissions.USER}>
+            <RequirePermissionCheck permission={Permissions.MY_DOCUMENTS}>
               <OwnDocumentsPage />
             </RequirePermissionCheck>
           }
@@ -53,7 +53,7 @@ const AppRoutes: FC = () => {
         <Route
           path="documentTypes"
           element={
-            <RequirePermissionCheck permission={Permissions.SYSTEM_ADMIN}>
+            <RequirePermissionCheck permission={Permissions.DOCUMENT_TYPES}>
               <DocumentTypesPage />
             </RequirePermissionCheck>
           }
@@ -61,7 +61,9 @@ const AppRoutes: FC = () => {
         <Route
           path="myCompany"
           element={
-            <RequirePermissionCheck permission={Permissions.COMPANY_ADMIN}>
+            <RequirePermissionCheck
+              permission={Permissions.MY_COMPANY_CONTROL_PANEL}
+            >
               <MyCompanyAdministrationPage />
             </RequirePermissionCheck>
           }
@@ -69,7 +71,9 @@ const AppRoutes: FC = () => {
         <Route
           path="company/:companyId"
           element={
-            <RequirePermissionCheck permission={Permissions.SYSTEM_ADMIN}>
+            <RequirePermissionCheck
+              permission={Permissions.CUSTOM_COMPANY_CONTROL_PANEL}
+            >
               <SpecificCompanyAdministrationPage />
             </RequirePermissionCheck>
           }
