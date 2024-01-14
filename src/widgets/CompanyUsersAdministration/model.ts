@@ -57,7 +57,7 @@ export class CompanyUsersModel {
   }
 }
 
-class Companies {
+class UsersByCompanies {
   constructor() {
     makeAutoObservable(this);
   }
@@ -67,7 +67,7 @@ class Companies {
     CompanyUsersModel
   >();
 
-  getCustomCompanyUsersStore(companyId: number): CompanyUsersModel {
+  getCustomCompanyUserStore(companyId: number): CompanyUsersModel {
     let result = this._usersByCompany.get(companyId);
     if (result === undefined) {
       result = new CompanyUsersModel();
@@ -93,4 +93,4 @@ class Companies {
   }
 }
 
-export default new Companies();
+export default new UsersByCompanies();

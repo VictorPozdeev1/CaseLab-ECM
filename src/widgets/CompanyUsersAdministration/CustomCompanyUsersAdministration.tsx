@@ -8,12 +8,12 @@ import { CompanyUsersAdministration } from './CompanyUsersAdministration';
 export const CustomCompanyUsersAdministration: FC<{ companyId: number }> =
   observer(({ companyId }) => {
     const [model, setModel] = useState<CompanyUsersModel>(
-      userStores.getCustomCompanyUsersStore(companyId),
+      userStores.getCustomCompanyUserStore(companyId),
     );
 
     // Может быть, это и не нужно?
     useEffect(() => {
-      const model = userStores.getCustomCompanyUsersStore(companyId);
+      const model = userStores.getCustomCompanyUserStore(companyId);
       setModel(model);
     }, [companyId]);
 
