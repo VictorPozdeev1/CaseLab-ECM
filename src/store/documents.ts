@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Service } from '@api';
-import currentSession from './session';
+import currentSession from '@entities/session/session';
 import { type Document } from '@entities/document';
 
 // Видимо, никакого общего стора документов быть не должно, а каждый модуль должен иметь свой стор (и там может быть всего одна загруженная страничка с документами)

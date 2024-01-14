@@ -1,19 +1,15 @@
-import { type FC, useState } from 'react';
-import { currentSessionStore } from '@store/index';
-import { useLocation, useNavigate } from 'react-router-dom';
-import styles from './LoginPage.module.css';
+import React, { type FC, useEffect, useState } from 'react';
+import { currentSessionStore, errorStore } from '@store/index';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, TextField } from '@mui/material';
 import Logo from '@shared/components/Logo/Logo';
-import React from 'react';
+import Unauthorized from '@processes/RequireAuth/Unauthorized';
+import { observer } from 'mobx-react-lite';
 
-export const LoginForm: FC = () => {
+export const LoginForm: FC = observer(() => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loginInProgress, setLoginInProgress] = useState<boolean>(false);
-  const { state } = useLocation();
-  const redirectBackUrl = state?.previousLocation?.pathname; // query parameters ???
-  const [message, setMessage] = useState<string | null>(null);
-  const [messageType, setMessageType] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const getDisabled = (
@@ -24,6 +20,11 @@ export const LoginForm: FC = () => {
     return {};
   };
 
+  useEffect(() => {
+    errorStore.clearError();
+    errorStore.setLoginPage();
+  }, []);
+
   return (
     <Box
       display={'flex'}
@@ -33,47 +34,28 @@ export const LoginForm: FC = () => {
       padding={'50px'}
     >
       <Logo size="medium" />
-      {message != null && (
-        <div
-          className={`${styles.message} ${
-            messageType === 'success'
-              ? styles.successMessage
-              : styles.errorMessage
-          }`}
-        >
-          {message}
-        </div>
-      )}
       <Box width={'80%'}>
+        {errorStore.showError && <Unauthorized />}
         <form
-          style={loginInProgress ? { opacity: 0.7, pointerEvents: 'none' } : {}}
+          style={
+            loginInProgress
+              ? { opacity: 0.7, pointerEvents: 'none' }
+              : { marginTop: '40px' }
+          }
           onSubmit={(e) => {
             e.preventDefault();
             if (!loginInProgress) {
               setLoginInProgress(true);
-              currentSessionStore
-                .login(email, password)
-                .then((loginSucceeded) => {
-                  if (loginSucceeded) {
-                    setMessage('Вход выполнен успешно');
-                    setMessageType('success');
-                    setTimeout(() => {
-                      navigate(redirectBackUrl);
-                    }, 1000);
-                  } else {
-                    setMessage(
-                      'Произошла ошибка при аутентификации. Пожалуйста, попробуйте еще раз.',
-                    );
-                    setMessageType('error');
-                  }
-                })
-                .catch((error) => {
-                  console.error('Ошибка при аутентификации:', error);
-                })
-                .finally(() => {
-                  setLoginInProgress(false);
-                });
+              void currentSessionStore.login(email, password);
+              setLoginInProgress(false);
             }
+            setTimeout(() => {
+              if (currentSessionStore.isAuth) {
+                errorStore.clearError();
+                errorStore.clearLoginPage();
+                navigate('/');
+              }
+            }, 1000);
           }}
         >
           <TextField
@@ -141,4 +123,4 @@ export const LoginForm: FC = () => {
       </Box>
     </Box>
   );
-};
+});

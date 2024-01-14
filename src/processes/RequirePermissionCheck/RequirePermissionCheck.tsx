@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { currentSessionStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
 
-import { type Permissions } from '@store/session';
+import { type Permissions } from '@entities/session/session';
 
 const RequirePermissionCheck: FC<{
   permission: Permissions;

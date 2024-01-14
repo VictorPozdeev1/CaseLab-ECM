@@ -7,7 +7,7 @@ import { DocTypeCreateDto } from '@api';
 import { DocumentTypesElement } from '@widgets/DocumentTypesWidget/components/DocumentTypesElement/DocumentTypesElement';
 import { DocumentTypesPopup } from '@widgets/DocumentTypesWidget/components/DocumentTypesPopup/DocumentTypesPopup';
 import { BtnsGroup } from '@widgets/DocumentTypesWidget/components/BtnsGroup/BtnsGroup';
-import session from '@entities/session/session';
+import session from '@store/session';
 
 export const DocumentTypesPage: FC = observer(() => {
   useEffect(() => {

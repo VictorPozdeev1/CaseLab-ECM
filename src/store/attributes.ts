@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Service } from '@api';
 import { type DocAttributeDto } from '@api';
-import session from './session';
+import session from '@entities/session/session';
 
 class AttributesStore {
   constructor() {
