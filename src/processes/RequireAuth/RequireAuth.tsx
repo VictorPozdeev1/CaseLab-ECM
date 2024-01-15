@@ -1,6 +1,7 @@
 import { type FC } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { currentSessionStore, errorStore } from '@store/index';
+import { currentSessionStore } from '@entities/session';
+import { errorStore } from '@shared/appError';
 import { observer } from 'mobx-react-lite';
 import Unauthorized from '@processes/RequireAuth/Unauthorized';
 

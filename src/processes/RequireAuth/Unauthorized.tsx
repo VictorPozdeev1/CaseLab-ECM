@@ -4,7 +4,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
-import { errorStore } from '@store/index';
+import { errorStore } from '@shared/appError';
 
 const CustomAlert: React.FC = () => {
   const message = errorStore.errorMessage;

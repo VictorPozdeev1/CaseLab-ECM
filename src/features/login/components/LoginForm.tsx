@@ -1,5 +1,6 @@
 import React, { type FC, useEffect, useState } from 'react';
-import { currentSessionStore, errorStore } from '@store/index';
+import { currentSessionStore } from '@entities/session';
+import { errorStore } from '@shared/appError';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, TextField } from '@mui/material';
 import Logo from '@shared/components/Logo/Logo';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { IconButton } from '@mui/material';
-import { currentSessionStore } from '@store/index';
+import { currentSessionStore } from '@entities/session';
 import { Logout } from '@mui/icons-material';
 
 export const LogoutButton: React.FC = observer(() => {

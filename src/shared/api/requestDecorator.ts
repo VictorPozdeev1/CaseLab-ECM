@@ -1,8 +1,8 @@
-import { request as baseRequest } from '@api/core/request';
-import type { ApiRequestOptions } from '@api/core/ApiRequestOptions';
-import { CancelablePromise } from '@api/core/CancelablePromise';
-import type { OpenAPIConfig } from '@api/core/OpenAPI';
-import { errorStore } from '@store/index';
+import { request as baseRequest } from './core/request';
+import type { ApiRequestOptions } from './core/ApiRequestOptions';
+import { CancelablePromise } from './core/CancelablePromise';
+import type { OpenAPIConfig } from './core/OpenAPI';
+import { errorStore } from '@shared/appError';
 
 export const RequestDecorator = <T>(
   config: OpenAPIConfig,
