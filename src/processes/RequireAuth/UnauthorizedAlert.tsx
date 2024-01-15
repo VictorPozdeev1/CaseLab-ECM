@@ -11,6 +11,7 @@ const UnauthorizedAlert: React.FC = () => {
   const message = errorStore.errorMessage;
 
   const handleYesClick = (): void => {
+    errorStore.clearError();
     currentSessionStore.logout();
   };
 

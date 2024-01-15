@@ -4,8 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './LoginPage.module.css';
 import { Box, Button, TextField } from '@mui/material';
 import Logo from '@shared/components/Logo/Logo';
-import React from 'react';
-import { errorStore } from '@shared/appError';
 
 export const LoginForm: FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -56,7 +54,6 @@ export const LoginForm: FC = () => {
                 .login(email, password)
                 .then((loginSucceeded) => {
                   if (loginSucceeded) {
-                    errorStore.clearError();
                     setMessage('Вход выполнен успешно');
                     setMessageType('success');
                     setTimeout(() => {
