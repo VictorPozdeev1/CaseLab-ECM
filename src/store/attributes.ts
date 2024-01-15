@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Service } from '@api';
 import { type DocAttributeDto } from '@api';
-import session from './session';
+import { currentSessionStore } from '@entities/session';
 
 class AttributesStore {
   constructor() {
@@ -18,7 +18,7 @@ class AttributesStore {
         0,
         1000,
         undefined,
-        session.currentUserCompanyId,
+        currentSessionStore.currentUserCompanyId,
       );
       runInAction(() => {
         this.attributes = response.content;

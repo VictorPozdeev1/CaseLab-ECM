@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Logo from '@shared/components/Logo/Logo';
 import { AppBar, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { currentSessionStore } from '@store/index';
+import { currentSessionStore } from '@entities/session';
 import { observer } from 'mobx-react-lite';
 
 export const Header: FC = observer(() => {

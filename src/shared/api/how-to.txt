@@ -11,3 +11,9 @@ $ npxopenapi --input=spec.yml --output=api --client=fetch
 [Дополнение от Виктора]
 Чтобы отформатировать сгенерированный код (и чтобы не было такого, что в ПР потом ВСЕ файлы изменены), можно выполнить следующую команду:
 npx prettier --write src/shared/api/**/*.ts
+
+[Дополнение от Артура]
+После выполнения команд - необходимо перейти в src/shared/api/services/Service.ts
+
+И заменить import { request as __request } from '../core/request';
+на import { RequestDecorator as __request } from '@entities/session/requestDecorator';

@@ -7,7 +7,7 @@ import {
   type DocTypeUpdateRequestDto,
 } from '@api';
 
-import session from './session';
+import { currentSessionStore } from '@entities/session';
 
 // Мб, нужны отдельные сторы для страницы редактирования типов документов и для формы создания документа. Надо подумать позже.
 // (И, соответственно, из общей папки store/ разнести эти сторы по соответствующим модулям.)
@@ -27,7 +27,7 @@ class DocTypes {
         0,
         1000,
         undefined,
-        session.currentUserCompanyId,
+        currentSessionStore.currentUserCompanyId,
       );
       runInAction(() => {
         this.docTypes = response.content;

@@ -34,7 +34,7 @@ import type { UserUpdateDto } from '../models/UserUpdateDto';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import { RequestDecorator as __request } from '@api/requestDecorator';
 
 export class Service {
   /**

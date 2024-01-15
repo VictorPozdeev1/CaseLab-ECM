@@ -4,10 +4,11 @@ import { attributesStore, docTypesStore } from '@store/index';
 import { observer } from 'mobx-react-lite';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { DocTypeCreateDto } from '@api';
+// Не знаю, что за импорты ниже, но в идеале нужно просто импортировать и рендерить виджет.
 import { DocumentTypesElement } from '@widgets/DocumentTypesWidget/components/DocumentTypesElement/DocumentTypesElement';
 import { DocumentTypesPopup } from '@widgets/DocumentTypesWidget/components/DocumentTypesPopup/DocumentTypesPopup';
 import { BtnsGroup } from '@widgets/DocumentTypesWidget/components/BtnsGroup/BtnsGroup';
-import session from '@store/session';
+import { currentSessionStore } from '@entities/session';
 
 export const DocumentTypesPage: FC = observer(() => {
   useEffect(() => {
@@ -19,7 +20,7 @@ export const DocumentTypesPage: FC = observer(() => {
   const [newTypeValue, setNewTypeValue] = useState<DocTypeCreateDto>({
     agreementType: DocTypeCreateDto.agreementType.EVERYONE,
     name: '',
-    organizationId: session.currentUserCompanyId, // ?
+    organizationId: currentSessionStore.currentUserCompanyId, // ?
     attributes: [],
   });
 
@@ -67,7 +68,7 @@ export const DocumentTypesPage: FC = observer(() => {
               void docTypesStore.createDocType({
                 name: newTypeValue.name,
                 agreementType: newTypeValue.agreementType,
-                organizationId: session.currentUserCompanyId, // todo
+                organizationId: currentSessionStore.currentUserCompanyId, // todo
                 attributes: [], // todo
               });
               setIsOpenPopup(false);

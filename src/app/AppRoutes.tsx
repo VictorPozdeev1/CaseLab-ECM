@@ -14,7 +14,7 @@ import { Page404 } from '@pages/Page404';
 import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
 import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
 import { ColumnLayout } from '@shared/layouts/ColumnLayout';
-import { Permissions } from '@store/session';
+import { Permissions } from '@entities/session/session';
 
 const AppRoutes: FC = () => {
   return (

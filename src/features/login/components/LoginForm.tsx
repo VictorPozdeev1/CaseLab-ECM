@@ -1,10 +1,9 @@
 import { type FC, useState } from 'react';
-import { currentSessionStore } from '@store/index';
+import { currentSessionStore } from '@entities/session';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './LoginPage.module.css';
 import { Box, Button, TextField } from '@mui/material';
 import Logo from '@shared/components/Logo/Logo';
-import React from 'react';
 
 export const LoginForm: FC = () => {
   const [email, setEmail] = useState<string>('');

@@ -1,13 +1,17 @@
-import currentSessionStore from './session';
+// Этот файл в итоге должен исчезнуть вместе со всей папкой store.
+
 import documentsStore from './documents';
 import attributesStore from './attributes';
 import docTypesStore from './documentTypes';
 import { injectStores } from '@mobx-devtools/tools';
 
+// temp!
+import users from '@widgets/CompanyUsersAdministration/model';
+
 injectStores({
-  currentUserStore: currentSessionStore,
   documentsStore,
   attributesStore,
+  users,
 });
 
-export { currentSessionStore, documentsStore, attributesStore, docTypesStore };
+export { documentsStore, attributesStore, docTypesStore };
