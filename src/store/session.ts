@@ -22,6 +22,7 @@ const rolesPermissions: Record<Roles, Permissions[]> = {
     Permissions.SYSTEM_ADMIN,
     Permissions.DOCUMENT_TYPES,
     Permissions.MY_COMPANY_CONTROL_PANEL,
+    Permissions.CUSTOM_COMPANY_CONTROL_PANEL,
   ],
   COMPANY_ADMIN: [
     Permissions.COMPANY_ADMIN,
