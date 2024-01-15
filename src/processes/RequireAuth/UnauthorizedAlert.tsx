@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import { errorStore } from '@shared/appError';
 import { currentSessionStore } from '@entities/session';
 
-const CustomAlert: React.FC = () => {
+const UnauthorizedAlert: React.FC = () => {
   const message = errorStore.errorMessage;
 
   const handleYesClick = (): void => {
@@ -39,4 +39,4 @@ const CustomAlert: React.FC = () => {
   );
 };
 
-export default CustomAlert;
+export default UnauthorizedAlert;
