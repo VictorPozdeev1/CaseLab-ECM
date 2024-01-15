@@ -1,2 +1,2 @@
 export { Company } from './Company';
-export { companiesStore } from './CompaniesStore';
+export { getCompaniesStore } from './CompaniesStore';

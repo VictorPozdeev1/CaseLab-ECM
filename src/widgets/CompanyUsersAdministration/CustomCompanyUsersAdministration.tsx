@@ -1,7 +1,7 @@
 import { useEffect, type FC, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
-import { companiesStore } from '@entities/company/model';
+import { getCompaniesStore } from '@entities/company/model';
 import userStores, { type CompanyUsersModel } from './model';
 import { CompanyUsersAdministration } from './CompanyUsersAdministration';
 
@@ -17,7 +17,7 @@ export const CustomCompanyUsersAdministration: FC<{ companyId: number }> =
       setModel(model);
     }, [companyId]);
 
-    const companyName = companiesStore.getNameById(companyId);
+    const companyName = getCompaniesStore().getNameById(companyId);
 
     return (
       <CompanyUsersAdministration
