@@ -44,10 +44,9 @@ export const LoginForm: FC = observer(() => {
           }
           onSubmit={(e) => {
             e.preventDefault();
+            setLoginInProgress(true);
             if (!loginInProgress) {
-              setLoginInProgress(true);
               void currentSessionStore.login(email, password);
-              setLoginInProgress(false);
             }
             setTimeout(() => {
               if (currentSessionStore.isAuth) {
@@ -55,7 +54,8 @@ export const LoginForm: FC = observer(() => {
                 errorStore.clearLoginPage();
                 navigate('/');
               }
-            }, 1000);
+            }, 2000);
+            setLoginInProgress(false);
           }}
         >
           <TextField

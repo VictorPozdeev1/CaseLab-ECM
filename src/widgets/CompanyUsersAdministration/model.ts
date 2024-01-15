@@ -7,7 +7,7 @@ import {
   type UserUpdateDto,
 } from '@api';
 import { User } from '@entities/user';
-import sessionStore from '@store/session';
+import sessionStore from '@entities/session/session';
 
 export class CompanyUsersModel {
   constructor() {
