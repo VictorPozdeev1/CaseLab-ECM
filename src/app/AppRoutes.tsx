@@ -1,9 +1,8 @@
 import type { FC } from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import { RequireAuth } from '@processes/RequireAuth/RequireAuth';
-import { RequireRoleCheck } from '@processes/RequireRoleCheck/RequireRoleCheck';
+import { RequirePermissionCheck } from '@processes/RequirePermissionCheck/RequirePermissionCheck';
 import { LoginPage } from '@pages/LoginPage/LoginPage';
-import { Header } from '@widgets/Header/Header';
 import { HomePage } from '@pages/HomePage/HomePage';
 import { Page1 } from '@pages/Page1/Page1';
 import { AdminPage } from '@pages/AdminPage/AdminPage';
@@ -14,6 +13,8 @@ import { SpecificCompanyAdministrationPage } from '@pages/SpecificCompanyAdminis
 import { Page404 } from '@pages/Page404';
 import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
 import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
+import { ColumnLayout } from '@shared/layouts/ColumnLayout';
+import { Permissions } from '@store/session';
 
 const AppRoutes: FC = () => {
   return (
@@ -23,10 +24,9 @@ const AppRoutes: FC = () => {
         path="/"
         element={
           <RequireAuth>
-            <>
-              <Header />
+            <ColumnLayout>
               <Outlet />
-            </>
+            </ColumnLayout>
           </RequireAuth>
         }
       >
@@ -34,51 +34,48 @@ const AppRoutes: FC = () => {
         <Route
           path="myDocuments"
           element={
-            <RequireRoleCheck role="USER">
+            <RequirePermissionCheck permission={Permissions.MY_DOCUMENTS}>
               <OwnDocumentsPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route path="documentView" element={<DocumentViewPage />} />
-        <Route
-          path="page1"
-          element={
-            <RequireRoleCheck role="USER">
-              <Page1 />
-            </RequireRoleCheck>
-          }
-        />
+        <Route path="page1" element={<Page1 />} />
 
         <Route
           path="systemadmin"
           element={
-            <RequireRoleCheck role="SYSTEM_ADMIN">
+            <RequirePermissionCheck permission={Permissions.SYSTEM_ADMIN}>
               <AdminPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route
           path="documentTypes"
           element={
-            <RequireRoleCheck role="SYSTEM_ADMIN">
+            <RequirePermissionCheck permission={Permissions.DOCUMENT_TYPES}>
               <DocumentTypesPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route
           path="myCompany"
           element={
-            <RequireRoleCheck role="COMPANY_ADMIN">
+            <RequirePermissionCheck
+              permission={Permissions.MY_COMPANY_CONTROL_PANEL}
+            >
               <MyCompanyAdministrationPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route
           path="company/:companyId"
           element={
-            <RequireRoleCheck role="SYSTEM_ADMIN">
+            <RequirePermissionCheck
+              permission={Permissions.CUSTOM_COMPANY_CONTROL_PANEL}
+            >
               <SpecificCompanyAdministrationPage />
-            </RequireRoleCheck>
+            </RequirePermissionCheck>
           }
         />
         <Route path="forbidden" element={<ForbiddenPage />} />

@@ -1,15 +1,35 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { OpenAPI, Service } from '@api';
 import type { AuthTokenDto } from '@api';
-import { User } from '@entities/user';
+import { User, type Roles } from '@entities/user';
 
 type SessionData = AuthTokenDto;
 
 const SESSION_DATA = 'sessionData';
 
-const rolesMapping = {
-  ADMIN: ['COMPANY_ADMIN', 'SYSTEM_ADMIN'],
-  USER: ['USER'],
+export enum Permissions {
+  MY_DOCUMENTS,
+  DOCUMENT_TYPES,
+  MY_COMPANY_CONTROL_PANEL,
+  CUSTOM_COMPANY_CONTROL_PANEL,
+  SYSTEM_ADMIN,
+  COMPANY_ADMIN,
+  USER,
+}
+
+const rolesPermissions: Record<Roles, Permissions[]> = {
+  ADMIN: [
+    Permissions.SYSTEM_ADMIN,
+    Permissions.DOCUMENT_TYPES,
+    Permissions.MY_COMPANY_CONTROL_PANEL,
+    Permissions.CUSTOM_COMPANY_CONTROL_PANEL,
+  ],
+  COMPANY_ADMIN: [
+    Permissions.COMPANY_ADMIN,
+    Permissions.MY_COMPANY_CONTROL_PANEL,
+    Permissions.CUSTOM_COMPANY_CONTROL_PANEL,
+  ],
+  USER: [Permissions.USER, Permissions.MY_DOCUMENTS],
 };
 
 const REMEMBER_ME = true; // todo Брать из формы логина
@@ -51,10 +71,12 @@ class Session {
     return result;
   }
 
-  get roles(): string[] {
+  get permissions(): Permissions[] {
     if (this._state?.user?.role === undefined) return [];
     return (
-      rolesMapping[this._state.user.role as keyof typeof rolesMapping] ?? []
+      rolesPermissions[
+        this._state.user.role as keyof typeof rolesPermissions
+      ] ?? []
     );
   }
 
