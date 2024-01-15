@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 
-import { CompanyUsersAdministration } from '@widgets/CompanyUsersAdministration/CompanyUsersAdministration';
+import { CustomCompanyUsersAdministration } from '@widgets/CompanyUsersAdministration';
 import { useParams } from 'react-router-dom';
 
 export const SpecificCompanyAdministrationPage: FC = () => {
@@ -8,5 +8,5 @@ export const SpecificCompanyAdministrationPage: FC = () => {
   const companyId = Number(companyIdString);
   if (Number.isNaN(companyId))
     return <div>Не существует организации с id = {companyIdString}</div>;
-  return <CompanyUsersAdministration companyId={companyId} />;
+  return <CustomCompanyUsersAdministration companyId={companyId} />;
 };

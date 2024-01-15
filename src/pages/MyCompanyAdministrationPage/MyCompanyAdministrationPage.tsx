@@ -1,10 +1,6 @@
 import { type FC } from 'react';
-
-import { CompanyUsersAdministration } from '@widgets/CompanyUsersAdministration/CompanyUsersAdministration';
-import sessionStore from '@entities/session/session';
+import { MyCompanyUsersAdministration } from '@widgets/CompanyUsersAdministration';
 
 export const MyCompanyAdministrationPage: FC = () => {
-  return (
-    <CompanyUsersAdministration companyId={sessionStore.currentUserCompanyId} />
-  );
+  return <MyCompanyUsersAdministration />;
 };
