@@ -75,7 +75,11 @@ class UsersByCompanies {
       void result
         ._loadCompanyUsers(() => api.getUsersByOrganization(companyId))
         .then(() => {
-          if (result !== undefined) this._usersByCompany.set(companyId, result);
+          // По идее, эта мапа вообще можно сделать не моделью?
+          runInAction(() => {
+            if (result !== undefined)
+              this._usersByCompany.set(companyId, result);
+          });
         })
         .catch((error) => {
           throw error;
