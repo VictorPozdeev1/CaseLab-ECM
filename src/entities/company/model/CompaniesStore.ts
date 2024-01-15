@@ -25,5 +25,11 @@ class CompaniesStore {
   }
 }
 
-export const companiesStore = new CompaniesStore();
-void companiesStore._loadCompanies();
+let _companiesStore: CompaniesStore | undefined;
+export const getCompaniesStore = (): CompaniesStore => {
+  if (_companiesStore === undefined) {
+    _companiesStore = new CompaniesStore();
+    void _companiesStore._loadCompanies();
+  }
+  return _companiesStore;
+};
