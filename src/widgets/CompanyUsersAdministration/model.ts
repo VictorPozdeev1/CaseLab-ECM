@@ -19,7 +19,8 @@ export class CompanyUsersModel {
   async _loadCompanyUsers(
     usersLoader: () => Promise<UserReplyDto[]>,
   ): Promise<void> {
-    const newUserList = (await usersLoader()).map((u) => new User(u));
+    const loadedUsers = await usersLoader();
+    const newUserList = loadedUsers.map((u) => new User(u));
     runInAction(() => {
       this.users = newUserList;
     });
@@ -71,10 +72,15 @@ class UsersByCompanies {
     let result = this._usersByCompany.get(companyId);
     if (result === undefined) {
       result = new CompanyUsersModel();
-      void result._loadCompanyUsers(() =>
-        api.getUsersByOrganization(companyId),
-      );
-      this._usersByCompany.set(companyId, result);
+      void result
+        ._loadCompanyUsers(() => api.getUsersByOrganization(companyId))
+        .then(() => {
+          if (result !== undefined) this._usersByCompany.set(companyId, result);
+        })
+        .catch((error) => {
+          throw error;
+        });
+      // Получается, если ошибка, то result возвращаем, но в Map не добавляем. Приемлемо? Видимо, с mobx-utils было бы лучше.
     }
     return result;
   }
@@ -84,10 +90,15 @@ class UsersByCompanies {
     let result = this._usersByCompany.get(companyId);
     if (result === undefined) {
       result = new CompanyUsersModel();
-      void result._loadCompanyUsers(() =>
-        api.getUsersByOrganization(companyId),
-      );
-      this._usersByCompany.set(companyId, result);
+      result
+        ._loadCompanyUsers(() => api.getUsersByOrganization(companyId))
+        .then(() => {
+          if (result !== undefined) this._usersByCompany.set(companyId, result);
+        })
+        .catch((error) => {
+          throw error;
+        });
+      // Получается, если ошибка, то result возвращаем, но в Map не добавляем. Приемлемо? Видимо, с mobx-utils было бы лучше.
     }
     return result;
   }
