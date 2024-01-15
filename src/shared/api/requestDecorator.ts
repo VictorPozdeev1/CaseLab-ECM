@@ -3,6 +3,7 @@ import type { ApiRequestOptions } from './core/ApiRequestOptions';
 import { CancelablePromise } from './core/CancelablePromise';
 import type { OpenAPIConfig } from './core/OpenAPI';
 import { errorStore } from '@shared/appError';
+import { type ApiError } from './core/ApiError';
 
 export const RequestDecorator = <T>(
   config: OpenAPIConfig,
@@ -13,10 +14,13 @@ export const RequestDecorator = <T>(
       .then((response) => {
         resolve(response as T);
       })
-      .catch((error: any) => {
-        if (error.status === 401) {
+      .catch((error: ApiError) => {
+        if (
+          error.status === 401 &&
+          error.body.message !== 'Неверные учетные данные пользователя'
+        ) {
           errorStore.setError(
-            'Похоже, вы не авторизованны. Перейти на страницу авторизации?',
+            'Похоже, вы не залогинены. Перейти на страницу логина?',
           );
         } else {
           reject(error);
