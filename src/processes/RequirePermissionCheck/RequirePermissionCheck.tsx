@@ -1,9 +1,7 @@
 import { type FC } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { currentSessionStore } from '@entities/session';
+import { currentSessionStore, type Permissions } from '@entities/session';
 import { observer } from 'mobx-react-lite';
-
-import { type Permissions } from '@entities/session/session';
 
 const RequirePermissionCheck: FC<{
   permission: Permissions;

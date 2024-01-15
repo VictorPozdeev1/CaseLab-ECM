@@ -7,7 +7,7 @@ import {
   type UserUpdateDto,
 } from '@api';
 import { User } from '@entities/user';
-import sessionStore from '@entities/session/session';
+import { currentSessionStore } from '@entities/session';
 
 export class CompanyUsersModel {
   constructor() {
@@ -80,7 +80,7 @@ class UsersByCompanies {
   }
 
   get myCompanyUsersStore(): CompanyUsersModel {
-    const companyId = sessionStore.currentUserCompanyId;
+    const companyId = currentSessionStore.currentUserCompanyId;
     let result = this._usersByCompany.get(companyId);
     if (result === undefined) {
       result = new CompanyUsersModel();

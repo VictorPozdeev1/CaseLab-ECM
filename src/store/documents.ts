@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Service } from '@api';
-import currentSession from '@entities/session/session';
+import { currentSessionStore } from '@entities/session';
 import { type Document } from '@entities/document';
 
 // Видимо, никакого общего стора документов быть не должно, а каждый модуль должен иметь свой стор (и там может быть всего одна загруженная страничка с документами)
@@ -43,7 +43,7 @@ class DocumentsStore {
     attributeValues: Map<number, string>,
   ): Promise<void> {
     try {
-      if (currentSession.currentUserData !== undefined) {
+      if (currentSessionStore.currentUserData !== undefined) {
         const res = await Service.createDocument({
           docTypeId,
           title: 'Добавить пользовательское название документа',

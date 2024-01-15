@@ -1,1 +1,1 @@
-export { default as currentSessionStore } from './session';
+export { default as currentSessionStore, type Permissions } from './session';
