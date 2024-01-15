@@ -5,6 +5,11 @@ import type { OpenAPIConfig } from './core/OpenAPI';
 import { errorStore } from '@shared/appError';
 import { type ApiError } from './core/ApiError';
 
+/* Может быть, всё-таки стоит сделать этот декоратор по-хорошему
+ * Например, чтобы он декорировал класс Service и обёртывал все его методы.
+ * Или через аксиос интерсептор. Но это надо тогда менять на аксиос в настройках...
+ */
+
 export const RequestDecorator = <T>(
   config: OpenAPIConfig,
   options: ApiRequestOptions,
