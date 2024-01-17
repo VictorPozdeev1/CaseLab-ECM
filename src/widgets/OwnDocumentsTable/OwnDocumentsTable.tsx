@@ -46,20 +46,6 @@ const columns: GridColDef[] = [
 export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = observer(
   ({ documents }) => {
     const navigate = useNavigate();
-    // const location = useLocation();
-    // const generateRows = (size: number): GridRowsProp => {
-    //   const testRows = [];
-    //   for (let index = 0; index < size; index++) {
-    //     testRows.push({
-    //       id: index * -1,
-    //       name: 'name' + index,
-    //       documentType: 'type1',
-    //       // creationDate: '4',
-    //       status: 'NEW',
-    //     });
-    //   }
-    //   return testRows;
-    // };
     const documentRows: GridRowsProp =
       documents?.map((d) => ({
         id: d.id,
@@ -80,7 +66,9 @@ export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = observer(
         pageSizeOptions={[25, 50]}
         loading={documents === undefined}
         onRowDoubleClick={(params) => {
-          navigate(`./${params.row.name}`);
+          navigate(`./${params.row.name}`, {
+            state: { documentId: params.id },
+          });
         }}
       />
     );

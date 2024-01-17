@@ -41,7 +41,10 @@ const AppRoutes: FC = () => {
             </RequirePermissionCheck>
           }
         />
-        <Route path="documentView" element={<DocumentViewPage />} />
+        <Route
+          path="myDocuments/:documentName"
+          element={<DocumentViewPage />}
+        />
         <Route path="page1" element={<Page1 />} />
 
         <Route

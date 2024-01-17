@@ -17,6 +17,14 @@ class DocumentsStore {
     return this.documents;
   }
 
+  getDocumentById(id: number): Document | undefined {
+    return this.documents?.find((document) => document.id === id);
+  }
+
+  getDocumentByName(name: string): Document | undefined {
+    return this.documents?.find((document) => document.name === name);
+  }
+
   async getDocuments(): Promise<void> {
     try {
       const creatorId: number = (await Service.getUserInfo()).id;
