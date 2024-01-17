@@ -8,9 +8,9 @@ import {
   UserPasswordForm,
 } from '@entities/user/components/UserPasswordForm/UserPasswordForm';
 import { UsersTable } from './UsersTable';
-import { type CompanyUsersModel } from './model';
+import { type CompanyUsersModel } from '../model';
 
-export const CompanyUsersAdministration: FC<{
+export const BaseCompanyUsersControlPanel: FC<{
   title: string;
   model: CompanyUsersModel;
 }> = observer(({ title, model }) => {

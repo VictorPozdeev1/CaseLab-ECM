@@ -2,10 +2,10 @@ import { useEffect, type FC, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { getCompaniesStore } from '@entities/company/model';
-import userStores, { type CompanyUsersModel } from './model';
-import { CompanyUsersAdministration } from './CompanyUsersAdministration';
+import userStores, { type CompanyUsersModel } from '../model';
+import { BaseCompanyUsersControlPanel } from './BaseCompanyUsersControlPanel';
 
-export const CustomCompanyUsersAdministration: FC<{ companyId: number }> =
+export const SpecificCompanyUsersControlPanel: FC<{ companyId: number }> =
   observer(({ companyId }) => {
     const [model, setModel] = useState<CompanyUsersModel>(
       userStores.getCustomCompanyUserStore(companyId),
@@ -20,7 +20,7 @@ export const CustomCompanyUsersAdministration: FC<{ companyId: number }> =
     const companyName = getCompaniesStore().getNameById(companyId);
 
     return (
-      <CompanyUsersAdministration
+      <BaseCompanyUsersControlPanel
         title={`Список сотрудников организации: ${
           companyName ?? 'id=' + companyId
         }`}
