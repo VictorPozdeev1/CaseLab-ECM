@@ -8,13 +8,8 @@ import {
 import { observer } from 'mobx-react-lite';
 
 import { type Document } from '@entities/document';
-import { statusChips, downloadDocumentFile } from '@entities/document';
-import styles from './OwnDocumentsTable.module.css';
-
-/*
- Это сделано на основе примера из Getting Started.
- Возможно, дальше там другой принцип составления столбцов и строк, надо смотреть документацию дальше.
-*/
+import { statusChips } from '@entities/document';
+import { useNavigate } from 'react-router';
 
 interface OwnDocumentsTableProps {
   documents?: Document[];
@@ -24,27 +19,24 @@ const columns: GridColDef[] = [
   {
     field: 'name',
     headerName: 'Название',
-    flex: 4,
-    headerClassName: styles.tableHeaderText,
+    flex: 1,
+    hideable: false,
   },
   {
-    field: 'docType',
+    field: 'documentType',
     headerName: 'Тип',
-    flex: 2,
-    headerClassName: styles.tableHeaderText,
+    flex: 1,
+    hideable: false,
   },
   {
     field: 'creationDate',
     headerName: 'Создан',
-    flex: 2,
-    headerClassName: styles.tableHeaderText,
     type: 'date',
   },
   {
     field: 'status',
     headerName: 'Статус',
-    flex: 2,
-    headerClassName: styles.tableHeaderText,
+    minWidth: 150,
     renderCell: (
       params: GridRenderCellParams<any, keyof typeof statusChips | undefined>,
     ) => (params.value !== undefined ? statusChips[params.value] : null),
@@ -53,26 +45,42 @@ const columns: GridColDef[] = [
 
 export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = observer(
   ({ documents }) => {
+    const navigate = useNavigate();
+    // const location = useLocation();
+    // const generateRows = (size: number): GridRowsProp => {
+    //   const testRows = [];
+    //   for (let index = 0; index < size; index++) {
+    //     testRows.push({
+    //       id: index * -1,
+    //       name: 'name' + index,
+    //       documentType: 'type1',
+    //       // creationDate: '4',
+    //       status: 'NEW',
+    //     });
+    //   }
+    //   return testRows;
+    // };
     const documentRows: GridRowsProp =
       documents?.map((d) => ({
         id: d.id,
         name: d.name,
-        docType: d.docTypeName,
+        documentType: d.docTypeName,
         creationDate: d.date,
         status: d.finalDocStatus,
       })) ?? [];
+
     return (
       <DataGrid
-        rows={documentRows}
+        rows={[...documentRows]}
         columns={columns}
-        getRowClassName={(_) => styles.tableRowText}
-        onRowDoubleClick={(params) => {
-          void downloadDocumentFile(Number(params.id));
+        autoHeight
+        initialState={{
+          pagination: { paginationModel: { pageSize: 25 } },
         }}
-        sx={{
-          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
-            display: 'none',
-          },
+        pageSizeOptions={[25, 50]}
+        loading={documents === undefined}
+        onRowDoubleClick={(params) => {
+          navigate(`./${params.row.name}`);
         }}
       />
     );
