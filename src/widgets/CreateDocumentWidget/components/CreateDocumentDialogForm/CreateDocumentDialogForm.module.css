@@ -5,23 +5,6 @@
   width: 720px;
 }
 
-.dialogTitle {
-  align-self: stretch;
-
-  color: var(--text-primary, rgba(0, 0, 0, 0.87));
-  font-feature-settings:
-    'clig' off,
-    'liga' off;
-
-  /* typography/h6 */
-  font-family: Roboto;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 160%; /* 32px */
-  letter-spacing: 0.15px;
-}
-
 .inputGroup {
   padding-top: 16px;
   display: flex;
