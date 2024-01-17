@@ -74,6 +74,14 @@ export const BaseCompanyUsersControlPanel: FC<{
     });
   };
 
+  const editUserRole = (userData: User): void => {
+    model
+      .updateUser(userData)
+      .then()
+      .catch(() => {})
+      .finally();
+  };
+
   return (
     <>
       <Container maxWidth={'lg'}>
@@ -116,6 +124,7 @@ export const BaseCompanyUsersControlPanel: FC<{
             users={users}
             onEditUserClick={editUserClickHandler}
             onEditUserClickPass={editUserClickPass}
+            onEditUserRole={editUserRole}
           />
         </Box>
       </Container>
