@@ -69,6 +69,11 @@ export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = observer(
         onRowDoubleClick={(params) => {
           void downloadDocumentFile(Number(params.id));
         }}
+        sx={{
+          '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
       />
     );
   },

@@ -2,32 +2,15 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 600px;
-}
-
-.dialogTitle {
-  align-self: stretch;
-
-  color: var(--text-primary, rgba(0, 0, 0, 0.87));
-  font-feature-settings:
-    'clig' off,
-    'liga' off;
-
-  /* typography/h6 */
-  font-family: Roboto;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 160%; /* 32px */
-  letter-spacing: 0.15px;
+  width: 720px;
 }
 
 .inputGroup {
+  padding-top: 16px;
   display: flex;
-  padding: var(--none, 0px);
-  align-items: flex-start;
-  gap: var(--paddings-pad-1, 8px);
-  align-self: stretch;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .documentNameInput {
@@ -35,7 +18,7 @@
   height: 56px;
   flex-direction: column;
   align-items: stretch;
-  flex: 1 0 0;
+  width: 38%;
 }
 
 .documentTypeSelect {
@@ -44,6 +27,5 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--none, 0px);
-  align-self: stretch;
-  flex: 1 0 0;
+  width: 100%;
 }
