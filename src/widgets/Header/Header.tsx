@@ -1,33 +1,13 @@
-import { LogoutButton } from '@features/logout';
 import { type FC } from 'react';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Logo from '@shared/components/Logo/Logo';
-import { AppBar, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { currentSessionStore } from '@entities/session';
+import { Typography, Avatar, Box, AppBar, Container } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 
-interface ILinks {
-  title: string;
-  href: string;
-}
+import { LogoutButton } from '@features/logout';
+import { currentSessionStore } from '@entities/session';
+import Logo from '@shared/components/Logo/Logo';
 
-const Links: ILinks[] = [
-  {
-    title: 'Главная',
-    href: '/',
-  },
-  {
-    title: 'Пользователи',
-    href: '/',
-  },
-  {
-    title: 'Типы документов',
-    href: '/documentTypes',
-  },
-];
+import { NavBar } from './NavBar';
 
 export const Header: FC = observer(() => {
   return (
@@ -49,23 +29,7 @@ export const Header: FC = observer(() => {
         <Link to={'/'} style={{ color: 'inherit', textDecoration: 'inherit' }}>
           <Logo hasText={true} size={'small'} />
         </Link>
-        <Box display={'flex'} gap={'20px'}>
-          {Links.map((el) => {
-            return (
-              <Link
-                key={el.title}
-                to={el.href}
-                style={{
-                  color: 'black',
-                  textDecoration: 'inherit',
-                  fontSize: '18px',
-                }}
-              >
-                {el.title}
-              </Link>
-            );
-          })}
-        </Box>
+        <NavBar />
         {/* <Typography variant="h5" fontWeight={'bold'}>
           {currentSessionStore.currentUserCompanyName}
         </Typography> */}
