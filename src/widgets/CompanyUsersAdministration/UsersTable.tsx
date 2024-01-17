@@ -8,12 +8,14 @@ import {
   Typography,
   TableRow,
   Box,
-  Chip,
   IconButton,
+  FormControl,
+  MenuItem,
+  Select,
 } from '@mui/material';
 import { EditRounded } from '@mui/icons-material';
 import PasswordIcon from '@mui/icons-material/Password';
-import { type User } from '@entities/user';
+import { Roles, type User } from '@entities/user';
 import { observer } from 'mobx-react-lite';
 
 const TableCells: string[] = ['ФИО', 'Должность', 'Роль', 'Email'];
@@ -30,10 +32,16 @@ interface UsersTableProps {
   users: User[];
   onEditUserClick: (userToEditId: number) => void;
   onEditUserClickPass: (userToEditId: number) => void;
+  onEditUserRole: (userData: User) => void;
 }
 
 export const UsersTable: FC<UsersTableProps> = observer(
-  ({ users, onEditUserClick, onEditUserClickPass }): JSX.Element => {
+  ({
+    users,
+    onEditUserClick,
+    onEditUserClickPass,
+    onEditUserRole,
+  }): JSX.Element => {
     const tableData: ITableData[] = users.map((u) => ({
       id: u.id,
       name: u.shortName,
@@ -67,7 +75,26 @@ export const UsersTable: FC<UsersTableProps> = observer(
                     <Typography variant="body2">{el.post}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Chip sx={{ color: '#0000007A' }} label={el.role} />
+                    <FormControl variant="standard">
+                      <Select
+                        sx={{ width: '100px' }}
+                        value={el.role ?? ''}
+                        onChange={(e) => {
+                          onEditUserRole(
+                            users.find((u) => {
+                              u.role = e.target.value;
+                              return u.id === el.id;
+                            }) as User,
+                          );
+                        }}
+                      >
+                        {Object.entries(Roles).map((e) => (
+                          <MenuItem key={e[0]} value={e[0]}>
+                            {e[1]}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </TableCell>
                   <TableCell>
                     <Box
