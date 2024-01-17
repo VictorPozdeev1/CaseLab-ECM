@@ -6,7 +6,7 @@ import docTypesStore from './documentTypes';
 import { injectStores } from '@mobx-devtools/tools';
 
 // temp!
-import users from '@widgets/CompanyUsersAdministration/model';
+import users from '@widgets/CompanyUsersControlPanel/model';
 
 injectStores({
   documentsStore,

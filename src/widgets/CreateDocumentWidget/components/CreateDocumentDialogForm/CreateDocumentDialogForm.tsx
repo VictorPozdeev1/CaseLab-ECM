@@ -13,6 +13,8 @@ import {
   MenuItem,
   type SelectChangeEvent,
   Typography,
+  InputLabel,
+  FormControl,
 } from '@mui/material';
 
 import styles from './CreateDocumentDialogForm.module.css';
@@ -85,7 +87,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
         }}
       >
         <Paper sx={{ width: '100%' }}>
-          <DialogTitle variant="h6" className={styles.title}>
+          <DialogTitle variant="h6" fontWeight={600}>
             Создать документ
           </DialogTitle>
           <DialogContent sx={{ alignSelf: 'stretch' }}>
@@ -94,37 +96,65 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
                 className={styles.documentNameInput}
                 label="Название"
                 variant="outlined"
-              />
-              <Select
-                className={styles.documentTypeSelect}
-                value={docTypeId !== 0 ? docTypeId?.toString() : ''}
-                label="Тип документа"
-                onChange={handleDocTypeChange}
-              >
-                {docTypesStore.docTypes?.map((t) => (
-                  <MenuItem key={t.id} value={t.id}>
-                    {t.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Box>
-            <Box>
-              <Typography variant="h6" gutterBottom={false}>
-                Атрибуты
-              </Typography>
-              {/* <GridToolbarQuickFilter> </GridToolbarQuickFilter> */}
-              <DataGrid
-                processRowUpdate={(cell) => {
-                  attributeValuesRef.current.set(cell.id, cell.value);
-                  return cell;
+                InputProps={{
+                  style: {
+                    borderRadius: '8px',
+                  },
                 }}
-                rows={rows}
-                columns={columns}
               />
+              <FormControl sx={{ width: '60%' }}>
+                <InputLabel id="select-label">Тип</InputLabel>
+                <Select
+                  labelId="select-label"
+                  className={styles.documentTypeSelect}
+                  value={docTypeId !== 0 ? docTypeId?.toString() : ''}
+                  label={'Тип'}
+                  onChange={handleDocTypeChange}
+                  style={{ borderRadius: '8px' }}
+                >
+                  {docTypesStore.docTypes?.map((t) => (
+                    <MenuItem key={t.id} value={t.id}>
+                      {t.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Box>
+            {docTypeId !== 0 && (
+              <Box>
+                <Typography
+                  variant="h6"
+                  gutterBottom={false}
+                  fontWeight={600}
+                  marginTop={'8px'}
+                >
+                  Атрибуты
+                </Typography>
+                {/* <GridToolbarQuickFilter> </GridToolbarQuickFilter> */}
+                <DataGrid
+                  processRowUpdate={(cell) => {
+                    attributeValuesRef.current.set(cell.id, cell.value);
+                    return cell;
+                  }}
+                  rows={rows}
+                  columns={columns}
+                  sx={{
+                    width: '100%',
+                    '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': {
+                      display: 'none',
+                    },
+                    '& .MuiDataGrid-footerContainer': {
+                      display: 'none',
+                    },
+                  }}
+                />
+              </Box>
+            )}
           </DialogContent>
           <DialogActions>
             <Button
+              sx={{ color: 'rgb(0, 0, 0, 0.6)' }}
+              color="inherit"
               onClick={() => {
                 onCancel();
               }}
@@ -132,7 +162,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               Отменить
             </Button>
             <Button
-              variant="contained"
+              variant="text"
               disabled={docTypeId === 0}
               onClick={(e) => {
                 onSubmit(docTypeId, attributeValuesRef.current);

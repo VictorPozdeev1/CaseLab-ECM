@@ -11,7 +11,7 @@ export enum Permissions {
   MY_DOCUMENTS,
   DOCUMENT_TYPES,
   MY_COMPANY_CONTROL_PANEL,
-  CUSTOM_COMPANY_CONTROL_PANEL,
+  SPECIFIC_COMPANY_CONTROL_PANEL,
   SYSTEM_ADMIN,
   COMPANY_ADMIN,
   USER,
@@ -22,12 +22,12 @@ const rolesPermissions: Record<Roles, Permissions[]> = {
     Permissions.SYSTEM_ADMIN,
     Permissions.DOCUMENT_TYPES,
     Permissions.MY_COMPANY_CONTROL_PANEL,
-    Permissions.CUSTOM_COMPANY_CONTROL_PANEL,
+    Permissions.SPECIFIC_COMPANY_CONTROL_PANEL,
   ],
   COMPANY_ADMIN: [
     Permissions.COMPANY_ADMIN,
     Permissions.MY_COMPANY_CONTROL_PANEL,
-    Permissions.CUSTOM_COMPANY_CONTROL_PANEL,
+    Permissions.SPECIFIC_COMPANY_CONTROL_PANEL,
   ],
   USER: [Permissions.USER, Permissions.MY_DOCUMENTS],
 };

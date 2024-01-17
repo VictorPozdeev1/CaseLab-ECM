@@ -8,8 +8,10 @@ import { Page1 } from '@pages/Page1/Page1';
 import { AdminPage } from '@pages/AdminPage/AdminPage';
 import { ForbiddenPage } from '@pages/ForbiddenPage/ForbiddenPage';
 import { OwnDocumentsPage } from '@pages/OwnDocumentsPage/OwnDocumentsPage';
-import { MyCompanyAdministrationPage } from '@pages/MyCompanyAdministrationPage/MyCompanyAdministrationPage';
-import { SpecificCompanyAdministrationPage } from '@pages/SpecificCompanyAdministrationPage/SpecificCompanyAdministrationPage';
+import { MyCompanyMainControlPanelPage } from '@pages/MyCompanyMainControlPanelPage';
+import { MyCompanyUsersControlPanelPage } from '@pages/MyCompanyUsersControlPanelPage';
+import { SpecificCompanyMainControlPanelPage } from '@pages/SpecificCompanyMainControlPanelPage';
+import { SpecificCompanyUsersControlPanelPage } from '@pages/SpecificCompanyUsersControlPanelPage';
 import { Page404 } from '@pages/Page404';
 import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
 import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
@@ -64,7 +66,17 @@ const AppRoutes: FC = () => {
             <RequirePermissionCheck
               permission={Permissions.MY_COMPANY_CONTROL_PANEL}
             >
-              <MyCompanyAdministrationPage />
+              <MyCompanyMainControlPanelPage />
+            </RequirePermissionCheck>
+          }
+        />
+        <Route
+          path="myCompany/users"
+          element={
+            <RequirePermissionCheck
+              permission={Permissions.MY_COMPANY_CONTROL_PANEL}
+            >
+              <MyCompanyUsersControlPanelPage />
             </RequirePermissionCheck>
           }
         />
@@ -72,9 +84,19 @@ const AppRoutes: FC = () => {
           path="company/:companyId"
           element={
             <RequirePermissionCheck
-              permission={Permissions.CUSTOM_COMPANY_CONTROL_PANEL}
+              permission={Permissions.SPECIFIC_COMPANY_CONTROL_PANEL}
             >
-              <SpecificCompanyAdministrationPage />
+              <SpecificCompanyMainControlPanelPage />
+            </RequirePermissionCheck>
+          }
+        />
+        <Route
+          path="company/:companyId/users"
+          element={
+            <RequirePermissionCheck
+              permission={Permissions.SPECIFIC_COMPANY_CONTROL_PANEL}
+            >
+              <SpecificCompanyUsersControlPanelPage />
             </RequirePermissionCheck>
           }
         />

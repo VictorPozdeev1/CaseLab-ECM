@@ -1,17 +1,17 @@
 import { type FC, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 
-import userStores, { type CompanyUsersModel } from './model';
-import { CompanyUsersAdministration } from './CompanyUsersAdministration';
+import userStores, { type CompanyUsersModel } from '../model';
+import { BaseCompanyUsersControlPanel } from './BaseCompanyUsersControlPanel';
 
-export const MyCompanyUsersAdministration: FC = observer(() => {
+export const MyCompanyUsersControlPanel: FC = observer(() => {
   const model = useMemo<CompanyUsersModel>(
     () => userStores.myCompanyUsersStore,
     [],
   );
 
   return (
-    <CompanyUsersAdministration
+    <BaseCompanyUsersControlPanel
       title={`Список сотрудников моей организации`}
       model={model}
     />

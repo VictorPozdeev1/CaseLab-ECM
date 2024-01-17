@@ -9,6 +9,26 @@ import { Link } from 'react-router-dom';
 import { currentSessionStore } from '@entities/session';
 import { observer } from 'mobx-react-lite';
 
+interface ILinks {
+  title: string;
+  href: string;
+}
+
+const Links: ILinks[] = [
+  {
+    title: 'Главная',
+    href: '/',
+  },
+  {
+    title: 'Пользователи',
+    href: '/',
+  },
+  {
+    title: 'Типы документов',
+    href: '/documentTypes',
+  },
+];
+
 export const Header: FC = observer(() => {
   return (
     <AppBar
@@ -29,9 +49,26 @@ export const Header: FC = observer(() => {
         <Link to={'/'} style={{ color: 'inherit', textDecoration: 'inherit' }}>
           <Logo hasText={true} size={'small'} />
         </Link>
-        <Typography variant="h5" fontWeight={'bold'}>
+        <Box display={'flex'} gap={'20px'}>
+          {Links.map((el) => {
+            return (
+              <Link
+                key={el.title}
+                to={el.href}
+                style={{
+                  color: 'black',
+                  textDecoration: 'inherit',
+                  fontSize: '18px',
+                }}
+              >
+                {el.title}
+              </Link>
+            );
+          })}
+        </Box>
+        {/* <Typography variant="h5" fontWeight={'bold'}>
           {currentSessionStore.currentUserCompanyName}
-        </Typography>
+        </Typography> */}
         <Box
           sx={{
             display: 'flex',
@@ -52,9 +89,14 @@ export const Header: FC = observer(() => {
             >
               {currentSessionStore.currentUserData.initials}
             </Avatar>
-            <Typography variant="h6" sx={{ fontSize: '16px' }}>
-              {currentSessionStore.currentUserData.shortName}
-            </Typography>
+            <Box display={'flex'} flexDirection={'column'} gap={'4px'}>
+              <Typography variant="h6" sx={{ fontSize: '16px' }}>
+                {currentSessionStore.currentUserData.shortName}
+              </Typography>
+              <Typography variant="h6" sx={{ fontSize: '16px' }}>
+                {currentSessionStore.currentUserCompanyName}
+              </Typography>
+            </Box>
           </Box>
           <LogoutButton />
         </Box>
