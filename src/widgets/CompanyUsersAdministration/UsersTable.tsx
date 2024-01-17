@@ -80,12 +80,13 @@ export const UsersTable: FC<UsersTableProps> = observer(
                         sx={{ width: '100px' }}
                         value={el.role ?? ''}
                         onChange={(e) => {
-                          onEditUserRole(
-                            users.find((u) => {
-                              u.role = e.target.value;
-                              return u.id === el.id;
-                            }) as User,
-                          );
+                          const findUser = users.find((u) => {
+                            return u.id === el.id;
+                          });
+                          if (findUser !== undefined) {
+                            findUser.role = e.target.value;
+                            onEditUserRole(findUser);
+                          }
                         }}
                       >
                         {Object.entries(Roles).map((e) => (
