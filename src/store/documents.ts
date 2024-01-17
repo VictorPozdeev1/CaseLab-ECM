@@ -40,13 +40,14 @@ class DocumentsStore {
 
   async createDocument(
     docTypeId: number,
+    title: string,
     attributeValues: Map<number, string>,
   ): Promise<void> {
     try {
       if (currentSessionStore.currentUserData !== undefined) {
         const res = await Service.createDocument({
           docTypeId,
-          title: 'Добавить пользовательское название документа',
+          title,
           attributeValues: Array.from(
             attributeValues,
             ([attributeId, value]) => ({ attributeId, value }),

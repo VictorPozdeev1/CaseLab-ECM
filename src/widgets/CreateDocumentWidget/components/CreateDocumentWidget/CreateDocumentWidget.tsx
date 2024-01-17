@@ -21,8 +21,8 @@ export const CreateDocumentWidget: FC = observer(() => {
       onCancel={() => {
         setIsMinimized(true);
       }}
-      onSubmit={(docTypeId, attributeValues) => {
-        void documentsStore.createDocument(docTypeId, attributeValues);
+      onSubmit={(docTypeId, title, attributeValues) => {
+        void documentsStore.createDocument(docTypeId, title, attributeValues);
         setIsMinimized(true); // После ответа от сервера
       }}
     />

@@ -25,13 +25,18 @@ import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { type DocAttributeDto } from '@api';
 
 interface CreateDocumentFormProps {
-  onSubmit: (docTypeId: number, attributeValues: Map<number, string>) => void;
+  onSubmit: (
+    docTypeId: number,
+    title: string,
+    attributeValues: Map<number, string>,
+  ) => void;
   onCancel: () => void;
 }
 
 export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
   ({ onSubmit, onCancel }) => {
     const [docTypeId, setDocTypeId] = useState<number>(0);
+    const [title, setTitle] = useState('');
     const attributeValuesRef = useRef<Map<number, string>>(new Map());
 
     const handleDocTypeChange = (event: SelectChangeEvent): void => {
@@ -101,6 +106,9 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
                     borderRadius: '8px',
                   },
                 }}
+                onChange={(event) => {
+                  setTitle(event.target.value);
+                }}
               />
               <FormControl sx={{ width: '60%' }}>
                 <InputLabel id="select-label">Тип</InputLabel>
@@ -136,6 +144,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
                     attributeValuesRef.current.set(cell.id, cell.value);
                     return cell;
                   }}
+                  autoHeight
                   rows={rows}
                   columns={columns}
                   sx={{
@@ -165,7 +174,7 @@ export const CreateDocumentDialogForm: FC<CreateDocumentFormProps> = observer(
               variant="text"
               disabled={docTypeId === 0}
               onClick={(e) => {
-                onSubmit(docTypeId, attributeValuesRef.current);
+                onSubmit(docTypeId, title, attributeValuesRef.current);
               }}
             >
               Создать
