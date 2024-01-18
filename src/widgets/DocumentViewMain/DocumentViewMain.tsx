@@ -32,7 +32,6 @@ export const DocumentViewMain: FC = observer(() => {
       sx={{
         display: 'flex',
         width: '100%',
-        padding: 'var(--paddings-pad4, 32px) var(--paddings-pad3, 24px)',
         flexDirection: 'column',
         justifyContent: 'flex-end',
         alignItems: 'flex-start',

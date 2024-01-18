@@ -1,10 +1,10 @@
 import { type FC } from 'react';
-import Box from '@mui/material/Box';
 import DocViewer, {
   type IDocument as DocViewerDocument,
 } from '@cyntler/react-doc-viewer';
 
 import { observer } from 'mobx-react-lite';
+
 interface DocumentPreviewProps {
   documentLink?: string;
 }
@@ -18,7 +18,7 @@ export const DocumentPreview: FC<DocumentPreviewProps> = observer(
       { uri: documentLink ?? '' },
     ];
     return (
-      <Box>
+      <>
         {documentLink !== undefined ? (
           <DocViewer
             documents={docs}
@@ -34,7 +34,7 @@ export const DocumentPreview: FC<DocumentPreviewProps> = observer(
         ) : (
           'не удалось загрузить документ'
         )}
-      </Box>
+      </>
     );
   },
 );
