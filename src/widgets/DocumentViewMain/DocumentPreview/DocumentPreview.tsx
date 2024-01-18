@@ -1,11 +1,40 @@
 import { type FC } from 'react';
-import Box from '@mui/material/Box';
-import imagePath from './test.png';
+import DocViewer, {
+  type IDocument as DocViewerDocument,
+} from '@cyntler/react-doc-viewer';
 
-export const DocumentPreview: FC = () => {
-  return (
-    <Box>
-      <img alt="Description" src={imagePath} style={{ width: '100%' }} />
-    </Box>
-  );
-};
+import { observer } from 'mobx-react-lite';
+
+interface DocumentPreviewProps {
+  documentLink?: string;
+}
+export const DocumentPreview: FC<DocumentPreviewProps> = observer(
+  ({ documentLink }) => {
+    const docs: DocViewerDocument[] = [
+      // заглушка пока не будет нормальной ссылки на документ
+      {
+        uri: 'https://pdfobject.com/pdf/sample.pdf',
+      },
+      { uri: documentLink ?? '' },
+    ];
+    return (
+      <>
+        {documentLink !== undefined ? (
+          <DocViewer
+            documents={docs}
+            prefetchMethod="GET"
+            config={{
+              header: {
+                disableHeader: true,
+                disableFileName: true,
+                retainURLParams: false,
+              },
+            }}
+          />
+        ) : (
+          'не удалось загрузить документ'
+        )}
+      </>
+    );
+  },
+);

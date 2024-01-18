@@ -1,39 +1,23 @@
 import { type FC } from 'react';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Typography from '@mui/material/Typography';
+
+import { useLocation, useNavigate } from 'react-router';
+import { Button } from '@mui/material';
 
 export const DocumentNav: FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        padding: 'var(--none, 0px)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '8px',
-        borderRadius: 'var(--none, 0px)',
+    <Button
+      variant={'text'}
+      startIcon={<ArrowBackIcon />}
+      onClick={() => {
+        // возвращаемся с /myDocument/:documentName на
+        navigate(location.pathname.match(/^\/.+\//)?.[0] as string);
       }}
     >
-      <IconButton aria-label="delete">
-        <ArrowBackIcon />
-      </IconButton>
-      <Typography
-        variant="h6"
-        sx={{
-          color: 'var(--text-primary, rgba(0, 0, 0, 0.87))',
-          fontFeatureSettings: "'clig' off, 'liga' off",
-          fontFamily: 'Roboto',
-          fontSize: '20px',
-          fontStyle: 'normal',
-          fontWeight: 500,
-          lineHeight: '160%',
-          letterSpacing: '0.15px',
-        }}
-      >
-        Документы
-      </Typography>
-    </Box>
+      Документы
+    </Button>
   );
 };

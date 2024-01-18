@@ -3,59 +3,48 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CreateIcon from '@mui/icons-material/Create';
 import Typography from '@mui/material/Typography';
+import { observer } from 'mobx-react-lite';
+import { type Document as StoreDocument } from '@entities/document';
+import session from '@entities/session/session';
+export interface DocumentHeaderProps {
+  document?: StoreDocument;
+}
 
-export const DocumentHeader: FC = () => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        padding: 'var(--none, 0px)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '41em',
-        borderRadius: 'var(--none, 0px)',
-      }}
-    >
+export const DocumentHeader: FC<DocumentHeaderProps> = observer(
+  ({ document }) => {
+    return (
       <Box
         sx={{
           display: 'flex',
-          padding: 'var(--none, 0px)',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: 'var(--none, 0px)',
-          flex: '1 0 0',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
         }}
       >
-        <Typography
-          variant="h6"
-          sx={{
-            color: 'var(--text-primary, rgba(0, 0, 0, 0.87))',
-            fontFeatureSettings: "'clig' off, 'liga' off",
-            fontFamily: 'Roboto',
-            fontSize: '30px',
-            fontStyle: 'normal',
-            fontWeight: 500,
-            lineHeight: '160%',
-            letterSpacing: '0.15px',
-            marginBottom: '5px',
-          }}
-        >
-          Трудовой договор №1
-        </Typography>
-        <Typography
-          variant="subtitle1" // Выберите подходящий вариант подзаголовка
+        <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
+            // flex: '1 0 0',
+            gap: 1,
           }}
         >
-          Создан 01.12.2023, 19:40 • Иванов И.И.{' '}
-        </Typography>
+          <Typography variant="h6">{document?.name}</Typography>
+          <Typography
+            variant="subtitle1" // Выберите подходящий вариант подзаголовка
+          >
+            Создан {document?.date.toLocaleDateString()} •{' '}
+            {session.currentUserData.shortName}
+          </Typography>
+        </Box>
+        <Button
+          variant="outlined"
+          startIcon={<CreateIcon />}
+          onClick={() => {}}
+        >
+          РЕДАКТИРОВАТЬ
+        </Button>
       </Box>
-      <Button variant="outlined" startIcon={<CreateIcon />}>
-        РЕДАКТИРОВАТЬ
-      </Button>
-    </Box>
-  );
-};
+    );
+  },
+);
