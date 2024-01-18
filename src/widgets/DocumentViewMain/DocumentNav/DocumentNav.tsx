@@ -13,7 +13,7 @@ export const DocumentNav: FC = () => {
       variant={'text'}
       startIcon={<ArrowBackIcon />}
       onClick={() => {
-        // возвращаемся с /myDocument/:documentName на /myDocument/
+        // возвращаемся с /myDocument/:documentName на
         navigate(location.pathname.match(/^\/.+\//)?.[0] as string);
       }}
     >

@@ -1,6 +1,6 @@
 import { documentsStore } from '@store/index';
 
-export async function downloadDocumentFile(id: number): Promise<void> {
+export async function downloadDocumentFile(id: number): Promise<string> {
   if (Number.isNaN(id)) throw new Error('Document id is NaN');
   const documentToDownload = documentsStore.ownDocuments?.find(
     (d) => d.id === id,
@@ -14,17 +14,25 @@ export async function downloadDocumentFile(id: number): Promise<void> {
   Сейчас - требуется логин в MinIO.
   */
 
-  const url = new URL(
-    `https://minio.docflow.fokidoki.su/api/v1/buckets/${documentToDownload.documentPath
-      .split('/')
-      .pop()}/objects/download?prefix=${btoa(
-      documentToDownload.name,
-    )}&version_id=null`,
+  const url = getDocumentDownloadLink(
+    documentToDownload.documentPath,
+    documentToDownload.name,
   );
+
   const link = document.createElement('a');
   // 'data:text/plain;charset=utf-8,' +
   link.setAttribute('href', url.href);
   link.setAttribute('download', '');
-  // link.setAttribute('target', '_blank');
-  link.click();
+  link.setAttribute('target', '_blank');
+  // link.click();
+  return url.toString();
+}
+
+export function getDocumentDownloadLink(path: string, name: string): URL {
+  const bucket = path?.match(/\/(\w+)$/)?.[0];
+  return new URL(
+    `https://minio.docflow.fokidoki.su/api/v1/buckets${bucket}/objects/download?prefix=${btoa(
+      name,
+    )}&version_id=null`,
+  );
 }

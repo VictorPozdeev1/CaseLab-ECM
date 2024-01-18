@@ -5,11 +5,12 @@ import FormControl from '@mui/material/FormControl';
 import Select, { type SelectChangeEvent } from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import { observer } from 'mobx-react-lite';
 
-export const DocumentSendToReview: FC = () => {
+export const DocumentSendToReview: FC = observer(() => {
   const [value, selectValue] = useState('');
 
-  const handleChange = (event: SelectChangeEvent): any => {
+  const handleChange = (event: SelectChangeEvent): void => {
     selectValue(event.target.value);
   };
 
@@ -26,17 +27,17 @@ export const DocumentSendToReview: FC = () => {
         <InputLabel id="select-label">Выберете проверяющего</InputLabel>
         <Select
           labelId="select-label"
-          id="select-demo"
+          id="select-reviewer"
           value={value}
           label="Выберете проверяющего"
           onChange={handleChange}
         >
+          {}
           <MenuItem value={10}>Григорьева А.А</MenuItem>
           <MenuItem value={20}>Иванов И.И</MenuItem>
         </Select>
       </FormControl>
       <Button
-        disabled
         variant="contained"
         color="primary"
         size="small"
@@ -46,4 +47,4 @@ export const DocumentSendToReview: FC = () => {
       </Button>
     </Box>
   );
-};
+});
