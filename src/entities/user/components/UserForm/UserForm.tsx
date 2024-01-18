@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, type FC, useEffect } from 'react';
 
 import {
   Box,
@@ -7,12 +7,16 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from '@mui/material';
 import { User } from '@entities/user/User';
-
+import { type OrgDto, Service } from '@api';
 import styles from './UserForm.module.css';
+import { Roles } from '@entities/user';
 
 export interface UserFormProps {
   userInitialInfo: User;
@@ -28,6 +32,17 @@ export const UserForm: FC<UserFormProps> = ({
   const userInitialInfoCopy: User = Object.create(User.prototype);
   Object.assign(userInitialInfoCopy, userInitialInfo);
   const [userInfo] = useState<User>(userInitialInfoCopy);
+  const [organization, setOrg] = useState<OrgDto[]>();
+  useEffect(() => {
+    Service.getAllOrgs()
+      .then((res) => {
+        setOrg(res.content);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally();
+  }, [userInitialInfo]);
 
   return (
     <Dialog open={true} sx={{ width: '688px', margin: '0 auto' }}>
@@ -93,21 +108,41 @@ export const UserForm: FC<UserFormProps> = ({
             }}
           />
         </Box>
-        <Box className={styles.inputBox}>
-          <Typography className={styles.label}> Оргинизация </Typography>
-          {/* todo: Сделать селектом */}
-          <TextField
-            sx={{ width: '446px' }}
-            defaultValue={
-              'id=' + userInfo.organizationId + '. Сделать селектом!'
-            }
-            onChange={(e) => {
-              // if (userInfo.organizationName !== undefined) {
-              //   userInfo.organizationName = e.target.value;
-              // }
-            }}
-          />
-        </Box>
+        {userInfo.id === -1 ? (
+          <Box className={styles.inputBox}>
+            <Typography className={styles.label}> Оргинизация </Typography>
+            <FormControl sx={{ width: '446px', height: '56px' }}>
+              <Select
+                key={
+                  organization?.find(
+                    (org) => org.id === userInfo.organizationId,
+                  )?.name
+                }
+                defaultValue={
+                  organization?.find(
+                    (org) => org.id === userInfo.organizationId,
+                  )?.name ?? ''
+                }
+                onChange={(e) => {
+                  organization?.forEach((org) => {
+                    if (org.name === e.target.value) {
+                      userInfo.organizationId = org.id;
+                    }
+                  });
+                }}
+              >
+                {organization?.map((org) => (
+                  <MenuItem key={org.id} value={org.name}>
+                    {org.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        ) : (
+          ''
+        )}
+
         <Box className={styles.inputBox}>
           <Typography className={styles.label}>Телефон</Typography>
           <TextField
@@ -128,16 +163,26 @@ export const UserForm: FC<UserFormProps> = ({
             }}
           />
         </Box>
-        <Box className={styles.inputBox}>
-          <Typography className={styles.label}>Роль</Typography>
-          <TextField
-            sx={{ width: '446px' }}
-            defaultValue={userInfo.role}
-            onChange={(e) => {
-              userInfo.role = e.target.value;
-            }}
-          />
-        </Box>
+        {userInfo.id === -1 ? (
+          <Box className={styles.inputBox}>
+            <Typography className={styles.label}>Роль</Typography>
+            <FormControl sx={{ width: '446px' }}>
+              <Select
+                onChange={(e) => {
+                  userInfo.role = e.target.value as string;
+                }}
+              >
+                {Object.entries(Roles).map((e) => (
+                  <MenuItem key={e[0]} value={e[0]}>
+                    {e[1]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        ) : (
+          ''
+        )}
       </DialogContent>
       <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
         <Button
