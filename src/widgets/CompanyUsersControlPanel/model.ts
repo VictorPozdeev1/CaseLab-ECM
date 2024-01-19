@@ -95,7 +95,7 @@ class UsersByCompanies {
     if (result === undefined) {
       result = new CompanyUsersModel();
       result
-        ._loadCompanyUsers(() => api.getUsersByOrganization(companyId))
+        ._loadCompanyUsers(() => api.getUsersMyOrganization())
         .then(() => {
           if (result !== undefined) this._usersByCompany.set(companyId, result);
         })
