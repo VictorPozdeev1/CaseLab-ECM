@@ -1,21 +1,20 @@
-import { useMemo, type FC } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { currentSessionStore, Permissions } from '@entities/session';
 
-interface ILinks {
+interface ILink {
   permission: Permissions;
   order: number;
   title: string;
   href: string | undefined;
 }
 
-export const NavBar: FC = () => {
+export const useLinks = (): ILink[] => {
   const { companyId } = useParams();
 
-  const allLinks: ILinks[] = useMemo(
-    () => [
+  return useMemo(() => {
+    const allLinks: ILink[] = [
       {
         order: 1,
         permission: Permissions.SPECIFIC_COMPANY_CONTROL_PANEL,
@@ -79,31 +78,14 @@ export const NavBar: FC = () => {
         title: 'Процессы',
         href: '/myDocumentProcesses',
       },
-    ],
-    [companyId],
-  );
+    ];
 
-  const permittedLinks = allLinks.filter((l) =>
-    currentSessionStore.permissions.includes(l.permission),
-  );
+    const permittedLinks = allLinks.filter((l) =>
+      currentSessionStore.permissions.includes(l.permission),
+    );
 
-  const resolvedLinks = permittedLinks.filter((l) => l.href !== undefined);
+    const resolvedLinks = permittedLinks.filter((l) => l.href !== undefined);
 
-  return (
-    <Box display={'flex'} gap={'20px'}>
-      {resolvedLinks.map((l) => (
-        <Link
-          key={l.title}
-          to={l.href as string} // undefined hrefs were filtered out above
-          style={{
-            color: 'black',
-            textDecoration: 'inherit',
-            fontSize: '18px',
-          }}
-        >
-          {l.title}
-        </Link>
-      ))}
-    </Box>
-  );
+    return resolvedLinks;
+  }, [companyId]);
 };
