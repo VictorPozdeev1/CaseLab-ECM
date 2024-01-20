@@ -32,7 +32,6 @@ class CompaniesStore {
       );
 
       if (selectedCompany !== undefined) {
-        // Your existing code here
         selectedCompany.name = updatedData.name ?? selectedCompany.name;
         selectedCompany.defaultRecipientId =
           updatedData.defaultRecipient ?? selectedCompany.defaultRecipientId;
