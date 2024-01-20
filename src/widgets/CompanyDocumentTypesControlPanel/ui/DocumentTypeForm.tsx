@@ -1,38 +1,30 @@
-import { type DocTypeCreateDto } from '@api';
+import { type FC } from 'react';
 import {
-  Box,
   Dialog,
   DialogTitle,
-  InputLabel,
-  MenuItem,
-  Select,
+  Box,
   TextField,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
-import { type FC } from 'react';
-// import { useState, type FC } from 'react';
 
-interface PopupProps {
-  isOpen: boolean;
-  onClose: () => void;
-  newTypeValue: DocTypeCreateDto;
-  setNewTypeValue: React.Dispatch<React.SetStateAction<DocTypeCreateDto>>;
-  children: JSX.Element;
-}
+import { type DocTypeCreateDto } from '@api';
 
 const agreementTypes = [
   {
-    title: 'Всеобщеее согласование',
+    title: 'Всеобщее согласование',
     value: 'EVERYONE',
     id: 1,
   },
   {
-    title: 'Один соглосующий',
+    title: 'Один согласующий',
     value: 'ANYONE ',
     id: 2,
   },
   {
-    title: 'Кворум(50%)',
-    value: 'QORUUM ',
+    title: 'Кворум (50%)',
+    value: 'QUORUM ',
     id: 3,
   },
 ];
@@ -45,7 +37,15 @@ const menuItems = agreementTypes.map((el) => {
   );
 });
 
-export const DocumentTypesPopup: FC<PopupProps> = ({
+interface DocumentTypeFormProps {
+  isOpen: boolean;
+  onClose: () => void;
+  newTypeValue: DocTypeCreateDto;
+  setNewTypeValue: React.Dispatch<React.SetStateAction<DocTypeCreateDto>>;
+  children: JSX.Element;
+}
+
+export const DocumentTypeForm: FC<DocumentTypeFormProps> = ({
   isOpen,
   onClose,
   children,

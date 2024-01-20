@@ -1,48 +1,58 @@
 import { type FC } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Box, Button, Typography } from '@mui/material';
+import {
+  DataGrid,
+  type GridRowsProp,
+  type GridColDef,
+  // type GridRenderCellParams,
+} from '@mui/x-data-grid';
 
 import { type CompanyDocumentTypesModel } from '../';
+import { toJS } from 'mobx';
+import { Box } from '@mui/material';
+
+const columns: GridColDef[] = [
+  {
+    field: 'name',
+    headerName: 'Название',
+    flex: 1,
+    width: 400,
+    hideable: false,
+  },
+  {
+    field: 'attributes',
+    headerName: 'Атрибуты',
+    flex: 1,
+    width: 600,
+    hideable: false,
+    renderCell: (params) => {
+      console.log('params: ', toJS(params.value));
+      return 'ACCORDION WILL BE HERE';
+    },
+    // params.value !== undefined ? statusChips[params.value] : null,
+  },
+];
 
 export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
   observer(({ model }) => {
-    return (
-      <>
-        <Box sx={{ mb: '1rem', backgroundColor: 'olive' }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{
-              textTransform: 'none',
-              width: 'fit-content',
-              height: '40px',
-              boxShadow: 'none',
-              borderRadius: '20px',
-              minWidth: '40px',
-              ':hover': {
-                boxShadow: 'none',
-              },
-              ':disabled': {
-                boxShadow: 'none',
-              },
-            }}
-            // onClick={addUserClickHandler}
-          >
-            <Typography>Добавить сотрудника</Typography>
-          </Button>
-        </Box>
-        {/* <UsersTable
-            users={users}
-            onEditUserClick={editUserClickHandler}
-            onEditUserClickPass={editUserClickPass}
-            onEditUserRole={editUserRole}
-          /> */}
+    const gridRows: GridRowsProp = model.data.map((dt) => ({
+      id: dt.id,
+      name: dt.name,
+      attributes: dt.attributes,
+    }));
 
-        {/* {userFormProps !== undefined && <UserForm {...userFormProps} />} */}
-        {/* {userPassFormProps !== undefined && (
-        <UserPasswordForm {...userPassFormProps} />
-      )} */}
-      </>
+    return (
+      <Box width={'100%'} height={'100%'}>
+        <DataGrid
+          rows={[...gridRows]}
+          columns={columns}
+          autoHeight
+          initialState={{
+            pagination: { paginationModel: { pageSize: 10 } },
+          }}
+          pageSizeOptions={[10, 25, 50]}
+          loading={model.data.length === 0} /* todo Переделать!! */
+        />
+      </Box>
     );
   });

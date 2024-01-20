@@ -9,13 +9,13 @@ export class CompanyDocumentTypesModel {
     makeAutoObservable(this);
   }
 
-  _data: DocumentType[] = [];
+  data: DocumentType[] = [];
 
   async _loadFromApi(loader: () => Promise<DocumentType[]>): Promise<void> {
     const loadedData = await loader();
     const newModelData = loadedData; // .map((dt) => new DocumentType(dt));
     runInAction(() => {
-      this._data = newModelData;
+      this.data = newModelData;
     });
   }
 

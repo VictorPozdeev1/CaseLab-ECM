@@ -4,7 +4,6 @@ import { type FC } from 'react';
 export const MainPanelTitle: FC<{ title: string }> = ({ title }) => {
   return (
     <Box
-      sx={{ backgroundColor: 'green' }}
       marginBottom={'28px'}
       display={'flex'}
       alignItems={'center'}
