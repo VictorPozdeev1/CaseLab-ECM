@@ -1,11 +1,11 @@
 import React, { type FC } from 'react';
 import { Box, Typography } from '@mui/material';
-import { OrganizationForm } from './OrganizationForm';
-import { OrganizationSidebar } from './OrganizationSidebar';
+import { CompanyForm } from './CompanyForm';
 
-export const BaseCompanyMainControlPanel: FC<{ title: string }> = ({
-  title,
-}) => {
+export const BaseCompanyMainControlPanel: FC<{
+  title: string;
+  children?: React.ReactNode;
+}> = ({ title, children }) => {
   return (
     <>
       <Box
@@ -18,9 +18,7 @@ export const BaseCompanyMainControlPanel: FC<{ title: string }> = ({
           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
         }}
       >
-        <Box>
-          <OrganizationSidebar />
-        </Box>
+        <Box>{children}</Box>
         <Box padding={'16px'} sx={{ width: '100%' }}>
           <Box
             marginBottom={'28px'}
@@ -34,7 +32,7 @@ export const BaseCompanyMainControlPanel: FC<{ title: string }> = ({
             </Typography>
           </Box>
           <Box>
-            <OrganizationForm />
+            <CompanyForm />
           </Box>
         </Box>
       </Box>
