@@ -79,6 +79,7 @@ export const DocumentTypesElement: FC<PropType> = observer(
           fontStyle: 'normal',
           fontWeight: 400,
           lineHeight: '133.4%',
+          backgroundColor: 'olive',
         }}
       >
         <FormControl>

@@ -5,9 +5,9 @@ import { observer } from 'mobx-react-lite';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import { DocTypeCreateDto } from '@api';
 // Не знаю, что за импорты ниже, но в идеале нужно просто импортировать и рендерить виджет.
-import { DocumentTypesElement } from '@widgets/CompanyDocumentTypesControlPanel/DocumentTypesWidget/components/DocumentTypesElement/DocumentTypesElement';
-import { DocumentTypesPopup } from '@widgets/CompanyDocumentTypesControlPanel/DocumentTypesWidget/components/DocumentTypesPopup/DocumentTypesPopup';
-import { BtnsGroup } from '@widgets/CompanyDocumentTypesControlPanel/DocumentTypesWidget/components/BtnsGroup/BtnsGroup';
+import { DocumentTypesElement } from '@widgets/CompanyDocumentTypesControlPanel/ui/_obsolete/DocumentTypesElement/DocumentTypesElement';
+import { DocumentTypesPopup } from '@widgets/CompanyDocumentTypesControlPanel/ui/_obsolete/DocumentTypesPopup/DocumentTypesPopup';
+import { BtnsGroup } from '@widgets/CompanyDocumentTypesControlPanel/ui/_obsolete/BtnsGroup/BtnsGroup';
 import { currentSessionStore } from '@entities/session';
 
 export const DocumentTypesPage: FC = observer(() => {
@@ -48,9 +48,10 @@ export const DocumentTypesPage: FC = observer(() => {
         gap: 'var(--none, 0px)',
         alignSelf: 'stretch',
         borderRadius: 'var(--none, 0px)',
+        backgroundColor: 'blue',
       }}
     >
-      <Container>
+      <Container sx={{ backgroundColor: 'green' }}>
         <DocumentTypesPopup
           isOpen={isOpenPopup}
           onClose={() => {

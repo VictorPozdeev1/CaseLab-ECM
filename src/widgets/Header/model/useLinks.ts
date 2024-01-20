@@ -39,7 +39,7 @@ export const useLinks = (): ILink[] => {
         title: 'Шаблоны документов',
         get href() {
           if (companyId === undefined) return undefined;
-          return `/documentTypes`; // Тут будет `/companies/${companyId}/documentTypes`;
+          return `/companies/${companyId}/documentTypes`;
         },
       },
       {
