@@ -9,26 +9,18 @@ const SESSION_DATA = 'sessionData';
 
 export enum Permissions {
   MY_DOCUMENTS,
-  DOCUMENT_TYPES,
+  DOCUMENT_TYPES, // Будет убрано, когда займусь типами документов
   MY_COMPANY_CONTROL_PANEL,
   SPECIFIC_COMPANY_CONTROL_PANEL,
-  SYSTEM_ADMIN,
-  COMPANY_ADMIN,
-  USER,
+  USER, // Надо будет разбить этот пермишн на отдельные
 }
 
 const rolesPermissions: Record<Roles, Permissions[]> = {
   ADMIN: [
-    Permissions.SYSTEM_ADMIN,
-    Permissions.DOCUMENT_TYPES,
-    Permissions.MY_COMPANY_CONTROL_PANEL,
+    Permissions.DOCUMENT_TYPES, // Будет изменено, когда займусь типами документов
     Permissions.SPECIFIC_COMPANY_CONTROL_PANEL,
   ],
-  COMPANY_ADMIN: [
-    Permissions.COMPANY_ADMIN,
-    Permissions.MY_COMPANY_CONTROL_PANEL,
-    Permissions.SPECIFIC_COMPANY_CONTROL_PANEL,
-  ],
+  COMPANY_ADMIN: [Permissions.MY_COMPANY_CONTROL_PANEL],
   USER: [Permissions.USER, Permissions.MY_DOCUMENTS],
 };
 

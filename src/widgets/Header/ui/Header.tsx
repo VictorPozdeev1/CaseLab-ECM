@@ -13,7 +13,7 @@ export const Header: FC = observer(() => {
   return (
     <AppBar
       elevation={0}
-      color="transparent"
+      color="default"
       position="relative"
       sx={{ pt: 2, pb: 2 }}
     >
