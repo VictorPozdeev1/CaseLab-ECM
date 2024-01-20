@@ -51,6 +51,7 @@ export class CompanyUsersModel {
       passportKp: '333999',
       passportNumber: (Date.now() % 1000000).toString(),
       passportSeries: '3453',
+      organizationId: this.users[0].organizationId,
       // Возможно, стоило бы проставлять здесь companyId
     };
     const response = await api.createUser(requestDto);

@@ -1,5 +1,7 @@
-import { useState, type FC, useEffect } from 'react';
-
+import { useState, type FC } from 'react';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import 'dayjs/locale/ru';
+import dayjs, { type Dayjs } from 'dayjs';
 import {
   Box,
   Button,
@@ -13,8 +15,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { User } from '@entities/user/User';
-import { type OrgDto, Service } from '@api';
 import styles from './UserForm.module.css';
 import { Roles } from '@entities/user';
 
@@ -32,17 +34,7 @@ export const UserForm: FC<UserFormProps> = ({
   const userInitialInfoCopy: User = Object.create(User.prototype);
   Object.assign(userInitialInfoCopy, userInitialInfo);
   const [userInfo] = useState<User>(userInitialInfoCopy);
-  const [organization, setOrg] = useState<OrgDto[]>();
-  useEffect(() => {
-    Service.getAllOrgs()
-      .then((res) => {
-        setOrg(res.content);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally();
-  }, [userInitialInfo]);
+  const [userDateOfBirthday, setUDOB] = useState<Dayjs>();
 
   return (
     <Dialog open={true} sx={{ width: '688px', margin: '0 auto' }}>
@@ -90,13 +82,18 @@ export const UserForm: FC<UserFormProps> = ({
         </Box>
         <Box className={styles.inputBox}>
           <Typography className={styles.label}>Дата рождения</Typography>
-          <TextField
-            sx={{ width: '446px' }}
-            onChange={(e) => {
-              userInfo.dateOfBirth = e.target.value;
-            }}
-            defaultValue={userInfo.dateOfBirth}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+            <DatePicker
+              format="YYYY-MM-DD"
+              sx={{ width: '446px' }}
+              value={dayjs(userInfo.dateOfBirth)}
+              onChange={(e) => {
+                if (e !== null) {
+                  setUDOB(e);
+                }
+              }}
+            />
+          </LocalizationProvider>
         </Box>
         <Box className={styles.inputBox}>
           <Typography className={styles.label}>email</Typography>
@@ -108,41 +105,6 @@ export const UserForm: FC<UserFormProps> = ({
             }}
           />
         </Box>
-        {userInfo.id === -1 ? (
-          <Box className={styles.inputBox}>
-            <Typography className={styles.label}> Оргинизация </Typography>
-            <FormControl sx={{ width: '446px', height: '56px' }}>
-              <Select
-                key={
-                  organization?.find(
-                    (org) => org.id === userInfo.organizationId,
-                  )?.name
-                }
-                defaultValue={
-                  organization?.find(
-                    (org) => org.id === userInfo.organizationId,
-                  )?.name ?? ''
-                }
-                onChange={(e) => {
-                  organization?.forEach((org) => {
-                    if (org.name === e.target.value) {
-                      userInfo.organizationId = org.id;
-                    }
-                  });
-                }}
-              >
-                {organization?.map((org) => (
-                  <MenuItem key={org.id} value={org.name}>
-                    {org.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-        ) : (
-          ''
-        )}
-
         <Box className={styles.inputBox}>
           <Typography className={styles.label}>Телефон</Typography>
           <TextField
@@ -197,6 +159,11 @@ export const UserForm: FC<UserFormProps> = ({
           variant="contained"
           className={styles.button}
           onClick={() => {
+            if (userDateOfBirthday !== undefined) {
+              userInfo.dateOfBirth = userDateOfBirthday
+                .add(1, 'day')
+                .toISOString();
+            }
             onSubmit(userInfo);
           }}
         >
