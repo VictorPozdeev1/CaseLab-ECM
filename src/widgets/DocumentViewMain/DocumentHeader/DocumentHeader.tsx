@@ -17,7 +17,7 @@ export const DocumentHeader: FC<DocumentHeaderProps> = observer(
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          alignItems: 'start',
           width: '100%',
         }}
       >
@@ -29,10 +29,8 @@ export const DocumentHeader: FC<DocumentHeaderProps> = observer(
             gap: 1,
           }}
         >
-          <Typography variant="h6">{document?.name}</Typography>
-          <Typography
-            variant="subtitle1" // Выберите подходящий вариант подзаголовка
-          >
+          <Typography variant="h4">{document?.name}</Typography>
+          <Typography variant="subtitle2">
             Создан {document?.date.toLocaleDateString()} •{' '}
             {session.currentUserData.shortName}
           </Typography>
