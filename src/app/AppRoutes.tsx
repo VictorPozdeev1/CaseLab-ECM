@@ -8,8 +8,10 @@ import { ForbiddenPage } from '@pages/ForbiddenPage/ForbiddenPage';
 import { OwnDocumentsPage } from '@pages/OwnDocumentsPage/OwnDocumentsPage';
 import { MyCompanyMainControlPanelPage } from '@pages/MyCompanyMainControlPanelPage';
 import { MyCompanyUsersControlPanelPage } from '@pages/MyCompanyUsersControlPanelPage';
+import { MyCompanyDocumentTypesControlPanelPage } from '@pages/MyCompanyDocumentTypesControlPanelPage';
 import { SpecificCompanyMainControlPanelPage } from '@pages/SpecificCompanyMainControlPanelPage';
 import { SpecificCompanyUsersControlPanelPage } from '@pages/SpecificCompanyUsersControlPanelPage';
+import { SpecificCompanyDocumentTypesControlPanelPage } from '@pages/SpecificCompanyDocumentTypesControlPanelPage';
 import { Page404 } from '@pages/Page404';
 import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
 import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
@@ -72,6 +74,16 @@ const AppRoutes: FC = () => {
           }
         />
         <Route
+          path="myCompany/documentTypes"
+          element={
+            <RequirePermissionCheck
+              permission={Permissions.MY_COMPANY_CONTROL_PANEL}
+            >
+              <MyCompanyDocumentTypesControlPanelPage />
+            </RequirePermissionCheck>
+          }
+        />
+        <Route
           path="companies/:companyId"
           element={
             <RequirePermissionCheck
@@ -88,6 +100,16 @@ const AppRoutes: FC = () => {
               permission={Permissions.SPECIFIC_COMPANY_CONTROL_PANEL}
             >
               <SpecificCompanyUsersControlPanelPage />
+            </RequirePermissionCheck>
+          }
+        />
+        <Route
+          path="companies/:companyId/documentTypes"
+          element={
+            <RequirePermissionCheck
+              permission={Permissions.SPECIFIC_COMPANY_CONTROL_PANEL}
+            >
+              <SpecificCompanyDocumentTypesControlPanelPage />
             </RequirePermissionCheck>
           }
         />
