@@ -4,21 +4,19 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { observer } from 'mobx-react-lite';
 
-import { type DocumentTypeAttribute } from '../model/DocumentTypeAttribute';
+import { type DocumentAttribute } from '../model/DocumentAttribute';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 interface Props {
-  documentTypeAttributes: DocumentTypeAttribute[] | undefined;
-  setTypeAttributes: (newAttr: DocumentTypeAttribute[]) => void;
-  allAttributes: DocumentTypeAttribute[] | undefined;
+  documentTypeAttributes: DocumentAttribute[] | undefined;
+  onChange: (newList: DocumentAttribute[]) => void;
+  allAttributes: DocumentAttribute[] | undefined;
 }
 
 export const DocumentTypeAttributes: FC<Props> = observer(
-  ({ documentTypeAttributes, setTypeAttributes, allAttributes }) => {
-    // console.log(typeAttributes);
-
+  ({ documentTypeAttributes, onChange, allAttributes }) => {
     const content =
       allAttributes == null && allAttributes === undefined ? (
         <Box>Нет атрибутов</Box>
@@ -55,7 +53,6 @@ export const DocumentTypeAttributes: FC<Props> = observer(
             </React.Fragment>
           )}
           renderInput={(params) => {
-            console.log('params:', params);
             return (
               <TextField
                 {...params}
@@ -64,13 +61,8 @@ export const DocumentTypeAttributes: FC<Props> = observer(
               />
             );
           }}
-          onChange={(
-            event: React.SyntheticEvent<Element, Event>,
-            newValue: DocumentTypeAttribute[],
-          ) => {
-            setTypeAttributes(newValue);
-            // console.log(newValue);
-            // typeAttributesRef.current = newValue.map((el) => el.id) as number[];
+          onChange={(_, newValue: DocumentAttribute[]) => {
+            onChange(newValue);
           }}
         />
       );

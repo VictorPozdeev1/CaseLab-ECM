@@ -1,7 +1,7 @@
 import { type DocAttributeDto } from '@api';
 import { makeAutoObservable } from 'mobx';
 
-export class DocumentTypeAttribute {
+export class DocumentAttribute {
   constructor(apiResponse: DocAttributeDto) {
     this.id = apiResponse.id;
     this.name = apiResponse.name;

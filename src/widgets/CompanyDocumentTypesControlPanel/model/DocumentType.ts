@@ -1,12 +1,12 @@
 import { makeAutoObservable } from 'mobx';
 
 import type { DocTypeDto } from '@api';
-import { type DocumentTypeAttribute } from './DocumentTypeAttribute';
+import { type DocumentAttribute } from './DocumentAttribute';
 
 export class DocumentType {
   constructor(
     apiResponse: DocTypeDto,
-    attributesList: DocumentTypeAttribute[] = [],
+    attributesList: DocumentAttribute[] = [],
   ) {
     this.id = apiResponse.id;
     this.name = apiResponse.name;
@@ -18,7 +18,7 @@ export class DocumentType {
 
   id: number;
   name: string;
-  attributes: DocumentTypeAttribute[];
+  attributes: DocumentAttribute[];
   agreementType: DocTypeDto.agreementType;
   companyId: number;
 }

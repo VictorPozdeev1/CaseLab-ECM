@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -15,8 +15,13 @@ import {
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 
-import { type DocumentType, type CompanyDocumentTypesModel } from '../';
+import type {
+  DocumentType,
+  CompanyDocumentTypesModel,
+  DocumentTypeAttribute,
+} from '../';
 import { DocumentTypeAttributes } from './DocumentTypeAttributes';
+import { type DocTypeDto } from '@api';
 
 const agreementTypes = [
   {
@@ -26,12 +31,12 @@ const agreementTypes = [
   },
   {
     title: 'Один согласующий',
-    value: 'ANYONE ',
+    value: 'ANYONE',
     id: 2,
   },
   {
     title: 'Кворум (50%)',
-    value: 'QUORUM ',
+    value: 'QUORUM',
     id: 3,
   },
 ];
@@ -52,6 +57,7 @@ export interface DocumentTypeFormProps {
 
 export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
   ({ documentTypeId, model, onClose }) => {
+    // make useEffect
     if (
       model.documentTypes?.state !== 'fulfilled' ||
       model.documentAttributes?.state !== 'fulfilled'
@@ -65,50 +71,60 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
       (dt) => dt.id === documentTypeId,
     ) as DocumentType;
 
+    // const nameRef = useRef<string>(documentTypeData.name);
+    // const agreementTypeRef = useRef<string>(documentTypeData.agreementType);
+    const [name, setName] = useState<string>(documentTypeData.name);
+    const [agreementType, setAgreementType] =
+      useState<DocTypeDto.agreementType>(documentTypeData.agreementType);
+    // const selectedAttributesRef = useRef<DocumentTypeAttribute[]>(
+    //   documentTypeData.attributes,
+    // );
+    const [selectedAttributes, setSelectedAttributes] = useState<
+      DocumentTypeAttribute[]
+    >(documentTypeData.attributes);
+
     return (
       <Dialog fullWidth open={true}>
         <DialogTitle id="dialog-title">Какой-то заголовок</DialogTitle>
         <DialogContent>
-          <Stack spacing={2}>
-            <TextField
-              sx={{ flex: '1' }}
-              label="Название"
-              required
-              variant="standard"
-              // onChange={(e) => {
-              //   console.log(e.target.value);
-              //   setNewTypeValue(() => {
-              //     return { ...newTypeValue, name: e.target.value };
-              //   });
-              //   console.log(newTypeValue);
-              // }}
-            />
+          <Stack spacing={5}>
+            <Stack direction="row" spacing={3}>
+              <TextField
+                sx={{ flex: '1' }}
+                label="Название"
+                required
+                variant="standard"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
 
-            <FormControl variant="standard" sx={{ flex: '1' }}>
-              <InputLabel id="demo-simple-select-standard-label">
-                Тип согласования
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                label="Тип согласования"
-                // onChange={(e) => {
-                //   setNewTypeValue(() => {
-                //     return {
-                //       ...newTypeValue,
-                //       agreementType: e.target.value as DocTypeCreateDto.agreementType,
-                //     };
-                //   });
-                // }}
-              >
-                {menuItems}
-              </Select>
-            </FormControl>
+              <FormControl variant="standard" sx={{ flex: '1' }}>
+                <InputLabel id="demo-simple-select-standard-label" required>
+                  Тип согласования
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  value={agreementType}
+                  onChange={(e) => {
+                    setAgreementType(
+                      e.target.value as DocTypeDto.agreementType,
+                    );
+                  }}
+                >
+                  {menuItems}
+                </Select>
+              </FormControl>
+            </Stack>
+            <DocumentTypeAttributes
+              documentTypeAttributes={selectedAttributes}
+              allAttributes={model.documentAttributes.value}
+              onChange={(newList) => {
+                setSelectedAttributes(newList);
+              }}
+            />
           </Stack>
-          <DocumentTypeAttributes
-            documentTypeAttributes={documentTypeData.attributes}
-            allAttributes={model.documentAttributes.value}
-            setTypeAttributes={() => {}}
-          />
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button

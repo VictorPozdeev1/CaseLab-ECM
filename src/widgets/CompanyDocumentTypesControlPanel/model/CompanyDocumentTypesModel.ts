@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import type { DocTypeDto, DocAttributeDto } from '@api';
 import { DocumentType } from './DocumentType';
-import { DocumentTypeAttribute as DocumentAttribute } from './DocumentTypeAttribute';
+import { DocumentAttribute } from './DocumentAttribute';
 import { type IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 
 export class CompanyDocumentTypesModel {
