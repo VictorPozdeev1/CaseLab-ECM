@@ -1,5 +1,4 @@
 import { type DocAttributeValues } from '@api';
-
 // Пока что просто скопировано из DocumentDto, но date: Date, а не string
 export interface Document {
   /**
