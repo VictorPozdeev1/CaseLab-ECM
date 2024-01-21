@@ -13,13 +13,9 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { Accordioned } from '@shared/components/Accordioned';
 
-import type {
-  CompanyDocumentTypesModel,
-  DocumentTypeAttribute,
-  DocumentType,
-} from '../';
+import type { CompanyDocumentTypesModel, DocumentTypeAttribute } from '../';
 
-import { DocumentTypesAttributesList } from './DocumentTypeAttributes';
+import { DocumentTypeAttributes } from './DocumentTypeAttributes';
 import {
   DocumentTypeForm,
   type DocumentTypeFormProps,
@@ -30,14 +26,14 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
     const renderAttributesCell = useCallback(
       (params: GridRenderCellParams<any, DocumentTypeAttribute[]>) => {
         if (params.value === undefined) return 'value === undefined';
-        if (model.documentTypeAttributes?.state !== 'fulfilled')
+        if (model.documentAttributes?.state !== 'fulfilled')
           return 'loading...';
         return (
           <Box width={'100%'} sx={{ backgroundColor: 'transparent' }}>
             <Accordioned detailsName="список атрибутов">
-              <DocumentTypesAttributesList
+              <DocumentTypeAttributes
                 documentTypeAttributes={params.value}
-                allAttributes={model.documentTypeAttributes?.value}
+                allAttributes={model.documentAttributes?.value}
                 setTypeAttributes={() => {}}
               />
             </Accordioned>
@@ -45,34 +41,17 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
           </Box>
         );
       },
-      [model.documentTypeAttributes?.value],
+      [model.documentAttributes?.value],
     );
 
     const editClickHandler = useCallback(
       (documentTypeToEditId: number): void => {
-        if (model.documentTypes?.state !== 'fulfilled') {
-          console.error(
-            "model.documentTypes?.state !== 'fulfilled' on editClickHandler",
-          );
-          return;
-        }
-        const documentTypeData = model.documentTypes.value.find(
-          (dt) => dt.id === documentTypeToEditId,
-        ) as DocumentType;
         setFormProps({
-          initialData: documentTypeData,
-          onCancel: () => {
+          documentTypeId: documentTypeToEditId,
+          onClose: () => {
             setFormProps(undefined);
           },
-          onSubmit: (data: DocumentType) => {
-            /* Заблокировать форму */
-            // model
-            //   .updateUser(userData)
-            //   .then() /* Закрыть форму */
-            //   .catch(() => {}) /* Оставить форму открытой и показать ошибку */
-            //   .finally(); /* Разблокировать форму */
-            // setUserFormProps(undefined);
-          },
+          model: model,
         });
       },
       [model.documentTypes?.value],

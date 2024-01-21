@@ -15,7 +15,7 @@ interface Props {
   allAttributes: DocumentTypeAttribute[] | undefined;
 }
 
-export const DocumentTypesAttributesList: FC<Props> = observer(
+export const DocumentTypeAttributes: FC<Props> = observer(
   ({ documentTypeAttributes, setTypeAttributes, allAttributes }) => {
     // console.log(typeAttributes);
 
@@ -24,6 +24,7 @@ export const DocumentTypesAttributesList: FC<Props> = observer(
         <Box>Нет атрибутов</Box>
       ) : (
         <Autocomplete
+          fullWidth
           multiple
           id="checkboxes-tags-demo"
           options={allAttributes}
@@ -53,7 +54,6 @@ export const DocumentTypesAttributesList: FC<Props> = observer(
               </div>
             </React.Fragment>
           )}
-          style={{ width: 500 }}
           renderInput={(params) => (
             <TextField
               {...params}

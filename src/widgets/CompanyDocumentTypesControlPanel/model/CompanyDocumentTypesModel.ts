@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import type { DocTypeDto, DocAttributeDto } from '@api';
 import { DocumentType } from './DocumentType';
-import { DocumentTypeAttribute } from './DocumentTypeAttribute';
+import { DocumentTypeAttribute as DocumentAttribute } from './DocumentTypeAttribute';
 import { type IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 
 export class CompanyDocumentTypesModel {
@@ -11,13 +11,13 @@ export class CompanyDocumentTypesModel {
   }
 
   documentTypes?: IPromiseBasedObservable<DocumentType[]>;
-  documentTypeAttributes?: IPromiseBasedObservable<DocumentTypeAttribute[]>;
+  documentAttributes?: IPromiseBasedObservable<DocumentAttribute[]>;
 
-  async _loadDocumentTypeAttributes(
-    documentTypeAttributesLoader: () => Promise<DocAttributeDto[]>,
-  ): Promise<DocumentTypeAttribute[]> {
-    const loadedData = await documentTypeAttributesLoader();
-    return loadedData.map((a) => new DocumentTypeAttribute(a));
+  async _loadDocumentAttributes(
+    documentAttributesLoader: () => Promise<DocAttributeDto[]>,
+  ): Promise<DocumentAttribute[]> {
+    const loadedData = await documentAttributesLoader();
+    return loadedData.map((a) => new DocumentAttribute(a));
   }
 
   async _loadDocumentTypes(
@@ -25,7 +25,7 @@ export class CompanyDocumentTypesModel {
   ): Promise<DocumentType[]> {
     const loadedData = await documentTypesLoader();
     // await Promise.all([this.documentTypes, this.documentTypeAttributes]);
-    await this.documentTypeAttributes; // Если будет rejected, дальше выполнение не пойдёт
+    await this.documentAttributes; // Если будет rejected, дальше выполнение не пойдёт
     // if (this.documentTypeAttributes?.state === 'fulfilled')
     return loadedData.map(
       (dt) =>
@@ -34,9 +34,9 @@ export class CompanyDocumentTypesModel {
           // Тут бэкенд должен, по идее, только id атрибутов возвращать
           dt.attributes.map(
             (aDto) =>
-              (
-                this.documentTypeAttributes?.value as DocumentTypeAttribute[]
-              ).find((a) => a.id === aDto.id) as DocumentTypeAttribute,
+              (this.documentAttributes?.value as DocumentAttribute[]).find(
+                (a) => a.id === aDto.id,
+              ) as DocumentAttribute,
           ),
         ),
     );
@@ -45,11 +45,11 @@ export class CompanyDocumentTypesModel {
   // Может, вообще прямо в конструкторе вызывать?
   async loadModel(
     documentTypesLoader: () => Promise<DocTypeDto[]>,
-    documentTypeAttributesLoader: () => Promise<DocAttributeDto[]>,
+    documentAttributesLoader: () => Promise<DocAttributeDto[]>,
   ): Promise<void> {
     runInAction(() => {
-      this.documentTypeAttributes = fromPromise(
-        this._loadDocumentTypeAttributes(documentTypeAttributesLoader),
+      this.documentAttributes = fromPromise(
+        this._loadDocumentAttributes(documentAttributesLoader),
       );
     });
 

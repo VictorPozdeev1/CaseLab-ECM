@@ -9,9 +9,14 @@ import {
   Select,
   MenuItem,
   DialogActions,
+  DialogContent,
+  FormControl,
+  Alert,
 } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 
-import { type DocumentType } from '../model/DocumentType';
+import { type DocumentType, type CompanyDocumentTypesModel } from '../';
+import { DocumentTypeAttributes } from './DocumentTypeAttributes';
 
 const agreementTypes = [
   {
@@ -40,102 +45,98 @@ const menuItems = agreementTypes.map((el) => {
 });
 
 export interface DocumentTypeFormProps {
-  initialData: DocumentType;
-  onSubmit: (data: DocumentType) => void;
-  onCancel: () => void;
-  // isOpen: boolean;
-  // onClose: () => void;
-  // newTypeValue: DocTypeCreateDto;
-  // setNewTypeValue: React.Dispatch<React.SetStateAction<DocTypeCreateDto>>;
-  // children: JSX.Element;
+  documentTypeId: number;
+  model: CompanyDocumentTypesModel;
+  onClose: () => void;
 }
 
-export const DocumentTypeForm: FC<DocumentTypeFormProps> = ({
-  initialData,
-  onSubmit,
-  onCancel,
-  // isOpen,
-  // onClose,
-  // children,
-  // newTypeValue,
-  // setNewTypeValue,
-}) => {
-  const data = initialData;
+export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
+  ({ documentTypeId, model, onClose }) => {
+    if (
+      model.documentTypes?.state !== 'fulfilled' ||
+      model.documentAttributes?.state !== 'fulfilled'
+    ) {
+      console.error(
+        "model.documentTypes?.state !== 'fulfilled' on editClickHandler",
+      );
+      return <Alert>Данные не загружены</Alert>;
+    }
+    const documentTypeData = model.documentTypes.value.find(
+      (dt) => dt.id === documentTypeId,
+    ) as DocumentType;
 
-  return (
-    <Dialog open={true}>
-      <DialogTitle id="dialog-title">
-        Создание нового типа документа
-      </DialogTitle>
-      <Box
-        sx={{
-          backgroundColor: 'violet',
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '20px 20px',
-          margin: '5px',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          alignSelf: 'stretch',
-          borderRadius: '20px',
-          color: 'var(--text-primary, rgba(0, 0, 0, 0.87))',
-          fontFeatureSettings: "'clig' off, 'liga' off",
-          fontFamily: 'Roboto',
-          fontSize: '24px',
-          fontStyle: 'normal',
-          fontWeight: 400,
-          lineHeight: '133.4%',
-        }}
-      >
-        <TextField
-          placeholder="Наименование"
-          // onChange={(e) => {
-          //   console.log(e.target.value);
-          //   setNewTypeValue(() => {
-          //     return { ...newTypeValue, name: e.target.value };
-          //   });
-          //   console.log(newTypeValue);
-          // }}
-          required
-          id="TextField-1"
-          label="Наименование"
-          sx={{ paddingBottom: '10px' }}
-        />
-        <InputLabel id="select-label">Тип согласования</InputLabel>
-        <Select
-          sx={{ width: '223px' }}
-          labelId="select-label"
-          id="select"
-          // onChange={(e) => {
-          //   setNewTypeValue(() => {
-          //     return {
-          //       ...newTypeValue,
-          //       agreementType: e.target.value as DocTypeCreateDto.agreementType,
-          //     };
-          //   });
-          // }}
+    return (
+      <Dialog fullWidth open={true}>
+        <DialogTitle id="dialog-title">Какой-то заголовок</DialogTitle>
+        <DialogContent
+          sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
         >
-          {menuItems}
-        </Select>
-      </Box>
-      <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            onCancel();
-          }}
-        >
-          Отменить
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => {
-            onSubmit(data);
-          }}
-        >
-          Подтвердить
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
+          <Box sx={{ display: 'flex', gap: 3 }}>
+            <TextField
+              sx={{ flex: '1' }}
+              label="Название"
+              required
+              variant="standard"
+              // onChange={(e) => {
+              //   console.log(e.target.value);
+              //   setNewTypeValue(() => {
+              //     return { ...newTypeValue, name: e.target.value };
+              //   });
+              //   console.log(newTypeValue);
+              // }}
+            />
+
+            <FormControl variant="standard" sx={{ flex: '1' }}>
+              <InputLabel id="demo-simple-select-standard-label">
+                Тип согласования
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-standard-label"
+                label="Тип согласования"
+                // onChange={(e) => {
+                //   setNewTypeValue(() => {
+                //     return {
+                //       ...newTypeValue,
+                //       agreementType: e.target.value as DocTypeCreateDto.agreementType,
+                //     };
+                //   });
+                // }}
+              >
+                {menuItems}
+              </Select>
+            </FormControl>
+          </Box>
+          <DocumentTypeAttributes
+            documentTypeAttributes={documentTypeData.attributes}
+            allAttributes={model.documentAttributes.value}
+            setTypeAttributes={() => {}}
+          />
+        </DialogContent>
+        <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              onClose();
+            }}
+          >
+            Отменить
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              /* Заблокировать форму */
+              // model
+              //   .updateUser(userData)
+              //   .then() /* Закрыть форму */
+              //   .catch(() => {}) /* Оставить форму открытой и показать ошибку */
+              //   .finally(); /* Разблокировать форму */
+              // setUserFormProps(undefined);
+            }}
+          >
+            Подтвердить
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  },
+);
