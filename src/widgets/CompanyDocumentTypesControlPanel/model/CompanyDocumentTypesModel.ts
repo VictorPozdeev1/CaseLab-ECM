@@ -3,38 +3,58 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import type { DocTypeDto, DocAttributeDto } from '@api';
 import { DocumentType } from './DocumentType';
 import { DocumentTypeAttribute } from './DocumentTypeAttribute';
+import { type IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 
 export class CompanyDocumentTypesModel {
   constructor() {
     makeAutoObservable(this);
   }
 
-  documentTypes: DocumentType[] = [];
-  documentTypeAttributes: DocumentTypeAttribute[] = [];
+  documentTypes?: IPromiseBasedObservable<DocumentType[]>;
+  documentTypeAttributes?: IPromiseBasedObservable<DocumentTypeAttribute[]>;
 
-  async _loadFromApi(
+  async _loadDocumentTypeAttributes(
+    documentTypeAttributesLoader: () => Promise<DocAttributeDto[]>,
+  ): Promise<DocumentTypeAttribute[]> {
+    const loadedData = await documentTypeAttributesLoader();
+    return loadedData.map((a) => new DocumentTypeAttribute(a));
+  }
+
+  async _loadDocumentTypes(
+    documentTypesLoader: () => Promise<DocTypeDto[]>,
+  ): Promise<DocumentType[]> {
+    const loadedData = await documentTypesLoader();
+    // await Promise.all([this.documentTypes, this.documentTypeAttributes]);
+    await this.documentTypeAttributes;
+    // if (this.documentTypeAttributes?.state === 'fulfilled')
+    return loadedData.map(
+      (dt) =>
+        new DocumentType(
+          dt,
+          // Тут бэкенд должен, по идее, только id атрибутов возвращать
+          dt.attributes.map(
+            (aDto) =>
+              (this.documentTypeAttributes?.value as DocumentTypeAttribute[]) // Надо проверить, что в value, когда ошибка. undefined?
+                .find((a) => a.id === aDto.id) as DocumentTypeAttribute,
+          ),
+        ),
+    );
+  }
+
+  // Может, вообще прямо в конструкторе вызывать?
+  async loadModel(
     documentTypesLoader: () => Promise<DocTypeDto[]>,
     documentTypeAttributesLoader: () => Promise<DocAttributeDto[]>,
   ): Promise<void> {
-    const documentTypesLoad = documentTypesLoader();
-    const documentTypeAttributesLoad = documentTypeAttributesLoader();
-    const loadedDocumentTypes = await documentTypesLoad;
-    const loadedDocumentTypeAttributes = await documentTypeAttributesLoad;
     runInAction(() => {
-      this.documentTypeAttributes = loadedDocumentTypeAttributes.map(
-        (a) => new DocumentTypeAttribute(a),
+      this.documentTypeAttributes = fromPromise(
+        this._loadDocumentTypeAttributes(documentTypeAttributesLoader),
       );
-      this.documentTypes = loadedDocumentTypes.map(
-        (dt) =>
-          new DocumentType(
-            dt,
-            dt.attributes.map(
-              (aDto) =>
-                this.documentTypeAttributes.find(
-                  (a) => a.id === aDto.id,
-                ) as DocumentTypeAttribute,
-            ),
-          ),
+    });
+
+    runInAction(() => {
+      this.documentTypes = fromPromise(
+        this._loadDocumentTypes(documentTypesLoader),
       );
     });
   }

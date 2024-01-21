@@ -9,7 +9,7 @@ class MyCompanyModel {
     if (result === undefined) {
       result = new CompanyDocumentTypesModel();
       result
-        ._loadFromApi(
+        .loadModel(
           () => api.getDocTypesMyOrganization(),
           () => api.getAttributesMyOrganization(),
         )

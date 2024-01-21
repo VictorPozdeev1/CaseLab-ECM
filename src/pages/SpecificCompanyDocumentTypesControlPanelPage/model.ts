@@ -17,7 +17,7 @@ class ByCompanyModels {
     if (result === undefined) {
       result = new CompanyDocumentTypesModel();
       void result
-        ._loadFromApi(
+        .loadModel(
           () => api.getDocTypesByOrganization(companyId),
           () => api.getAttributesByOrganization(companyId),
         )

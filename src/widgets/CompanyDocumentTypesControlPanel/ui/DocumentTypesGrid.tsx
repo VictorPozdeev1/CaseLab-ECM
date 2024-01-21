@@ -19,12 +19,14 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
     const renderAttributesCell = useCallback(
       (params: GridRenderCellParams<any, DocumentTypeAttribute[]>) => {
         if (params.value === undefined) return 'value === undefined';
+        if (model.documentTypeAttributes?.state !== 'fulfilled')
+          return 'loading...';
         return (
           <Box width={'100%'} sx={{ backgroundColor: 'transparent' }}>
             <Accordioned detailsName="список атрибутов">
               <DocumentTypesAttributesList
                 documentTypeAttributes={params.value}
-                allAttributes={model.documentTypeAttributes}
+                allAttributes={model.documentTypeAttributes?.value}
                 setTypeAttributes={() => {}}
               />
             </Accordioned>
@@ -32,7 +34,7 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
           </Box>
         );
       },
-      [model],
+      [model, model.documentTypeAttributes],
     );
 
     const columns: GridColDef[] = useMemo<GridColDef[]>(
@@ -55,11 +57,14 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
       [renderAttributesCell],
     );
 
-    const gridRows: GridRowsProp = model.documentTypes.map((dt) => ({
-      id: dt.id,
-      name: dt.name,
-      attributes: dt.attributes,
-    }));
+    const gridRows: GridRowsProp =
+      model.documentTypes?.state === 'fulfilled'
+        ? model.documentTypes?.value.map((dt) => ({
+            id: dt.id,
+            name: dt.name,
+            attributes: dt.attributes,
+          }))
+        : [];
 
     return (
       <Box width={'100%'} height={'100%'}>
@@ -72,7 +77,7 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
             pagination: { paginationModel: { pageSize: 10 } },
           }}
           pageSizeOptions={[10, 25, 50]}
-          loading={model.documentTypes.length === 0} /* todo Переделать!! */
+          loading={model.documentTypes?.state === 'pending'}
         />
       </Box>
     );
