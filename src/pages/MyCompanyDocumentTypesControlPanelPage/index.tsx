@@ -10,7 +10,7 @@ export const MyCompanyDocumentTypesControlPanelPage: FC = observer(() => {
   const model = myCompanyModel.instance;
   return (
     <>
-      <MainPanelTitle title={'Моя организация'} />
+      <MainPanelTitle title={'Шаблоны документов моей организации'} />
       <DocumentTypesGrid model={model} />
     </>
   );

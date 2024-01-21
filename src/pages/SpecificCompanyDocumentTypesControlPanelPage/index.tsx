@@ -20,7 +20,9 @@ export const SpecificCompanyDocumentTypesControlPanelPage: FC = observer(() => {
   return (
     <>
       <MainPanelTitle
-        title={`Организация: ${companyName ?? 'id=' + companyId}`}
+        title={`Шаблоны документов организации: ${
+          companyName ?? 'id=' + companyId
+        }`}
       />
       <DocumentTypesGrid model={model} />
     </>
