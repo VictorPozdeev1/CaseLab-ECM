@@ -1,11 +1,15 @@
 import React, { type FC } from 'react';
 import { Box, Typography } from '@mui/material';
 import { CompanyForm } from './CompanyForm';
+import { useParams, useLocation } from 'react-router-dom';
+import { CompanySidebar } from './CompanySidebar';
 
 export const BaseCompanyMainControlPanel: FC<{
   title: string;
-  children?: React.ReactNode;
-}> = ({ title, children }) => {
+}> = ({ title }) => {
+  const { companyId } = useParams();
+  const location = useLocation();
+  const isMyCompanyRoute = location.pathname === '/myCompany';
   return (
     <>
       <Box
@@ -18,7 +22,11 @@ export const BaseCompanyMainControlPanel: FC<{
           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
         }}
       >
-        <Box>{children}</Box>
+        {isMyCompanyRoute ? null : (
+          <Box>
+            <CompanySidebar />
+          </Box>
+        )}
         <Box padding={'16px'} sx={{ width: '100%' }}>
           <Box
             marginBottom={'28px'}
@@ -32,7 +40,12 @@ export const BaseCompanyMainControlPanel: FC<{
             </Typography>
           </Box>
           <Box>
-            <CompanyForm />
+            {(companyId !== null && companyId !== undefined) ||
+            isMyCompanyRoute ? (
+              <CompanyForm />
+            ) : (
+              <Box></Box>
+            )}
           </Box>
         </Box>
       </Box>

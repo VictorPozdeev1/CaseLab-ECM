@@ -1,25 +1,18 @@
 import React, { type FC } from 'react';
 import { observer } from 'mobx-react-lite';
-import { CompanySidebar } from './CompanySidebar';
 import { getCompaniesStore } from '@entities/company/model';
 import { BaseCompanyMainControlPanel } from './BaseCompanyMainControlPanel';
-import { Box } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
-export const SpecificCompanyMainControlPanel: FC<{ companyId: number }> =
-  observer(({ companyId }) => {
-    const companiesStore = getCompaniesStore();
-    const companyName = companiesStore.getNameById(companyId);
+export const SpecificCompanyMainControlPanel: FC = observer(() => {
+  const companiesStore = getCompaniesStore();
+  const { companyId } = useParams();
+  const companyName = companiesStore.getNameById(Number(companyId));
 
-    const title =
-      companiesStore.getSelectedCompany() !== undefined
-        ? `Организация: ${companyName ?? 'id=' + companyId}`
-        : 'Выберите организацию';
+  const title =
+    companyName !== undefined
+      ? `Организация: ${companyName ?? 'id=' + companyId}`
+      : 'Выберите организацию';
 
-    return (
-      <BaseCompanyMainControlPanel title={title}>
-        <Box sx={{ height: '100%' }}>
-          <CompanySidebar />
-        </Box>
-      </BaseCompanyMainControlPanel>
-    );
-  });
+  return <BaseCompanyMainControlPanel title={title} />;
+});

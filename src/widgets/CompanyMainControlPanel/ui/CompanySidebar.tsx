@@ -1,4 +1,4 @@
-import React, { type FC, useEffect } from 'react';
+import React, { type FC } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -7,23 +7,12 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { observer } from 'mobx-react';
 import { getCompaniesStore } from '@entities/company/model/CompaniesStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const CompanySidebar: FC = observer(() => {
   const companiesStore = getCompaniesStore();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      try {
-        await companiesStore._loadCompanies();
-      } catch (error) {
-        console.error('Ошибка при загрузке данных:', error);
-      }
-    };
-
-    void fetchData();
-  }, [companiesStore]);
+  const { companyId } = useParams();
 
   return (
     <Box sx={{ backgroundColor: '#EDEDED', height: '100%' }}>
@@ -47,17 +36,12 @@ export const CompanySidebar: FC = observer(() => {
               fontFamily: 'Manrope',
               fontSize: '16px',
               backgroundColor:
-                companiesStore.getSelectedCompany()?.id === company.id
-                  ? 'white'
-                  : 'transparent',
+                Number(companyId) === company.id ? 'white' : 'transparent',
               color:
-                companiesStore.getSelectedCompany()?.id === company.id
-                  ? 'mediumBlue'
-                  : 'inherit',
+                Number(companyId) === company.id ? 'mediumBlue' : 'inherit',
             }}
             onClick={() => {
-              companiesStore.setSelectedCompany(company.id);
-              navigate(`/company/${company.id}`);
+              navigate(`/companies/${company.id}`);
             }}
           >
             <ListItemText primary={company.name} />

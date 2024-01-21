@@ -1,11 +1,11 @@
 import React, { type FC, type ChangeEvent, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { useLocalStore } from 'mobx-react-lite';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import { getCompaniesStore } from '@entities/company/model/CompaniesStore';
+import { useParams } from 'react-router-dom';
+import { Service as api } from '@api';
 
 interface CompanyFormData {
   name: string;
@@ -13,35 +13,54 @@ interface CompanyFormData {
 }
 
 export const CompanyForm: FC = observer(() => {
-  const companiesStore = useLocalStore(() => getCompaniesStore());
+  const { companyId } = useParams();
   const [companyData, setCompanyData] = useState<CompanyFormData>({
     name: '',
     defaultRecipient: '',
   });
+  const [changed, setChanged] = useState(false);
 
   useEffect(() => {
-    const selectedCompany = companiesStore.getSelectedCompany();
+    const fetchData = async (): Promise<void> => {
+      try {
+        const response = await api.getOrg(Number(companyId));
+        const selectedCompany = response;
 
-    if (selectedCompany != null) {
-      setCompanyData({
-        name: selectedCompany.name,
-        defaultRecipient: String(selectedCompany.defaultRecipientId),
-      });
-    }
-  }, [companiesStore.selectedCompanyId]);
+        if (selectedCompany != null) {
+          setCompanyData({
+            name: selectedCompany.name,
+            defaultRecipient: String(selectedCompany.defaultRecipient),
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching company data:', error);
+      }
+    };
+
+    void fetchData();
+    setChanged(false);
+  }, [companyId]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setCompanyData({
       ...companyData,
       [e.target.name]: e.target.value,
     });
+    setChanged(true);
   };
 
   const handleSave = (): void => {
-    companiesStore.updateSelectedCompany({
-      name: companyData.name,
-      defaultRecipient: Number(companyData.defaultRecipient),
-    });
+    api
+      .updateOrg(Number(companyId), {
+        name: companyData.name,
+        defaultRecipient: Number(companyData.defaultRecipient),
+      })
+      .then((updatedOrg) => {
+        console.log('Organization updated:', updatedOrg);
+      })
+      .catch((error) => {
+        console.error('Error updating organization:', error);
+      });
   };
 
   return (
@@ -101,7 +120,7 @@ export const CompanyForm: FC = observer(() => {
           variant="contained"
           color="primary"
           onClick={handleSave}
-          disabled={companiesStore.getSelectedCompany() == null}
+          disabled={!changed}
         >
           Сохранить
         </Button>
