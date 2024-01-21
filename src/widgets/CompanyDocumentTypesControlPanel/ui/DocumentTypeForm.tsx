@@ -3,10 +3,12 @@ import {
   Dialog,
   DialogTitle,
   Box,
+  Button,
   TextField,
   InputLabel,
   Select,
   MenuItem,
+  DialogActions,
 } from '@mui/material';
 
 import { type DocumentType } from '../model/DocumentType';
@@ -58,6 +60,8 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = ({
   // newTypeValue,
   // setNewTypeValue,
 }) => {
+  const data = initialData;
+
   return (
     <Dialog open={true}>
       <DialogTitle id="dialog-title">
@@ -114,6 +118,24 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = ({
           {menuItems}
         </Select>
       </Box>
+      <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            onCancel();
+          }}
+        >
+          Отменить
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            onSubmit(data);
+          }}
+        >
+          Подтвердить
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
