@@ -54,13 +54,17 @@ export const DocumentTypeAttributes: FC<Props> = observer(
               </div>
             </React.Fragment>
           )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Атрибуты"
-              placeholder="Добавить атрибут"
-            />
-          )}
+          renderInput={(params) => {
+            console.log('params:', params);
+            return (
+              <TextField
+                {...params}
+                label="Атрибуты"
+                placeholder="Добавить атрибут"
+                sx={{ backgroundColor: 'blue' }}
+              />
+            );
+          }}
           onChange={(
             event: React.SyntheticEvent<Element, Event>,
             newValue: DocumentTypeAttribute[],

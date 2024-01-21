@@ -1,6 +1,6 @@
 import { useCallback, type FC, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Box } from '@mui/material';
+import { Box, Chip } from '@mui/material';
 import {
   DataGrid,
   type GridRowsProp,
@@ -11,11 +11,8 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { Accordioned } from '@shared/components/Accordioned';
-
 import type { CompanyDocumentTypesModel, DocumentTypeAttribute } from '../';
 
-import { DocumentTypeAttributes } from './DocumentTypeAttributes';
 import {
   DocumentTypeForm,
   type DocumentTypeFormProps,
@@ -28,15 +25,20 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
         if (params.value === undefined) return 'value === undefined';
         if (model.documentAttributes?.state !== 'fulfilled')
           return 'loading...';
+        const amount = params.value.length;
+        if (amount === 0) return '<Нет атрибутов>';
+        const first = params.value[0];
         return (
-          <Box width={'100%'} sx={{ backgroundColor: 'transparent' }}>
-            <Accordioned detailsName="список атрибутов">
-              <DocumentTypeAttributes
-                documentTypeAttributes={params.value}
-                allAttributes={model.documentAttributes?.value}
-                setTypeAttributes={() => {}}
-              />
-            </Accordioned>
+          <Box
+            width={'100%'}
+            sx={{ backgroundColor: 'transparent' }}
+            // overflow={'hidden'}
+          >
+            {/* {params.value.map((dta: DocumentTypeAttribute) => (
+              <Chip key={dta.id} label={dta.name} />
+            ))} */}
+            <Chip label={first.name} />
+            {amount > 1 && ` и ещё ${amount - 1}...`}
             <Box sx={{ flex: '1 0' }}></Box>
           </Box>
         );

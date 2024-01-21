@@ -2,7 +2,6 @@ import { type FC } from 'react';
 import {
   Dialog,
   DialogTitle,
-  Box,
   Button,
   TextField,
   InputLabel,
@@ -12,6 +11,7 @@ import {
   DialogContent,
   FormControl,
   Alert,
+  Stack,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 
@@ -71,7 +71,7 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
         <DialogContent
           sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
         >
-          <Box sx={{ display: 'flex', gap: 3 }}>
+          <Stack spacing={2}>
             <TextField
               sx={{ flex: '1' }}
               label="Название"
@@ -105,7 +105,7 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
                 {menuItems}
               </Select>
             </FormControl>
-          </Box>
+          </Stack>
           <DocumentTypeAttributes
             documentTypeAttributes={documentTypeData.attributes}
             allAttributes={model.documentAttributes.value}
