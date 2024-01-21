@@ -9,7 +9,7 @@ import {
   MenuItem,
 } from '@mui/material';
 
-import { type DocTypeCreateDto } from '@api';
+import { type DocumentType } from '../model/DocumentType';
 
 const agreementTypes = [
   {
@@ -37,23 +37,29 @@ const menuItems = agreementTypes.map((el) => {
   );
 });
 
-interface DocumentTypeFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-  newTypeValue: DocTypeCreateDto;
-  setNewTypeValue: React.Dispatch<React.SetStateAction<DocTypeCreateDto>>;
-  children: JSX.Element;
+export interface DocumentTypeFormProps {
+  initialData: DocumentType;
+  onSubmit: (data: DocumentType) => void;
+  onCancel: () => void;
+  // isOpen: boolean;
+  // onClose: () => void;
+  // newTypeValue: DocTypeCreateDto;
+  // setNewTypeValue: React.Dispatch<React.SetStateAction<DocTypeCreateDto>>;
+  // children: JSX.Element;
 }
 
 export const DocumentTypeForm: FC<DocumentTypeFormProps> = ({
-  isOpen,
-  onClose,
-  children,
-  newTypeValue,
-  setNewTypeValue,
+  initialData,
+  onSubmit,
+  onCancel,
+  // isOpen,
+  // onClose,
+  // children,
+  // newTypeValue,
+  // setNewTypeValue,
 }) => {
   return (
-    <Dialog onClose={onClose} aria-labelledby="dialog-title" open={isOpen}>
+    <Dialog open={true}>
       <DialogTitle id="dialog-title">
         Создание нового типа документа
       </DialogTitle>
@@ -79,13 +85,13 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = ({
       >
         <TextField
           placeholder="Наименование"
-          onChange={(e) => {
-            console.log(e.target.value);
-            setNewTypeValue(() => {
-              return { ...newTypeValue, name: e.target.value };
-            });
-            console.log(newTypeValue);
-          }}
+          // onChange={(e) => {
+          //   console.log(e.target.value);
+          //   setNewTypeValue(() => {
+          //     return { ...newTypeValue, name: e.target.value };
+          //   });
+          //   console.log(newTypeValue);
+          // }}
           required
           id="TextField-1"
           label="Наименование"
@@ -96,18 +102,17 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = ({
           sx={{ width: '223px' }}
           labelId="select-label"
           id="select"
-          onChange={(e) => {
-            setNewTypeValue(() => {
-              return {
-                ...newTypeValue,
-                agreementType: e.target.value as DocTypeCreateDto.agreementType,
-              };
-            });
-          }}
+          // onChange={(e) => {
+          //   setNewTypeValue(() => {
+          //     return {
+          //       ...newTypeValue,
+          //       agreementType: e.target.value as DocTypeCreateDto.agreementType,
+          //     };
+          //   });
+          // }}
         >
           {menuItems}
         </Select>
-        {children}
       </Box>
     </Dialog>
   );
