@@ -1,7 +1,7 @@
 import { Service as api } from '@api';
 
 import { CompanyDocumentTypesModel } from '@widgets/CompanyDocumentTypesControlPanel';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 class ByCompanyModels {
   constructor() {
     makeAutoObservable(this);
@@ -17,10 +17,15 @@ class ByCompanyModels {
     if (result === undefined) {
       result = new CompanyDocumentTypesModel();
       void result
-        ._loadFromApi(() => api.getDocTypesByOrganization(companyId))
+        ._loadFromApi(
+          () => api.getDocTypesByOrganization(companyId),
+          () => api.getAttributesByOrganization(companyId),
+        )
         .then(() => {
-          if (result !== undefined)
-            this._byCompanyModels.set(companyId, result);
+          runInAction(() => {
+            if (result !== undefined)
+              this._byCompanyModels.set(companyId, result);
+          });
         })
         .catch((error) => {
           throw error;

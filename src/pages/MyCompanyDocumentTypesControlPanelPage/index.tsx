@@ -7,7 +7,7 @@ import { MainPanelTitle } from '@shared/components/MainPanelTitle';
 import { myCompanyModel } from './model';
 
 export const MyCompanyDocumentTypesControlPanelPage: FC = observer(() => {
-  const model = myCompanyModel.myCompanyModel;
+  const model = myCompanyModel.instance;
   return (
     <>
       <MainPanelTitle title={'Моя организация'} />
