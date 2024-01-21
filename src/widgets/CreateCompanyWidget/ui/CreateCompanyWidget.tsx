@@ -31,7 +31,6 @@ export const CreateCompanyWidget: FC<CreateCompanyModalProps> = ({
           inn,
         })
         .then((response) => {
-          // Assuming OrgDto has 'name' and 'inn' properties
           onSubmit(response.name, response.inn);
         })
         .catch((error) => {
