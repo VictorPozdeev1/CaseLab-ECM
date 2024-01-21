@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Service as api } from '@api';
 
 interface CompanyFormData {
@@ -19,6 +19,7 @@ export const CompanyForm: FC = observer(() => {
     defaultRecipient: '',
   });
   const [changed, setChanged] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -60,6 +61,18 @@ export const CompanyForm: FC = observer(() => {
       })
       .catch((error) => {
         console.error('Error updating organization:', error);
+      });
+  };
+
+  const handleDelete = (): void => {
+    api
+      .deleteOrg(Number(companyId))
+      .then(() => {
+        console.log('Organization deleted successfully');
+        navigate('/companies');
+      })
+      .catch((error) => {
+        console.error('Error deleting organization:', error);
       });
   };
 
@@ -115,7 +128,10 @@ export const CompanyForm: FC = observer(() => {
           onChange={handleInputChange}
         />
       </Box>
-      <Box display="flex" justifyContent="flex-end">
+      <Box display="flex" justifyContent="space-between" marginTop="20px">
+        <Button variant="contained" color="secondary" onClick={handleDelete}>
+          Удалить организацию
+        </Button>
         <Button
           variant="contained"
           color="primary"
