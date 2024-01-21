@@ -1,27 +1,32 @@
 import React, { useEffect, type FC, useState } from 'react';
 import { DocumentHeader } from './DocumentHeader/DocumentHeader';
 import { DocumentNav } from './DocumentNav/DocumentNav';
-import { DocumentSendToReview } from './DocumentSendToReview/DocumentSendToReview';
+import { DocumentSendToReview } from '@features/review/DocumentSendToReview/DocumentSendToReview';
 import { DocumentPreview } from './DocumentPreview/DocumentPreview';
 import { Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import { useMatch } from 'react-router';
 import { documentsStore } from '@store/index';
 import { type Document as StoreDocument } from '@entities/document';
 import { getDocumentDownloadLink } from '@entities/document/lib/downloadDocumentFile';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const DocumentViewMain: FC = observer(() => {
-  const match = useMatch('/myDocuments/:documentName');
+  const { documentName } = useParams();
+  const navigate = useNavigate();
   const [document, setDocument] = useState<StoreDocument>();
-
   useEffect(() => {
     void (async () => {
       if (documentsStore.documents === undefined) {
-        await documentsStore.getDocuments();
+        await documentsStore.loadOwnDocuments();
+      }
+      if (
+        documentsStore.getDocumentByName(documentName as string) === undefined
+      ) {
+        navigate('/myDocuments');
       }
       setDocument(
         documentsStore.getDocumentByName(
-          match?.params.documentName as string,
+          documentName as string,
         ) as StoreDocument,
       );
     })();

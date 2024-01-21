@@ -9,7 +9,7 @@ import { OwnDocumentsTable } from '@widgets/OwnDocumentsTable';
 
 export const OwnDocumentsPage: FC = observer(() => {
   useEffect(() => {
-    void documentsStore.getDocuments();
+    void documentsStore.loadOwnDocuments();
   }, []);
 
   return (

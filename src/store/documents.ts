@@ -25,7 +25,7 @@ class DocumentsStore {
     return this.documents?.find((document) => document.name === name);
   }
 
-  async getDocuments(): Promise<void> {
+  async loadOwnDocuments(): Promise<void> {
     try {
       const creatorId: number = (await Service.getUserInfo()).id;
       const response = await Service.findDocuments(
@@ -41,8 +41,7 @@ class DocumentsStore {
         }));
       });
     } catch (e) {
-      console.log(e);
-      throw e;
+      console.error(e);
     }
   }
 
@@ -71,8 +70,7 @@ class DocumentsStore {
         );
       }
     } catch (e) {
-      console.log(e);
-      throw e;
+      console.error(e);
     }
   }
 }
