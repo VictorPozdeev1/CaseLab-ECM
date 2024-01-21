@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Service as api } from '@api';
+import { getCompaniesStore } from '@entities/company/model';
 
 interface CompanyFormData {
   name: string;
@@ -20,6 +21,7 @@ export const CompanyForm: FC = observer(() => {
   });
   const [changed, setChanged] = useState(false);
   const navigate = useNavigate();
+  const companiesStore = getCompaniesStore();
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -56,9 +58,7 @@ export const CompanyForm: FC = observer(() => {
         name: companyData.name,
         defaultRecipient: Number(companyData.defaultRecipient),
       })
-      .then((updatedOrg) => {
-        console.log('Organization updated:', updatedOrg);
-      })
+      .then((updatedOrg) => {})
       .catch((error) => {
         console.error('Error updating organization:', error);
       });
@@ -68,7 +68,10 @@ export const CompanyForm: FC = observer(() => {
     api
       .deleteOrg(Number(companyId))
       .then(() => {
-        console.log('Organization deleted successfully');
+        const fetchData = async (): Promise<void> => {
+          await companiesStore._loadCompanies();
+        };
+        void fetchData();
         navigate('/companies');
       })
       .catch((error) => {
