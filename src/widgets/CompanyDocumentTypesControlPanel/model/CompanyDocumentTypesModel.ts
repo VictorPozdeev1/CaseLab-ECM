@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import type { DocTypeDto, DocAttributeDto } from '@api';
 import { DocumentType } from './DocumentType';
-import { type DocumentTypeAttribute } from './DocumentTypeAttribute';
+import { DocumentTypeAttribute } from './DocumentTypeAttribute';
 import { type IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 
 export class CompanyDocumentTypesModel {
@@ -16,9 +16,8 @@ export class CompanyDocumentTypesModel {
   async _loadDocumentTypeAttributes(
     documentTypeAttributesLoader: () => Promise<DocAttributeDto[]>,
   ): Promise<DocumentTypeAttribute[]> {
-    throw new Error('privet!');
-    // const loadedData = await documentTypeAttributesLoader();
-    // return loadedData.map((a) => new DocumentTypeAttribute(a));
+    const loadedData = await documentTypeAttributesLoader();
+    return loadedData.map((a) => new DocumentTypeAttribute(a));
   }
 
   async _loadDocumentTypes(
