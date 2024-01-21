@@ -61,7 +61,6 @@ export const DocumentTypeAttributes: FC<Props> = observer(
                 {...params}
                 label="Атрибуты"
                 placeholder="Добавить атрибут"
-                sx={{ backgroundColor: 'blue' }}
               />
             );
           }}

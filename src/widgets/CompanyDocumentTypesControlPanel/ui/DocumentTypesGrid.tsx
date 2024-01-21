@@ -53,7 +53,7 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
           onClose: () => {
             setFormProps(undefined);
           },
-          model: model,
+          model,
         });
       },
       [model.documentTypes?.value],
@@ -120,7 +120,7 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
         <DataGrid
           rows={[...gridRows]}
           columns={columns}
-          getRowHeight={() => 'auto'}
+          // getRowHeight={() => 'auto'}
           autoHeight
           initialState={{
             pagination: { paginationModel: { pageSize: 10 } },

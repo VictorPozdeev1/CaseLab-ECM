@@ -68,9 +68,7 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
     return (
       <Dialog fullWidth open={true}>
         <DialogTitle id="dialog-title">Какой-то заголовок</DialogTitle>
-        <DialogContent
-          sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
-        >
+        <DialogContent>
           <Stack spacing={2}>
             <TextField
               sx={{ flex: '1' }}
