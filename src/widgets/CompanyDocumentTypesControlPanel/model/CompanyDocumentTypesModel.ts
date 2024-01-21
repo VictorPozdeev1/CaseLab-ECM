@@ -1,9 +1,8 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import type { DocTypeDto, DocAttributeDto } from '@api';
-
-type DocumentType = DocTypeDto; // Мб, позже класс такой сделаю, если понадобится
-type DocumentTypeAttribute = DocAttributeDto; // Мб, позже класс такой сделаю, если понадобится
+import { DocumentType } from './DocumentType';
+import { DocumentTypeAttribute } from './DocumentTypeAttribute';
 
 export class CompanyDocumentTypesModel {
   constructor() {
@@ -14,18 +13,29 @@ export class CompanyDocumentTypesModel {
   documentTypeAttributes: DocumentTypeAttribute[] = [];
 
   async _loadFromApi(
-    documentTypesLoader: () => Promise<DocumentType[]>,
-    documentTypeAttributesLoader: () => Promise<DocumentTypeAttribute[]>,
+    documentTypesLoader: () => Promise<DocTypeDto[]>,
+    documentTypeAttributesLoader: () => Promise<DocAttributeDto[]>,
   ): Promise<void> {
     const documentTypesLoad = documentTypesLoader();
     const documentTypeAttributesLoad = documentTypeAttributesLoader();
     const loadedDocumentTypes = await documentTypesLoad;
-    runInAction(() => {
-      this.documentTypes = loadedDocumentTypes;
-    });
     const loadedDocumentTypeAttributes = await documentTypeAttributesLoad;
     runInAction(() => {
-      this.documentTypeAttributes = loadedDocumentTypeAttributes;
+      this.documentTypeAttributes = loadedDocumentTypeAttributes.map(
+        (a) => new DocumentTypeAttribute(a),
+      );
+      this.documentTypes = loadedDocumentTypes.map(
+        (dt) =>
+          new DocumentType(
+            dt,
+            dt.attributes.map(
+              (aDto) =>
+                this.documentTypeAttributes.find(
+                  (a) => a.id === aDto.id,
+                ) as DocumentTypeAttribute,
+            ),
+          ),
+      );
     });
   }
 

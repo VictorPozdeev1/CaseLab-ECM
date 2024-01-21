@@ -9,15 +9,15 @@ import {
 } from '@mui/x-data-grid';
 
 import { Accordioned } from '@shared/components/Accordioned';
-import { type DocAttributeDto } from '@api';
 
 import { DocumentTypesAttributesList } from './DocumentTypeAttributes';
 import { type CompanyDocumentTypesModel } from '../';
+import { type DocumentTypeAttribute } from '../model/DocumentTypeAttribute';
 
 export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
   observer(({ model }) => {
     const renderAttributesCell = useCallback(
-      (params: GridRenderCellParams<any, DocAttributeDto[]>) => {
+      (params: GridRenderCellParams<any, DocumentTypeAttribute[]>) => {
         if (params.value === undefined) return 'value === undefined';
         return (
           <Box width={'100%'} sx={{ backgroundColor: 'transparent' }}>

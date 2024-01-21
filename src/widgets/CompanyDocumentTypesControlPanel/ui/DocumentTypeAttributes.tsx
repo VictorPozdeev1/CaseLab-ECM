@@ -4,15 +4,15 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { observer } from 'mobx-react-lite';
 
-import { type DocAttributeDto } from '@api';
+import { type DocumentTypeAttribute } from '../model/DocumentTypeAttribute';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 interface Props {
-  documentTypeAttributes: DocAttributeDto[] | undefined;
-  setTypeAttributes: (newAttr: DocAttributeDto[]) => void;
-  allAttributes: DocAttributeDto[] | undefined;
+  documentTypeAttributes: DocumentTypeAttribute[] | undefined;
+  setTypeAttributes: (newAttr: DocumentTypeAttribute[]) => void;
+  allAttributes: DocumentTypeAttribute[] | undefined;
 }
 
 export const DocumentTypesAttributesList: FC<Props> = observer(
@@ -63,7 +63,7 @@ export const DocumentTypesAttributesList: FC<Props> = observer(
           )}
           onChange={(
             event: React.SyntheticEvent<Element, Event>,
-            newValue: DocAttributeDto[],
+            newValue: DocumentTypeAttribute[],
           ) => {
             setTypeAttributes(newValue);
             // console.log(newValue);
