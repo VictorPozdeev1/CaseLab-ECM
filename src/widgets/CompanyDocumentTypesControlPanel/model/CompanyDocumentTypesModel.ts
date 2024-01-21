@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import type { DocTypeDto, DocAttributeDto } from '@api';
 import { DocumentType } from './DocumentType';
-import { DocumentTypeAttribute } from './DocumentTypeAttribute';
+import { type DocumentTypeAttribute } from './DocumentTypeAttribute';
 import { type IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 
 export class CompanyDocumentTypesModel {
@@ -16,8 +16,9 @@ export class CompanyDocumentTypesModel {
   async _loadDocumentTypeAttributes(
     documentTypeAttributesLoader: () => Promise<DocAttributeDto[]>,
   ): Promise<DocumentTypeAttribute[]> {
-    const loadedData = await documentTypeAttributesLoader();
-    return loadedData.map((a) => new DocumentTypeAttribute(a));
+    throw new Error('privet!');
+    // const loadedData = await documentTypeAttributesLoader();
+    // return loadedData.map((a) => new DocumentTypeAttribute(a));
   }
 
   async _loadDocumentTypes(
@@ -25,7 +26,7 @@ export class CompanyDocumentTypesModel {
   ): Promise<DocumentType[]> {
     const loadedData = await documentTypesLoader();
     // await Promise.all([this.documentTypes, this.documentTypeAttributes]);
-    await this.documentTypeAttributes;
+    await this.documentTypeAttributes; // Если будет rejected, дальше выполнение не пойдёт
     // if (this.documentTypeAttributes?.state === 'fulfilled')
     return loadedData.map(
       (dt) =>
@@ -34,8 +35,9 @@ export class CompanyDocumentTypesModel {
           // Тут бэкенд должен, по идее, только id атрибутов возвращать
           dt.attributes.map(
             (aDto) =>
-              (this.documentTypeAttributes?.value as DocumentTypeAttribute[]) // Надо проверить, что в value, когда ошибка. undefined?
-                .find((a) => a.id === aDto.id) as DocumentTypeAttribute,
+              (
+                this.documentTypeAttributes?.value as DocumentTypeAttribute[]
+              ).find((a) => a.id === aDto.id) as DocumentTypeAttribute,
           ),
         ),
     );
