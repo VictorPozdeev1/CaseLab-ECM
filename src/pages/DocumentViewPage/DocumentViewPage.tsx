@@ -9,14 +9,10 @@ export const DocumentViewPage: FC = observer(() => {
   const { documentName } = useParams();
   const navigate = useNavigate();
   useEffect(() => {
-    void (async () => {
-      void (await documentViewPageStore.loadDocumentByName(
-        documentName as string,
-      ));
-      if (documentViewPageStore.document === undefined) {
-        navigate('/myDocuments');
-      }
-    })();
+    void documentViewPageStore.loadDocumentByName(documentName as string);
+    if (documentViewPageStore.document === undefined) {
+      navigate('/myDocuments');
+    }
   }, []);
 
   return (

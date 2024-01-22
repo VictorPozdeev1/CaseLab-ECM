@@ -1,35 +1,46 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { Service as api } from '@api';
-import { Company } from './Company';
+import { CompanyModel } from './CompanyModel';
+import { asyncWrapper } from '@shared/utils/asyncWrapper';
 
 class CompaniesStore {
-  companies: Company[] = [];
+  protected _companies?: CompanyModel[];
+
   constructor() {
-    makeAutoObservable(this, {});
+    makeAutoObservable(this);
   }
 
-  async _loadCompanies(): Promise<void> {
-    // content должен быть required, как я понимаю
-    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-    const newCompaniesList = (await api.getAllOrgs()).content!.map(
-      (o) => new Company(o),
-    );
-    runInAction(() => {
-      this.companies = newCompaniesList;
-    });
+  get companies(): CompanyModel[] | undefined {
+    return this._companies ?? undefined;
   }
 
-  getNameById(id: number): string | undefined {
-    return this.companies.find((c) => c.id === id)?.name;
+  getById(id: number): CompanyModel | undefined {
+    return this._companies !== undefined
+      ? this._companies.find((el) => el.id === id)
+      : undefined;
   }
+
+  loadCompanies = asyncWrapper(
+    async (page?: number, size?: number, sort?: string[]): Promise<void> => {
+      const response = await api.getAllOrgs(page, size, sort);
+      if (response?.content === undefined) {
+        throw new Error('Не удалось загрузить организации');
+      }
+      runInAction(() => {
+        const companiesEntries = response.content;
+        if (companiesEntries !== undefined) {
+          this._companies = companiesEntries.map((el) => new CompanyModel(el));
+        }
+      });
+    },
+  );
 }
 
 let _companiesStore: CompaniesStore | undefined;
 export const getCompaniesStore = (): CompaniesStore => {
   if (_companiesStore === undefined) {
     _companiesStore = new CompaniesStore();
-    void _companiesStore._loadCompanies();
   }
   return _companiesStore;
 };

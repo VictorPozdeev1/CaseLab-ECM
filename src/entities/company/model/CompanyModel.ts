@@ -1,6 +1,6 @@
 import { type OrgDto } from '@api';
 
-export class Company {
+export class CompanyModel {
   constructor(apiResponse: OrgDto) {
     this.id = apiResponse.id;
     this.name = apiResponse.name;

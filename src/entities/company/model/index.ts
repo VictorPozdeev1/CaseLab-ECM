@@ -1,2 +1,2 @@
-export { Company } from './Company';
+export { CompanyModel } from './CompanyModel';
 export { getCompaniesStore } from './CompaniesStore';
