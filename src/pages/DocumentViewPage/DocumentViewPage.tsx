@@ -1,9 +1,24 @@
-import { type FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { Box } from '@mui/material';
 import { DocumentViewMain } from '@widgets/DocumentViewMain/DocumentViewMain';
-// import { DocumentViewTimeline } from '@widgets/DocumentViewTimeline/DocumentViewTimeline';
+import { observer } from 'mobx-react-lite';
+import { documentViewPageStore } from './store';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export const DocumentViewPage: FC = () => {
+export const DocumentViewPage: FC = observer(() => {
+  const { documentName } = useParams();
+  const navigate = useNavigate();
+  useEffect(() => {
+    void (async () => {
+      void (await documentViewPageStore.loadDocumentByName(
+        documentName as string,
+      ));
+      if (documentViewPageStore.document === undefined) {
+        navigate('/myDocuments');
+      }
+    })();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -17,4 +32,4 @@ export const DocumentViewPage: FC = () => {
       {/* <DocumentViewTimeline /> */}
     </Box>
   );
-};
+});

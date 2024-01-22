@@ -4,45 +4,36 @@ import Button from '@mui/material/Button';
 import CreateIcon from '@mui/icons-material/Create';
 import Typography from '@mui/material/Typography';
 import { observer } from 'mobx-react-lite';
-import { type Document as StoreDocument } from '@entities/document';
 import session from '@entities/session/session';
-export interface DocumentHeaderProps {
-  document?: StoreDocument;
-}
+import { documentViewPageStore } from '@pages/DocumentViewPage/store';
 
-export const DocumentHeader: FC<DocumentHeaderProps> = observer(
-  ({ document }) => {
-    return (
+export const DocumentHeader: FC = observer(() => {
+  const document = documentViewPageStore.document;
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'start',
+        width: '100%',
+      }}
+    >
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'start',
-          width: '100%',
+          flexDirection: 'column',
+          gap: 1,
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            // flex: '1 0 0',
-            gap: 1,
-          }}
-        >
-          <Typography variant="h4">{document?.name}</Typography>
-          <Typography variant="subtitle2">
-            Создан {document?.date.toLocaleDateString()} •{' '}
-            {session.currentUserData.shortName}
-          </Typography>
-        </Box>
-        <Button
-          variant="outlined"
-          startIcon={<CreateIcon />}
-          onClick={() => {}}
-        >
-          РЕДАКТИРОВАТЬ
-        </Button>
+        <Typography variant="h4">{document?.name}</Typography>
+        <Typography variant="subtitle2">
+          Создан {document?.date.toLocaleDateString()} •{' '}
+          {session.currentUserData.shortName}
+        </Typography>
       </Box>
-    );
-  },
-);
+      <Button variant="outlined" startIcon={<CreateIcon />} onClick={() => {}}>
+        РЕДАКТИРОВАТЬ
+      </Button>
+    </Box>
+  );
+});

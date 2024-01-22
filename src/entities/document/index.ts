@@ -9,3 +9,4 @@ export {
 } from './DocumentStatus';
 export { downloadDocumentFile } from './lib/downloadDocumentFile';
 export { type Document } from './Document';
+export { DocumentModel } from './model/DocumentModel';
