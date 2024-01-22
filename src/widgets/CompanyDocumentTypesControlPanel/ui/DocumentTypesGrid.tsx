@@ -1,4 +1,4 @@
-import { useCallback, type FC, useMemo, useState } from 'react';
+import { useCallback, type FC, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Box, Chip } from '@mui/material';
 import {
@@ -12,7 +12,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
 import type { CompanyDocumentTypesModel, DocumentTypeAttribute } from '../';
-
 import {
   DocumentTypeForm,
   type DocumentTypeFormProps,
@@ -20,11 +19,11 @@ import {
 
 export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
   observer(({ model }) => {
+    // В итоге избавились от зависимости от model - можно теперь и вынести из компонента
     const renderAttributesCell = useCallback(
       (params: GridRenderCellParams<any, DocumentTypeAttribute[]>) => {
-        if (params.value === undefined) return 'value === undefined';
-        if (model.documentAttributes?.state !== 'fulfilled')
-          return 'loading...';
+        if (params.value === undefined)
+          return 'params.value === undefined at rendering a cell';
         const amount = params.value.length;
         if (amount === 0) return '<Нет атрибутов>';
         const first = params.value[0];
@@ -43,7 +42,7 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
           </Box>
         );
       },
-      [model.documentAttributes?.value],
+      [],
     );
 
     const editClickHandler = useCallback(
@@ -59,57 +58,54 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
       [model.documentTypes?.value],
     );
 
-    const columns: GridColDef[] = useMemo<GridColDef[]>(
-      () => [
-        {
-          field: 'name',
-          headerName: 'Название',
-          flex: 1,
-          hideable: false,
-        },
-        {
-          field: 'attributes',
-          headerName: 'Атрибуты',
-          flex: 0,
-          width: 500,
-          hideable: false,
-          renderCell: renderAttributesCell,
-        },
-        {
-          field: 'actions',
-          type: 'actions',
-          width: 80,
-          getActions: (params) => [
-            <GridActionsCellItem
-              key={'1'}
-              icon={<EditIcon />}
-              label="Edit"
-              onClick={() => {
-                editClickHandler(Number(params.id));
-              }}
-              showInMenu
-            />,
-            <GridActionsCellItem
-              key={'2'}
-              icon={<DeleteIcon />}
-              label="Delete"
-              onClick={() => {
-                console.log(params.id);
-              }}
-              showInMenu
-            />,
-          ],
-        },
-      ],
-      [renderAttributesCell],
-    );
+    const columns: GridColDef[] = [
+      {
+        field: 'name',
+        headerName: 'Название',
+        flex: 1,
+        hideable: false,
+      },
+      {
+        field: 'attributes',
+        headerName: 'Атрибуты',
+        flex: 0,
+        width: 500,
+        hideable: false,
+        renderCell: renderAttributesCell,
+      },
+      {
+        field: 'actions',
+        type: 'actions',
+        width: 80,
+        getActions: (params) => [
+          <GridActionsCellItem
+            key={'1'}
+            icon={<EditIcon />}
+            label="Edit"
+            onClick={() => {
+              editClickHandler(Number(params.id));
+            }}
+            showInMenu
+          />,
+          <GridActionsCellItem
+            key={'2'}
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={() => {
+              console.log(params.id);
+            }}
+            showInMenu
+          />,
+        ],
+      },
+    ];
 
     const gridRows: GridRowsProp =
       model.documentTypes?.state === 'fulfilled'
-        ? model.documentTypes?.value.map((dt) => ({
+        ? model.documentTypes.value.map((dt) => ({
             id: dt.id,
             name: dt.name,
-            attributes: dt.attributes,
+            attributes: [...dt.attributes], // должно работать и без копирования, надо проверить
           }))
         : [];
 

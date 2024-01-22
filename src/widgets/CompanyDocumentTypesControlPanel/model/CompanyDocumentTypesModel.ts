@@ -1,13 +1,18 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import type { DocTypeDto, DocAttributeDto } from '@api';
+import { Service as api } from '@api';
+import type {
+  DocTypeDto,
+  DocAttributeDto,
+  DocTypeUpdateRequestDto,
+} from '@api';
 import { DocumentType } from './DocumentType';
 import { DocumentAttribute } from './DocumentAttribute';
 import { type IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 
 export class CompanyDocumentTypesModel {
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { deep: true });
   }
 
   documentTypes?: IPromiseBasedObservable<DocumentType[]>;
@@ -26,18 +31,15 @@ export class CompanyDocumentTypesModel {
     const loadedData = await documentTypesLoader();
     // await Promise.all([this.documentTypes, this.documentTypeAttributes]);
     await this.documentAttributes; // Если будет rejected, дальше выполнение не пойдёт
-    // if (this.documentTypeAttributes?.state === 'fulfilled')
+    if (this.documentAttributes?.state !== 'fulfilled')
+      throw new Error('Где я?');
     return loadedData.map(
       (dt) =>
         new DocumentType(
           dt,
-          // Тут бэкенд должен, по идее, только id атрибутов возвращать
-          dt.attributes.map(
-            (aDto) =>
-              (this.documentAttributes?.value as DocumentAttribute[]).find(
-                (a) => a.id === aDto.id,
-              ) as DocumentAttribute,
-          ),
+          this.documentAttributes as IPromiseBasedObservable<
+            DocumentAttribute[] // Почему TS сам не выводит после проверки выше?
+          >,
         ),
     );
   }
@@ -60,21 +62,37 @@ export class CompanyDocumentTypesModel {
     });
   }
 
-  // async updateUser(newData: User): Promise<void> {
-  //   const requestDto: UserUpdateDto = {
-  //     ...newData,
-  //     // Заглушка. Скоро бэкендеры уберут паспортные данные.
-  //     passportDate: new Date().toISOString(),
-  //     passportIssued: new Date().toISOString(),
-  //     passportKp: '333999',
-  //     passportNumber: (Date.now() % 1000000).toString(),
-  //     passportSeries: '3453',
-  //     // Возможно, стоило бы проставлять здесь companyId
-  //   };
-  //   const response = await api.updateUser(newData.id, requestDto);
-  //   const index = this.users.findIndex((u) => u.id === newData.id);
-  //   runInAction(() => this.users.splice(index, 1, new User(response)));
-  // }
+  async updateDocumentType(
+    id: number,
+    newData: { name: string; attributeIds: number[] },
+  ): Promise<void> {
+    const requestDto: DocTypeUpdateRequestDto = newData;
+    const responseDto = await api.updateDocType(id, requestDto);
+    runInAction(() => {
+      if (
+        this.documentTypes?.state !== 'fulfilled' ||
+        this.documentAttributes?.state !== 'fulfilled'
+      )
+        return;
+      const indexToUpdate = this.documentTypes.value.findIndex(
+        (u) => u.id === id,
+      );
+      const updatedDocumentType = new DocumentType(
+        responseDto,
+        this.documentAttributes,
+      );
+
+      // Попробовать убрать deep observing (в родительской модели), и затем пробовать более точечные обновления -
+      // - и посмотреть, не сломается ли реактивность в какой-то момент.
+      // this.documentTypes.value[indexToUpdate] = updatedDocumentType;
+      // this.documentTypes.value.splice(index, 1, updatedDocumentType);
+
+      const updatedArray = this.documentTypes.value.map((dt, i) =>
+        i === indexToUpdate ? updatedDocumentType : dt,
+      );
+      this.documentTypes = fromPromise.resolve(updatedArray);
+    });
+  }
 
   // async addUser(newData: User): Promise<void> {
   //   const requestDto: UserCreateDto = {

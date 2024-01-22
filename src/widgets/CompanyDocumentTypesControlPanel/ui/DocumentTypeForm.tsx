@@ -21,7 +21,7 @@ import type {
   DocumentTypeAttribute,
 } from '../';
 import { DocumentTypeAttributes } from './DocumentTypeAttributes';
-import { type DocTypeDto } from '@api';
+import type { DocTypeDto } from '@api';
 
 const agreementTypes = [
   {
@@ -139,12 +139,16 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
             variant="contained"
             onClick={() => {
               /* Заблокировать форму */
-              // model
-              //   .updateUser(userData)
-              //   .then() /* Закрыть форму */
-              //   .catch(() => {}) /* Оставить форму открытой и показать ошибку */
-              //   .finally(); /* Разблокировать форму */
-              // setUserFormProps(undefined);
+              model
+                .updateDocumentType(documentTypeData.id, {
+                  name,
+                  // agreementType, // В запросе на бэк нет этого поля, просить исправлять уже поздно
+                  attributeIds: selectedAttributes.map((a) => a.id),
+                })
+                .then() /* Закрыть форму */
+                .catch(() => {}) /* Оставить форму открытой и показать ошибку */
+                .finally(); /* Разблокировать форму */
+              onClose();
             }}
           >
             Подтвердить
