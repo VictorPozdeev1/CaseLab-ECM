@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { User } from '@entities/user/User';
+import { User } from '@entities/user/model/User';
 
 import styles from './UserForm.module.css';
 

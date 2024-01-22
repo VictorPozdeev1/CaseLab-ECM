@@ -1,4 +1,4 @@
-import { type User } from '@entities/user/User';
+import { type User } from '@entities/user/model/User';
 import {
   Box,
   Button,
