@@ -20,16 +20,20 @@ interface CompanyFormData {
 }
 
 export const CompanyForm: FC = observer(() => {
+  // todo Можно ли обойтись без этого? Получать сверху в пропсах нужную модель
   const { companyId } = useParams<{ companyId: string }>();
   const [changed, setChanged] = useState<boolean>(false);
   const navigate = useNavigate();
   const companiesStore = getCompaniesStore();
 
+  // todo Можно бы загрузить сразу, раз уже есть companyId ? Но, думаю, не страшно..
+  // А вообще, думаю, лучше получать это в пропсах сверху
   const [companyData, setCompanyData] = useState<CompanyFormData>({
     name: '',
     defaultRecipient: '',
-  }); // Можно бы загрузить сразу, раз уже есть companyId ? Но, думаю, не страшно..
+  });
 
+  // todo Тоже сверху передавать
   const [companyUsersStore, setCompanyUsersStore] = useState<CompanyUsersModel>(
     userStores.getCustomCompanyUserStore(Number(companyId)),
   );

@@ -8,6 +8,8 @@ export const BaseCompanyMainControlPanel: FC<{
   title: string;
 }> = ({ title }) => {
   const { companyId } = useParams();
+  // todo Это всё надо убрать. Просто сверху в пропсах передавать, если нужно.
+  // А в идеале, мб, и вообще без этого обойтись. Сайдбар, к примеру, не в этом компоненте добавлять, а выше.
   const location = useLocation();
   const isMyCompanyRoute = location.pathname === '/myCompany';
   return (
