@@ -1,29 +1,56 @@
-import { Box, Container, Typography } from '@mui/material';
-import { type FC } from 'react';
+import React, { type FC } from 'react';
+import { Box, Typography } from '@mui/material';
+import { CompanyForm } from './CompanyForm';
+import { useParams, useLocation } from 'react-router-dom';
+import { CompanySidebar } from './CompanySidebar';
 
-export const BaseCompanyMainControlPanel: FC<{ title: string }> = ({
-  title,
-}) => {
+export const BaseCompanyMainControlPanel: FC<{
+  title: string;
+}> = ({ title }) => {
+  const { companyId } = useParams();
+  // todo Это всё надо убрать. Просто сверху в пропсах передавать, если нужно.
+  // А в идеале, мб, и вообще без этого обойтись. Сайдбар, к примеру, не в этом компоненте добавлять, а выше.
+  const location = useLocation();
+  const isMyCompanyRoute = location.pathname === '/myCompany';
   return (
     <>
-      <Container maxWidth={'lg'}>
-        <Box padding={'16px'}>
+      <Box
+        maxWidth={'lg'}
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          height: '100vh',
+          width: '100%',
+          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+        }}
+      >
+        {isMyCompanyRoute ? null : (
+          <Box>
+            <CompanySidebar />
+          </Box>
+        )}
+        <Box padding={'16px'} sx={{ width: '100%' }}>
           <Box
             marginBottom={'28px'}
             display={'flex'}
             alignItems={'center'}
             gap={'16px'}
+            justifyContent={'center'}
           >
             <Typography variant="h5" fontWeight={'bold'}>
               {title}
             </Typography>
           </Box>
-          <Box>?Задизабленная кнопка архивации?</Box>
+          <Box>
+            {(companyId !== null && companyId !== undefined) ||
+            isMyCompanyRoute ? (
+              <CompanyForm />
+            ) : (
+              <Box></Box>
+            )}
+          </Box>
         </Box>
-        <Box
-          sx={{ width: '100%', height: '400px', backgroundColor: 'cadetblue' }}
-        ></Box>
-      </Container>
+      </Box>
     </>
   );
 };

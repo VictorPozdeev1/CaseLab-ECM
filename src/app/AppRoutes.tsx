@@ -72,6 +72,16 @@ const AppRoutes: FC = () => {
           }
         />
         <Route
+          path="companies"
+          element={
+            <RequirePermissionCheck
+              permission={Permissions.SPECIFIC_COMPANY_CONTROL_PANEL}
+            >
+              <SpecificCompanyMainControlPanelPage />
+            </RequirePermissionCheck>
+          }
+        />
+        <Route
           path="companies/:companyId"
           element={
             <RequirePermissionCheck
