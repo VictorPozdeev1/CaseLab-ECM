@@ -1,12 +1,14 @@
-import React, { type FC, type ChangeEvent, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Service as api } from '@api';
 import { getCompaniesStore } from '@entities/company/model';
+import userStores from '@widgets/CompanyUsersControlPanel/model';
 
 interface CompanyFormData {
   name: string;
@@ -14,64 +16,60 @@ interface CompanyFormData {
 }
 
 export const CompanyForm: FC = observer(() => {
-  const { companyId } = useParams();
+  const { companyId } = useParams<{ companyId: string }>();
+  const [changed, setChanged] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const companiesStore = getCompaniesStore();
+  const companyUsersStore = userStores.getCustomCompanyUserStore(
+    Number(companyId),
+  );
+
   const [companyData, setCompanyData] = useState<CompanyFormData>({
     name: '',
     defaultRecipient: '',
   });
-  const [changed, setChanged] = useState(false);
-  const navigate = useNavigate();
-  const companiesStore = getCompaniesStore();
 
   useEffect(() => {
-    const fetchData = async (): Promise<void> => {
+    const loadCompanyData = async (): Promise<void> => {
       try {
-        const response = await api.getOrg(Number(companyId));
-        const selectedCompany = response;
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        const company = companiesStore.getCompany(Number(companyId));
 
-        if (selectedCompany != null) {
+        if (company !== null && company !== undefined) {
+          setChanged(false);
           setCompanyData({
-            name: selectedCompany.name,
-            defaultRecipient: String(selectedCompany.defaultRecipient),
+            name: company.name,
+            defaultRecipient: String(company.defaultRecipientId),
           });
+        } else {
+          console.error('Company not found');
         }
       } catch (error) {
-        console.error('Error fetching company data:', error);
+        console.error('Error loading company data:', error);
       }
     };
 
-    void fetchData();
-    setChanged(false);
-  }, [companyId]);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setCompanyData({
-      ...companyData,
-      [e.target.name]: e.target.value,
-    });
-    setChanged(true);
-  };
+    void loadCompanyData();
+  }, [companyId, companiesStore]);
 
   const handleSave = (): void => {
-    api
-      .updateOrg(Number(companyId), {
+    companiesStore
+      .updateCompany(Number(companyId), {
         name: companyData.name,
         defaultRecipient: Number(companyData.defaultRecipient),
       })
-      .then((updatedOrg) => {})
+      .then(() => {
+        setChanged(false);
+      })
       .catch((error) => {
-        console.error('Error updating organization:', error);
+        console.error('Error saving organization:', error);
       });
   };
 
   const handleDelete = (): void => {
-    api
-      .deleteOrg(Number(companyId))
+    companiesStore
+      .deleteCompany(Number(companyId))
       .then(() => {
-        const fetchData = async (): Promise<void> => {
-          await companiesStore._loadCompanies();
-        };
-        void fetchData();
         navigate('/companies');
       })
       .catch((error) => {
@@ -79,21 +77,33 @@ export const CompanyForm: FC = observer(() => {
       });
   };
 
+  const handleInputChange = (
+    field: keyof CompanyFormData,
+    value: string,
+  ): void => {
+    setChanged(true);
+    setCompanyData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
+  const handleUserChange = (userId: number): void => {
+    setChanged(true);
+    setCompanyData((prevData) => ({
+      ...prevData,
+      defaultRecipient: String(userId),
+    }));
+  };
+
   return (
-    <Box
-      sx={{
-        padding: '20px',
-      }}
-    >
+    <Box sx={{ padding: '20px' }}>
       <Box
         display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
         alignItems="center"
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginBottom: 5,
-        }}
+        marginBottom={5}
       >
         <Typography variant="h6" gutterBottom>
           Название*
@@ -105,31 +115,44 @@ export const CompanyForm: FC = observer(() => {
           fullWidth
           sx={{ width: '60%' }}
           value={companyData.name}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            handleInputChange('name', e.target.value);
+          }}
         />
       </Box>
       <Box
         display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
         alignItems="center"
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginBottom: 5,
-        }}
+        marginBottom={5}
       >
         <Typography variant="h6" gutterBottom>
           Получатель по умолчанию*
         </Typography>
-        <TextField
-          name="defaultRecipient"
-          label="Введите получателя по умолчанию"
-          variant="outlined"
-          fullWidth
-          sx={{ width: '60%' }}
-          value={companyData.defaultRecipient}
-          onChange={handleInputChange}
-        />
+        {companyUsersStore.users.length > 0 ? (
+          <Select
+            name="defaultRecipient"
+            label="Выберите получателя по умолчанию"
+            variant="outlined"
+            fullWidth
+            sx={{ width: '60%' }}
+            value={companyData.defaultRecipient}
+            onChange={(e) => {
+              handleUserChange(Number(e.target.value));
+            }}
+          >
+            {companyUsersStore.users.map((user) => (
+              <MenuItem key={user.id} value={user.id}>
+                {user.firstName} {user.lastName} {user.patronymic}
+              </MenuItem>
+            ))}
+          </Select>
+        ) : (
+          <Typography variant="body2" color="textSecondary">
+            Нет доступных пользователей
+          </Typography>
+        )}
       </Box>
       <Box display="flex" justifyContent="space-between" marginTop="20px">
         <Button variant="contained" color="secondary" onClick={handleDelete}>

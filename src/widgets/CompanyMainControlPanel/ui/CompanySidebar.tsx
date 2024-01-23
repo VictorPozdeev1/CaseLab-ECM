@@ -1,4 +1,4 @@
-import React, { type FC, useState, useEffect } from 'react';
+import React, { type FC, useState } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -15,15 +15,6 @@ export const CompanySidebar: FC = observer(() => {
   const navigate = useNavigate();
   const { companyId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [triggerRerender, setTriggerRerender] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async (): Promise<void> => {
-      await companiesStore._loadCompanies();
-    };
-
-    void fetchData();
-  }, [companiesStore, triggerRerender]);
 
   const openModal = (): void => {
     setIsModalOpen(true);
@@ -33,8 +24,7 @@ export const CompanySidebar: FC = observer(() => {
     setIsModalOpen(false);
   };
 
-  const handleCreateCompany = (name: string, inn: string): void => {
-    setTriggerRerender((prev) => !prev);
+  const handleCreateCompany = (): void => {
     closeModal();
   };
 
