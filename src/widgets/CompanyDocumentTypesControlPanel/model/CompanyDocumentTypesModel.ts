@@ -66,7 +66,10 @@ export class CompanyDocumentTypesModel {
     id: number,
     newData: { name: string; attributeIds: number[] },
   ): Promise<void> {
-    const requestDto: DocTypeUpdateRequestDto = newData;
+    const requestDto: DocTypeUpdateRequestDto = {
+      name: newData.name,
+      attributes: newData.attributeIds,
+    };
     const responseDto = await api.updateDocType(id, requestDto);
     runInAction(() => {
       if (

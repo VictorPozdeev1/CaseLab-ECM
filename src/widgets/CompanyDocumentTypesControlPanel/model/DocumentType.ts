@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 
 import type { DocTypeDto } from '@api';
 import { type DocumentAttribute } from './DocumentAttribute';
-import mobxUtils, { type IPromiseBasedObservable } from 'mobx-utils';
+import { FULFILLED, type IPromiseBasedObservable } from 'mobx-utils';
 
 export class DocumentType {
   constructor(
@@ -13,7 +13,7 @@ export class DocumentType {
     this.name = apiResponseDto.name;
     this.agreementType = apiResponseDto.agreementType;
     this.companyId = apiResponseDto.organizationId;
-    if (attributesStore?.state === mobxUtils.FULFILLED)
+    if (attributesStore?.state === FULFILLED)
       this.attributes = apiResponseDto.attributes.map(
         // Тут бэкенд должен, по идее, только id атрибутов возвращать
         (aDto) =>
