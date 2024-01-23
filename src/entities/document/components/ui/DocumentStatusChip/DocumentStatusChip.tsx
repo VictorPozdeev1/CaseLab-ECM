@@ -14,10 +14,14 @@ import {
 } from '@mui/icons-material';
 
 export interface DocumentStatusChipProps {
+  variant?: 'filled' | 'outlined' | 'text';
   status: DocumentStatusUnion;
 }
 
-export const DocumentStatusChip: FC<DocumentStatusChipProps> = ({ status }) => {
+export const DocumentStatusChip: FC<DocumentStatusChipProps> = ({
+  variant = 'filled',
+  status,
+}) => {
   const chipMap: Record<DocumentStatusUnion, ChipOwnProps> = {
     [DocumentStatus.NEW]: {
       icon: <Edit />,
@@ -47,10 +51,17 @@ export const DocumentStatusChip: FC<DocumentStatusChipProps> = ({ status }) => {
 
   return (
     <Chip
-      variant="filled"
+      variant={variant === 'text' ? 'outlined' : variant}
       label={documentStatusMap[status]}
       icon={chipMap[status].icon}
       color={chipMap[status].color}
+      sx={
+        variant === 'text'
+          ? {
+              border: 0,
+            }
+          : {}
+      }
     />
   );
 };

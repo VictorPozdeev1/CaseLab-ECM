@@ -1,9 +1,10 @@
 import React, { type FC } from 'react';
 import { DocumentHeader } from './DocumentHeader/DocumentHeader';
 import { DocumentNav } from './DocumentNav/DocumentNav';
-import { SendToReviewForm } from '@features/review/SendToReviewForm/SendToReviewForm';
-import { DocumentPreview } from './DocumentPreview/DocumentPreview';
+import { SendToReviewForm } from '@features/review/components/SendToReviewForm/SendToReviewForm';
+// import { DocumentPreview } from './DocumentPreview/DocumentPreview';
 import { Box } from '@mui/material';
+import { ProcessesList } from '@features/review/components/ProcessesList/ProcessesList';
 
 export const DocumentViewMain: FC = () => {
   return (
@@ -20,7 +21,8 @@ export const DocumentViewMain: FC = () => {
       <DocumentNav />
       <DocumentHeader />
       <SendToReviewForm />
-      <DocumentPreview />
+      <ProcessesList />
+      {/* <DocumentPreview /> */}
     </Box>
   );
 };
