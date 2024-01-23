@@ -4,7 +4,7 @@ import {
   DocumentStatus,
   type DocumentStatusUnion,
   documentStatusMap,
-} from '@entities/document/DocumentStatus';
+} from '@entities/document/const/DocumentStatus';
 import {
   Cancel,
   CheckCircle,

@@ -6,7 +6,7 @@ export {
   DocumentStatus,
   type DocumentStatusUnion,
   documentStatusMap,
-} from './DocumentStatus';
+} from './const/DocumentStatus';
 export { downloadDocumentFile } from './lib/downloadDocumentFile';
 export { type Document } from './Document';
 export { DocumentModel } from './model/DocumentModel';
