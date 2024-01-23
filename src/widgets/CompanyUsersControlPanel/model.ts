@@ -10,12 +10,13 @@ import { User } from '@entities/user';
 import { currentSessionStore } from '@entities/session';
 
 export class CompanyUsersModel {
-  constructor() {
+  constructor(companyId: number) {
     makeAutoObservable(this);
+    this.companyId = companyId;
   }
 
   users: User[] = [];
-
+  companyId: number;
   async _loadCompanyUsers(
     usersLoader: () => Promise<UserReplyDto[]>,
   ): Promise<void> {
@@ -51,6 +52,7 @@ export class CompanyUsersModel {
       passportKp: '333999',
       passportNumber: (Date.now() % 1000000).toString(),
       passportSeries: '3453',
+      organizationId: this.companyId,
       // Возможно, стоило бы проставлять здесь companyId
     };
     const response = await api.createUser(requestDto);
@@ -71,7 +73,7 @@ class UsersByCompanies {
   getCustomCompanyUserStore(companyId: number): CompanyUsersModel {
     let result = this._usersByCompany.get(companyId);
     if (result === undefined) {
-      result = new CompanyUsersModel();
+      result = new CompanyUsersModel(companyId);
       void result
         ._loadCompanyUsers(() => api.getUsersByOrganization(companyId))
         .then(() => {
@@ -93,7 +95,7 @@ class UsersByCompanies {
     const companyId = currentSessionStore.currentUserCompanyId;
     let result = this._usersByCompany.get(companyId);
     if (result === undefined) {
-      result = new CompanyUsersModel();
+      result = new CompanyUsersModel(companyId);
       result
         ._loadCompanyUsers(() => api.getUsersMyOrganization())
         .then(() => {
