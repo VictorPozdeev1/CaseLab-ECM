@@ -24,6 +24,18 @@ class UsersStore {
     return this._ownCompanyUsers ?? undefined;
   }
 
+  userById(id: number): User | undefined {
+    return this.allUsers !== undefined
+      ? this.allUsers?.find((el) => el.id === id)
+      : undefined;
+  }
+
+  companyUserById(id: number): User | undefined {
+    return this.ownCompanyUsers !== undefined
+      ? this.ownCompanyUsers?.find((el) => el.id === id)
+      : undefined;
+  }
+
   loadAllUsers = asyncWrapper(
     async (ids?: number[], page?: number, size?: number, sort?: string[]) => {
       const response = await Service.getUsers(ids, page, size, sort);
