@@ -77,6 +77,7 @@ export class DocumentProcessesStore {
   getProcessById(id: number): ProcessWrapper | undefined {
     return this._processes !== undefined ? this._processes.get(id) : undefined;
   }
+  // создать процесс в своей организации
 
   create = asyncWrapper(
     async (
@@ -98,6 +99,7 @@ export class DocumentProcessesStore {
     },
   );
 
+  // создать процесс в другой организации
   createProcessInCompany = asyncWrapper(
     async (
       documentId: number,
@@ -120,6 +122,7 @@ export class DocumentProcessesStore {
     },
   );
 
+  // создать процесс и направить на согласование
   createAndSend = asyncWrapper(
     async (
       documentId: number,
@@ -136,7 +139,6 @@ export class DocumentProcessesStore {
       if (error !== null) {
         throw error as Error;
       }
-      console.log('succcess', this.processesList);
 
       const [sentProcess, sentError] = await (
         newProcess as ProcessWrapper
@@ -174,6 +176,7 @@ export class DocumentProcessesStore {
     }
   });
 
+  // загрузка всех процессов, связанных с документом
   load = asyncWrapper(async (documentId: number): Promise<void> => {
     const response = await Service.findProcessByDocumentId(documentId);
     if (response.length < 1) {
