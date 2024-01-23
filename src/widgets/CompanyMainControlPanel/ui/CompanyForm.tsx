@@ -8,7 +8,11 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getCompaniesStore } from '@entities/company/model';
-import userStores from '@widgets/CompanyUsersControlPanel/model';
+
+// todo Не надо использовать стор другого виджета, надо использовать общий стор
+import userStores, {
+  type CompanyUsersModel,
+} from '@widgets/CompanyUsersControlPanel/model';
 
 interface CompanyFormData {
   name: string;
@@ -20,36 +24,34 @@ export const CompanyForm: FC = observer(() => {
   const [changed, setChanged] = useState<boolean>(false);
   const navigate = useNavigate();
   const companiesStore = getCompaniesStore();
-  const companyUsersStore = userStores.getCustomCompanyUserStore(
-    Number(companyId),
-  );
 
   const [companyData, setCompanyData] = useState<CompanyFormData>({
     name: '',
     defaultRecipient: '',
-  });
+  }); // Можно бы загрузить сразу, раз уже есть companyId ? Но, думаю, не страшно..
+
+  const [companyUsersStore, setCompanyUsersStore] = useState<CompanyUsersModel>(
+    userStores.getCustomCompanyUserStore(Number(companyId)),
+  );
 
   useEffect(() => {
-    const loadCompanyData = async (): Promise<void> => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        const company = companiesStore.getCompany(Number(companyId));
-
-        if (company !== null && company !== undefined) {
-          setChanged(false);
-          setCompanyData({
-            name: company.name,
-            defaultRecipient: String(company.defaultRecipientId),
-          });
-        } else {
-          console.error('Company not found');
-        }
-      } catch (error) {
-        console.error('Error loading company data:', error);
+    try {
+      const company = companiesStore.getCompany(Number(companyId));
+      if (company !== null && company !== undefined) {
+        setChanged(false);
+        setCompanyData({
+          name: company.name,
+          defaultRecipient: String(company.defaultRecipientId),
+        });
+        setCompanyUsersStore(
+          userStores.getCustomCompanyUserStore(Number(companyId)),
+        );
+      } else {
+        console.error('Company not found');
       }
-    };
-
-    void loadCompanyData();
+    } catch (error) {
+      console.error('Error loading company data:', error);
+    }
   }, [companyId, companiesStore]);
 
   const handleSave = (): void => {
