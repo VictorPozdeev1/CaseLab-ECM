@@ -4,7 +4,7 @@ export {
 } from './components/ui/DocumentStatusChip/DocumentStatusChip';
 export {
   DocumentStatus,
-  type DocumentStatusUnion,
+  type DocumentStatusUnion as DocumentStatusType,
   documentStatusMap,
 } from './const/DocumentStatus';
 export { downloadDocumentFile } from './lib/downloadDocumentFile';

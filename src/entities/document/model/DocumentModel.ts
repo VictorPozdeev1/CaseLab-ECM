@@ -1,4 +1,5 @@
 import { type DocumentDto, type DocAttributeValues } from '@api';
+import { type DocumentStatusType } from '..';
 
 export class DocumentModel {
   id: number;
@@ -10,7 +11,7 @@ export class DocumentModel {
   ownerId: number;
   type: string;
   attributes: DocAttributeValues[];
-  status: string;
+  status: DocumentStatusType;
 
   constructor(params: DocumentDto) {
     this.id = params.id;
@@ -22,6 +23,6 @@ export class DocumentModel {
     this.ownerId = params.ownerId;
     this.type = params.docTypeName;
     this.attributes = params.attributeValues;
-    this.status = params.finalDocStatus;
+    this.status = params.finalDocStatus as DocumentStatusType;
   }
 }
