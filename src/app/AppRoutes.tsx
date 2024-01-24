@@ -14,7 +14,6 @@ import { SpecificCompanyUsersControlPanelPage } from '@pages/SpecificCompanyUser
 import { SpecificCompanyDocumentTypesControlPanelPage } from '@pages/SpecificCompanyDocumentTypesControlPanelPage';
 import { Page404 } from '@pages/Page404';
 import { DocumentViewPage } from '@pages/DocumentViewPage/DocumentViewPage';
-import { DocumentTypesPage } from '@pages/DocumentTypesPage/DocumentTypesPage';
 import { ColumnLayout } from '@shared/layouts/ColumnLayout';
 import { Permissions } from '@entities/session/session';
 
@@ -44,14 +43,6 @@ const AppRoutes: FC = () => {
         <Route
           path="myDocuments/:documentName"
           element={<DocumentViewPage />}
-        />
-        <Route
-          path="documentTypes"
-          element={
-            <RequirePermissionCheck permission={Permissions.DOCUMENT_TYPES}>
-              <DocumentTypesPage />
-            </RequirePermissionCheck>
-          }
         />
         <Route
           path="myCompany"
