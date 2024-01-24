@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Service } from '@api';
 import { currentSessionStore } from '@entities/session';
-import { type Document as StoreDocument } from '@entities/document';
+import { DocumentModel } from '@entities/document';
 
 // Видимо, никакого общего стора документов быть не должно, а каждый модуль должен иметь свой стор (и там может быть всего одна загруженная страничка с документами)
 
@@ -10,22 +10,26 @@ class DocumentsStore {
     makeAutoObservable(this);
   }
 
-  documents?: StoreDocument[];
+  documents: DocumentModel[] = [];
 
   // todo сделать норм
-  get ownDocuments(): StoreDocument[] | undefined {
+  get ownDocuments(): DocumentModel[] {
     return this.documents;
   }
 
-  getDocumentById(id: number): StoreDocument | undefined {
+  public get isEmpty(): boolean {
+    return this.documents.length === 0;
+  }
+
+  getDocumentById(id: number): DocumentModel | undefined {
     return this.documents?.find((document) => document.id === id);
   }
 
-  getDocumentByName(name: string): StoreDocument | undefined {
+  getDocumentByName(name: string): DocumentModel | undefined {
     return this.documents?.find((document) => document.name === name);
   }
 
-  async getDocuments(): Promise<void> {
+  async loadOwnDocuments(): Promise<void> {
     try {
       const creatorId: number = (await Service.getUserInfo()).id;
       const response = await Service.findDocuments(
@@ -35,14 +39,13 @@ class DocumentsStore {
         creatorId,
       );
       runInAction(() => {
-        this.documents = response.content?.map((d) => ({
-          ...d,
-          date: new Date(d.date as unknown as string),
-        }));
+        if (response?.content === undefined) {
+          throw new Error('empty response');
+        }
+        this.documents = response.content.map((d) => new DocumentModel(d));
       });
     } catch (e) {
-      console.log(e);
-      throw e;
+      console.error(e);
     }
   }
 
@@ -62,7 +65,7 @@ class DocumentsStore {
           ),
         });
         runInAction(() => {
-          this.documents?.push({ ...res, date: new Date(res.date) });
+          this.documents?.push(new DocumentModel(res));
         });
       } else {
         // todo: Разобраться, как сделать, чтобы не писать эту проверку во всех методах. Декоратор использовать, мб?
@@ -71,8 +74,7 @@ class DocumentsStore {
         );
       }
     } catch (e) {
-      console.log(e);
-      throw e;
+      console.error(e);
     }
   }
 }

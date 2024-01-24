@@ -1,12 +1,14 @@
-import { type FC } from 'react';
-
+import { useEffect, type FC } from 'react';
 import { SpecificCompanyMainControlPanel } from '@widgets/CompanyMainControlPanel';
-import { useParams } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { useCompaniesStore } from '@entities/company/model';
 
-export const SpecificCompanyMainControlPanelPage: FC = () => {
-  const { companyId: companyIdString } = useParams();
-  const companyId = Number(companyIdString);
-  if (Number.isNaN(companyId))
-    return <div>Не существует организации с id = {companyIdString}</div>;
-  return <SpecificCompanyMainControlPanel companyId={companyId} />;
-};
+export const SpecificCompanyMainControlPanelPage: FC = observer(() => {
+  const companiesStore = useCompaniesStore();
+  useEffect(() => {
+    if (companiesStore.isEmpty) {
+      void companiesStore.loadCompanies();
+    }
+  }, []);
+  return <SpecificCompanyMainControlPanel />;
+});
