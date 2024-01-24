@@ -1,7 +1,7 @@
 import { type OrgDto } from '@api';
 import { makeAutoObservable } from 'mobx';
 
-export class Company {
+export class CompanyModel {
   constructor(apiResponse: OrgDto) {
     makeAutoObservable(this);
     this.id = apiResponse.id;

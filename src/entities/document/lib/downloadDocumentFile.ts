@@ -15,7 +15,7 @@ export async function downloadDocumentFile(id: number): Promise<string> {
   */
 
   const url = getDocumentDownloadLink(
-    documentToDownload.documentPath,
+    documentToDownload.documentLink,
     documentToDownload.name,
   );
 

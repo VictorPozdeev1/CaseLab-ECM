@@ -6,12 +6,12 @@ import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { observer } from 'mobx-react';
-import { getCompaniesStore } from '@entities/company/model/CompaniesStore';
+import { useCompaniesStore } from '@entities/company/model/CompaniesStore';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CreateCompanyWidget } from '@widgets/CreateCompanyWidget';
 
 export const CompanySidebar: FC = observer(() => {
-  const companiesStore = getCompaniesStore();
+  const companiesStore = useCompaniesStore();
   const navigate = useNavigate();
   const { companyId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
