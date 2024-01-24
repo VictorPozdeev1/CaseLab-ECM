@@ -56,7 +56,7 @@ export const CompanyForm: FC = observer(() => {
     } catch (error) {
       console.error('Error loading company data:', error);
     }
-  }, [companyId, companiesStore]);
+  }, [companyId, companiesStore.companies]);
 
   const handleSave = (): void => {
     companiesStore
