@@ -1,84 +1,54 @@
 import { Service } from '@api/services/Service';
 import { makeAutoObservable, runInAction } from 'mobx';
-import { ProcessModel } from '../model/ProcessModel';
 import { asyncWrapper } from '@shared/utils/asyncWrapper';
-import { type DocProcessDto } from '@api';
-
-class ProcessWrapper {
-  process: ProcessModel;
-  constructor(data: DocProcessDto) {
-    this.process = new ProcessModel(data);
-    makeAutoObservable(this);
-  }
-
-  approve = asyncWrapper(async (comment?: string): Promise<ProcessModel> => {
-    const process = await Service.approve(this.process.id, comment);
-    runInAction(() => {
-      this.process = new ProcessModel(process);
-    });
-    return this.process;
-  });
-
-  reject = asyncWrapper(async (comment?: string): Promise<ProcessModel> => {
-    const process = await Service.reject(this.process.id, comment);
-    runInAction(() => {
-      this.process = new ProcessModel(process);
-    });
-    return this.process;
-  });
-
-  sendToCorrection = asyncWrapper(
-    async (comment?: string): Promise<ProcessModel> => {
-      const process = await Service.sendToCorrection(this.process.id, comment);
-      runInAction(() => {
-        this.process = new ProcessModel(process);
-      });
-      return this.process;
-    },
-  );
-
-  sendToApprove = asyncWrapper(
-    async (comment?: string): Promise<ProcessModel> => {
-      const process = await Service.sendToApprove(this.process.id, comment);
-      runInAction(() => {
-        this.process = new ProcessModel(process);
-      });
-      return this.process;
-    },
-  );
-}
+import { ProcessWrapper } from '../model/ProcessWrapper';
+import { type ProcessModel } from '../model/ProcessModel';
 
 export class DocumentProcessesStore {
-  protected _processes?: Map<number, ProcessWrapper>;
+  protected _processes: Map<number, ProcessWrapper> = new Map<
+    number,
+    ProcessWrapper
+  >();
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  get processesList(): ProcessModel[] | undefined {
-    return this._processes !== undefined
-      ? Array.from(this._processes.values(), (el) => el.process)
-      : undefined;
+  get processesList(): ProcessModel[] {
+    return Array.from(this._processes.values(), (el) => el.process);
   }
 
   get processesCount(): number {
-    return this._processes !== undefined ? this._processes.size : 0;
+    return this._processes.size;
   }
 
   get isEmpty(): boolean {
     return this.processesCount === 0;
   }
 
+  // возвращает массив id проверяющих
+  get reviewerIds(): number[] {
+    return this.processesList
+      .map((el) => el.recipient)
+      .filter((el, index, arr) => arr.indexOf(el) === index);
+  }
+
+  // возвращает массив id организаций в которые были направлены процессы
+  get companiesIds(): number[] {
+    return this.processesList
+      .map((el) => el.recipientOrganization)
+      .filter((el, index, arr) => arr.indexOf(el) === index);
+  }
+
   clear(): void {
     this._processes?.clear();
-    this._processes = undefined;
   }
 
   getProcessById(id: number): ProcessWrapper | undefined {
-    return this._processes !== undefined ? this._processes.get(id) : undefined;
+    return this._processes.get(id);
   }
-  // создать процесс в своей организации
 
+  // создать процесс в своей организации
   create = asyncWrapper(
     async (
       documentId: number,
@@ -113,12 +83,9 @@ export class DocumentProcessesStore {
         throw new Error('Не удалось создать процесс');
       }
       runInAction(() => {
-        if (this._processes === undefined) {
-          this._processes = new Map();
-        }
         this._processes.set(data.id, new ProcessWrapper(data));
       });
-      return this._processes?.get(data.id);
+      return this._processes.get(data.id);
     },
   );
 
@@ -154,12 +121,11 @@ export class DocumentProcessesStore {
   delete = asyncWrapper(async (id: number): Promise<void> => {
     await Service.deleteProcess(id);
     runInAction(() => {
-      this._processes?.delete(id);
+      this._processes.delete(id);
     });
   });
 
   // удаляет все процессы, связанные с документом
-
   deleteAll = asyncWrapper(async (): Promise<void> => {
     if (this.processesList === undefined) {
       return;
@@ -185,9 +151,9 @@ export class DocumentProcessesStore {
       );
     }
     runInAction(() => {
-      this._processes = new Map(
-        response.map((element) => [element.id, new ProcessWrapper(element)]),
-      );
+      response.forEach((element) => {
+        this._processes.set(element.id, new ProcessWrapper(element));
+      });
     });
   });
 }
