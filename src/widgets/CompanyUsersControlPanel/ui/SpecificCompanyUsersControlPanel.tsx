@@ -22,7 +22,7 @@ export const SpecificCompanyUsersControlPanel: FC<{ companyId: number }> =
       setModel(model);
     }, [companyId]);
 
-    const companyName = companiesStore.getById(companyId)?.name;
+    const companyName = companiesStore.getCompany(companyId)?.name;
 
     return (
       <BaseCompanyUsersControlPanel

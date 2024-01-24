@@ -19,7 +19,8 @@ export const ProcessesList: FC = observer(() => {
               usersStore.companyUserById(el.recipient)?.shortName as string
             }
             company={
-              companiesStore.getById(el.recipientOrganization)?.name as string
+              companiesStore.getCompany(el.recipientOrganization)
+                ?.name as string
             }
             status={el.status}
             comment={el.comment}

@@ -1,24 +1,18 @@
-import { useEffect, type FC } from 'react';
+import { type FC } from 'react';
 import { observer } from 'mobx-react-lite';
-
 import { getCompaniesStore } from '@entities/company/model';
 import { BaseCompanyMainControlPanel } from './BaseCompanyMainControlPanel';
+import { useParams } from 'react-router-dom';
 
-export const SpecificCompanyMainControlPanel: FC<{ companyId: number }> =
-  observer(({ companyId }) => {
-    // пока зуглушка лучше сделать стор для одной страницы
-    const companiesStore = getCompaniesStore();
-    useEffect(() => {
-      if (companiesStore.companies === undefined) {
-        void companiesStore.loadCompanies();
-      }
-    }, []);
+export const SpecificCompanyMainControlPanel: FC = observer(() => {
+  const companiesStore = getCompaniesStore();
+  const { companyId } = useParams();
+  const companyName = companiesStore.getNameById(+companyId);
 
-    const companyName = companiesStore.getById(companyId)?.name;
+  const title =
+    companyName !== undefined
+      ? `Организация: ${companyName ?? 'id=' + companyId}`
+      : 'Выберите организацию';
 
-    return (
-      <BaseCompanyMainControlPanel
-        title={`Организация: ${companyName ?? 'id=' + companyId}`}
-      />
-    );
-  });
+  return <BaseCompanyMainControlPanel title={title} />;
+});
