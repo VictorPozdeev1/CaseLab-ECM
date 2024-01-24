@@ -3,13 +3,13 @@ import React, { type MouseEventHandler, type FC } from 'react';
 
 export interface ReviewFormHeaderProps {
   isOwnCompanyReviewer: boolean;
-  toggleButtonVisible: boolean;
+  toggleButtonVisible?: boolean;
   onButtonClick?: MouseEventHandler;
 }
 
 export const ReviewFormHeader: FC<ReviewFormHeaderProps> = ({
   isOwnCompanyReviewer,
-  toggleButtonVisible,
+  toggleButtonVisible = true,
   onButtonClick,
 }) => {
   return (

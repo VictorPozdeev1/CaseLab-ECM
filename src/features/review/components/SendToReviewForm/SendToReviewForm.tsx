@@ -1,15 +1,14 @@
-import React, { type FC, useState, useEffect } from 'react';
+import React, { type FC, useState, useEffect, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import { observer } from 'mobx-react-lite';
 import { useCompaniesStore } from '@entities/company/model';
 import { documentProcessesStore as processesStore } from '@entities/documentProcess';
 import { documentViewPageStore as pageStore } from '@pages/DocumentViewPage/store';
 import { usersStore } from '@entities/user';
-import session from '@entities/session/session';
+// import session from '@entities/session/session';
 import { CommentInput } from './ui/textInput/CommentInput';
 import { ReviewFormHeader } from './ui/ReviewFormHeader';
 import { SendToReviewButton } from './ui/buttons/SendToReviewButton';
-import { CancelReviewButton } from './ui/buttons/CancelReviewButton';
 import { ReviewerSelect } from './ui/select/ReviewerSelect';
 import { CompanySelect } from './ui/select/CompanySelect';
 
@@ -21,28 +20,40 @@ export const SendToReviewForm: FC = observer(() => {
   const [reviewerId, setReviewerId] = useState('');
   const [comment, setComment] = useState('');
 
+  // список пользователей, которым документ не направлен на согласование
+  const allowedCompanyUsers = useMemo(
+    () =>
+      usersStore.ownCompanyUsers?.filter(
+        (user) => !processesStore.reviewerIds.includes(user.id),
+      ),
+    [usersStore.ownCompanyUsers, processesStore.reviewerIds],
+  );
+
+  // список компаний, в которые документ не направлен на согласование
+  const allowedCompanies = useMemo(
+    () =>
+      companiesStore.companies.filter(
+        (company) => !processesStore.companiesIds.includes(company.id),
+      ),
+    [companiesStore.companies, processesStore.companiesIds],
+  );
+  /* идея в том, направить документ на согласование можно максимум один раз для каждого сотрудника/организацию */
+
   useEffect(() => {
-    if (processesStore.processesList !== undefined) {
-      if (
-        processesStore.processesList[0].recipientOrganization !==
-        session.currentUserCompanyId
-      ) {
-        setIsOwnCompanyReviewer(false);
-        setReviewerId(
-          '' + processesStore.processesList[0].recipientOrganization,
-        );
-      } else {
-        setReviewerId('' + processesStore.processesList[0].recipient);
-      }
-      setComment(processesStore.processesList[0].comment);
+    if (usersStore.ownCompanyUsers === undefined) {
+      void usersStore.loadOwnCompanyUsers();
     }
   }, []);
 
   useEffect(() => {
     if (isOwnCompanyReviewer) {
-      void companiesStore.loadCompanies();
+      if (companiesStore.isEmpty) {
+        void companiesStore.loadCompanies();
+      }
     } else {
-      void usersStore.loadOwnCompanyUsers();
+      if (usersStore.ownCompanyUsers === undefined) {
+        void usersStore.loadOwnCompanyUsers();
+      }
     }
   }, [isOwnCompanyReviewer]);
 
@@ -51,32 +62,21 @@ export const SendToReviewForm: FC = observer(() => {
       action="."
       onSubmit={(event) => {
         event.preventDefault();
-        if (processesStore.isEmpty) {
-          void processesStore.createAndSend(
-            pageStore.document?.id as number,
-            {
-              isOwnCompany: isOwnCompanyReviewer,
-              recipientId: isOwnCompanyReviewer ? +reviewerId : +companyId,
-            },
-            comment,
-          );
-          // void processesStore.create(
-          //   pageStore.document?.id as number,
-          //   +reviewerId,
-          // );
-          // void processesStore.createProcessInCompany(
-          //   pageStore.document?.id as number,
-          //   +companyId,
-          // );
-        } else {
-          void processesStore.deleteAll();
-        }
+
+        void processesStore.createAndSend(
+          pageStore.document?.id as number,
+          {
+            isOwnCompany: isOwnCompanyReviewer,
+            recipientId: isOwnCompanyReviewer ? +reviewerId : +companyId,
+          },
+          comment,
+        );
       }}
     >
       <Box display={'flex'} flexDirection={'column'} gap={1}>
         <ReviewFormHeader
           isOwnCompanyReviewer={isOwnCompanyReviewer}
-          toggleButtonVisible={processesStore.isEmpty}
+          // toggleButtonVisible={processesStore.isEmpty}
           onButtonClick={() => {
             setIsOwnCompanyReviewer((value) => !value);
           }}
@@ -93,35 +93,29 @@ export const SendToReviewForm: FC = observer(() => {
           {isOwnCompanyReviewer ? (
             <ReviewerSelect
               value={reviewerId}
-              disabled={!processesStore.isEmpty}
               onChange={(event) => {
                 setReviewerId(event.target.value);
               }}
-              userList={usersStore.ownCompanyUsers}
+              userList={allowedCompanyUsers}
             />
           ) : (
             <CompanySelect
               value={companyId}
-              disabled={!processesStore.isEmpty}
               onChange={(event) => {
                 setCompanyId(event.target.value);
               }}
-              companiesList={companiesStore.companies}
+              companiesList={allowedCompanies}
             />
           )}
-          {processesStore.isEmpty ? (
-            <SendToReviewButton
-              disabled={
-                (!isOwnCompanyReviewer && companyId === '') ||
-                (isOwnCompanyReviewer && reviewerId === '')
-              }
-            />
-          ) : (
-            <CancelReviewButton />
-          )}
+
+          <SendToReviewButton
+            disabled={
+              (!isOwnCompanyReviewer && companyId === '') ||
+              (isOwnCompanyReviewer && reviewerId === '')
+            }
+          />
         </Box>
         <CommentInput
-          disabled={!processesStore.isEmpty}
           value={comment}
           onChange={(event) => {
             setComment(event?.target.value);
