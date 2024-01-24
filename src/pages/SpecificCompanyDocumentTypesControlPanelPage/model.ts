@@ -15,7 +15,7 @@ class ByCompanyModels {
   getCustomCompanyModel(companyId: number): CompanyDocumentTypesModel {
     let result = this._byCompanyModels.get(companyId);
     if (result === undefined) {
-      result = new CompanyDocumentTypesModel();
+      result = new CompanyDocumentTypesModel(companyId);
       void result
         .loadModel(
           () => api.getDocTypesByOrganization(companyId),

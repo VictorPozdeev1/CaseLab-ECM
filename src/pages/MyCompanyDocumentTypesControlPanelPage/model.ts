@@ -1,13 +1,17 @@
-import { Service as api } from '@api';
-import { CompanyDocumentTypesModel } from '@widgets/CompanyDocumentTypesControlPanel';
 import { runInAction } from 'mobx';
+
+import { CompanyDocumentTypesModel } from '@widgets/CompanyDocumentTypesControlPanel';
+import { currentSessionStore } from '@entities/session';
+import { Service as api } from '@api';
 
 class MyCompanyModel {
   _instance?: CompanyDocumentTypesModel;
   get instance(): CompanyDocumentTypesModel {
     let result = this._instance;
     if (result === undefined) {
-      result = new CompanyDocumentTypesModel();
+      result = new CompanyDocumentTypesModel(
+        currentSessionStore.currentUserCompanyId,
+      );
       result
         .loadModel(
           () => api.getDocTypesMyOrganization(),

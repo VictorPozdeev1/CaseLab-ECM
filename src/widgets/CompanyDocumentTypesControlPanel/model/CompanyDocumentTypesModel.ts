@@ -5,15 +5,19 @@ import type {
   DocTypeDto,
   DocAttributeDto,
   DocTypeUpdateRequestDto,
+  DocTypeCreateDto,
 } from '@api';
 import { DocumentType } from './DocumentType';
 import { DocumentAttribute } from './DocumentAttribute';
 import { type IPromiseBasedObservable, fromPromise } from 'mobx-utils';
 
 export class CompanyDocumentTypesModel {
-  constructor() {
+  constructor(companyId: number) {
+    this.companyId = companyId;
     makeAutoObservable(this, {}, { deep: true });
   }
+
+  companyId: number;
 
   documentTypes?: IPromiseBasedObservable<DocumentType[]>;
   documentAttributes?: IPromiseBasedObservable<DocumentAttribute[]>;
@@ -97,18 +101,35 @@ export class CompanyDocumentTypesModel {
     });
   }
 
-  // async addUser(newData: User): Promise<void> {
-  //   const requestDto: UserCreateDto = {
-  //     ...newData,
-  //     // Заглушка. Скоро бэкендеры уберут паспортные данные.
-  //     passportDate: new Date().toISOString(),
-  //     passportIssued: new Date().toISOString(),
-  //     passportKp: '333999',
-  //     passportNumber: (Date.now() % 1000000).toString(),
-  //     passportSeries: '3453',
-  //     // Возможно, стоило бы проставлять здесь companyId
-  //   };
-  //   const response = await api.createUser(requestDto);
-  //   runInAction(() => this.users.push(new User(response)));
-  // }
+  async createDocumentType(newData: {
+    name: string;
+    agreementType: DocTypeDto.agreementType;
+    attributeIds: number[];
+  }): Promise<void> {
+    const requestDto: DocTypeCreateDto = {
+      name: newData.name,
+      agreementType: newData.agreementType,
+      attributes: newData.attributeIds,
+      organizationId: this.companyId,
+    };
+    const responseDto = await api.createDocType(requestDto);
+    runInAction(() => {
+      if (
+        this.documentTypes?.state !== 'fulfilled' ||
+        this.documentAttributes?.state !== 'fulfilled'
+      )
+        return;
+      const createdDocumentType = new DocumentType(
+        responseDto,
+        this.documentAttributes,
+      );
+
+      // Мутирование не работает. Надо лучше разобраться, почему.
+      // this.documentTypes.value.push(createdDocumentType);
+      this.documentTypes = fromPromise.resolve([
+        ...this.documentTypes.value,
+        createdDocumentType,
+      ]);
+    });
+  }
 }

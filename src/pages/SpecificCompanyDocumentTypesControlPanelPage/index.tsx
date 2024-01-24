@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useParams } from 'react-router-dom';
 
@@ -9,6 +9,10 @@ import { MainPanelTitle } from '@shared/components/MainPanelTitle';
 import { byCompanyModels } from './model';
 
 export const SpecificCompanyDocumentTypesControlPanelPage: FC = observer(() => {
+  useEffect(() => {
+    void useCompaniesStore().loadCompanies();
+  }, []);
+
   const { companyId: companyIdString } = useParams();
   const companyId = Number(companyIdString);
 

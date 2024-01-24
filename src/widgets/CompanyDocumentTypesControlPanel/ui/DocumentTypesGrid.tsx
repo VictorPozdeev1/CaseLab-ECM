@@ -1,6 +1,6 @@
 import { useCallback, type FC, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Box, Chip } from '@mui/material';
+import { Box, Button, Chip, Stack } from '@mui/material';
 import {
   DataGrid,
   type GridRowsProp,
@@ -58,6 +58,16 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
       [model.documentTypes?.value],
     );
 
+    const addClickHandler = useCallback((): void => {
+      setFormProps({
+        documentTypeId: -1,
+        onClose: () => {
+          setFormProps(undefined);
+        },
+        model,
+      });
+    }, [model.documentTypes?.value]);
+
     const columns: GridColDef[] = [
       {
         field: 'name',
@@ -112,7 +122,12 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
     const [formProps, setFormProps] = useState<DocumentTypeFormProps>();
 
     return (
-      <Box width={'100%'} height={'100%'}>
+      <Stack width={'100%'} height={'100%'} spacing={2}>
+        <Stack direction={'row'}>
+          <Button variant="contained" onClick={addClickHandler}>
+            Создать шаблон...
+          </Button>
+        </Stack>
         <DataGrid
           rows={[...gridRows]}
           columns={columns}
@@ -125,6 +140,6 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
           loading={model.documentTypes?.state === 'pending'}
         />
         {formProps !== undefined && <DocumentTypeForm {...formProps} />}
-      </Box>
+      </Stack>
     );
   });

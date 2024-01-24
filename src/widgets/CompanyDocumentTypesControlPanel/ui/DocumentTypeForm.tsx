@@ -21,7 +21,7 @@ import type {
   DocumentTypeAttribute,
 } from '../';
 import { DocumentTypeAttributes } from './DocumentTypeAttributes';
-import type { DocTypeDto } from '@api';
+import { DocTypeDto } from '@api';
 
 const agreementTypes = [
   {
@@ -67,21 +67,46 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
       );
       return <Alert>Данные не загружены</Alert>;
     }
-    const documentTypeData = model.documentTypes.value.find(
-      (dt) => dt.id === documentTypeId,
-    ) as DocumentType;
+
+    const documentTypeData =
+      documentTypeId > 0
+        ? (model.documentTypes.value.find(
+            (dt) => dt.id === documentTypeId,
+          ) as DocumentType)
+        : null;
 
     // const nameRef = useRef<string>(documentTypeData.name);
     // const agreementTypeRef = useRef<string>(documentTypeData.agreementType);
-    const [name, setName] = useState<string>(documentTypeData.name);
+    const [name, setName] = useState<string>(documentTypeData?.name ?? '');
     const [agreementType, setAgreementType] =
-      useState<DocTypeDto.agreementType>(documentTypeData.agreementType);
+      useState<DocTypeDto.agreementType>(
+        documentTypeData?.agreementType ?? DocTypeDto.agreementType.ANYONE,
+      );
     // const selectedAttributesRef = useRef<DocumentTypeAttribute[]>(
     //   documentTypeData.attributes,
     // );
     const [selectedAttributes, setSelectedAttributes] = useState<
       DocumentTypeAttribute[]
-    >(documentTypeData.attributes);
+    >(documentTypeData?.attributes ?? []);
+
+    const performUpdateAsync = async (): Promise<void> => {
+      await model.updateDocumentType(documentTypeId, {
+        name,
+        // agreementType, // В запросе на бэк нет этого поля, просить исправлять уже поздно
+        attributeIds: selectedAttributes.map((a) => a.id),
+      });
+    };
+
+    const performCreateAsync = async (): Promise<void> => {
+      await model.createDocumentType({
+        name,
+        agreementType,
+        attributeIds: selectedAttributes.map((a) => a.id),
+      });
+    };
+
+    const performSubmitActionAsync =
+      documentTypeId > 0 ? performUpdateAsync : performCreateAsync;
 
     return (
       <Dialog fullWidth open={true}>
@@ -139,12 +164,7 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
             variant="contained"
             onClick={() => {
               /* Заблокировать форму */
-              model
-                .updateDocumentType(documentTypeData.id, {
-                  name,
-                  // agreementType, // В запросе на бэк нет этого поля, просить исправлять уже поздно
-                  attributeIds: selectedAttributes.map((a) => a.id),
-                })
+              performSubmitActionAsync()
                 .then() /* Закрыть форму */
                 .catch(() => {}) /* Оставить форму открытой и показать ошибку */
                 .finally(); /* Разблокировать форму */

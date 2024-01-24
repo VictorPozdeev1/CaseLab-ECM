@@ -13,6 +13,7 @@ export class DocumentType {
     this.name = apiResponseDto.name;
     this.agreementType = apiResponseDto.agreementType;
     this.companyId = apiResponseDto.organizationId;
+    // резолвить в компьютеде?
     if (attributesStore?.state === FULFILLED)
       this.attributes = apiResponseDto.attributes.map(
         // Тут бэкенд должен, по идее, только id атрибутов возвращать
@@ -27,6 +28,7 @@ export class DocumentType {
 
   id: number;
   name: string;
+  // Это же вообще компьютед должен быть из attributeId[]? Или нет?
   attributes: DocumentAttribute[] = [];
   agreementType: DocTypeDto.agreementType;
   companyId: number;
