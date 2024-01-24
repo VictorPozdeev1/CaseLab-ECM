@@ -9,7 +9,7 @@ import {
   Box,
   TextField,
 } from '@mui/material';
-import { getCompaniesStore } from '@entities/company/model';
+import { useCompaniesStore } from '@entities/company/model';
 
 interface CreateCompanyModalProps {
   onSubmit: () => void;
@@ -23,7 +23,7 @@ export const CreateCompanyWidget: FC<CreateCompanyModalProps> = ({
   const [name, setName] = useState<string>('');
   const [inn, setInn] = useState<string>('');
   const [innError, setInnError] = useState<string | null>(null);
-  const companiesStore = getCompaniesStore();
+  const companiesStore = useCompaniesStore();
 
   const validateInn = (value: string): boolean => {
     const isValid = /^\d{10}$/.test(value);

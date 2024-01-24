@@ -1,2 +1,2 @@
 export { CompanyModel } from './CompanyModel';
-export { getCompaniesStore } from './CompaniesStore';
+export { useCompaniesStore } from './CompaniesStore';

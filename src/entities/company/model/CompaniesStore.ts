@@ -4,20 +4,28 @@ import { CompanyModel } from './CompanyModel';
 import { asyncWrapper } from '@shared/utils/asyncWrapper';
 
 class CompaniesStore {
-  protected _companies?: CompanyModel[];
+  protected _companies: CompanyModel[] = [];
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  get companies(): CompanyModel[] | undefined {
-    return this._companies ?? undefined;
+  get companies(): CompanyModel[] {
+    return this._companies;
+  }
+
+  public get isEmpty(): boolean {
+    return this.companies.length === 0;
   }
 
   getCompany(id: number): CompanyModel | undefined {
-    return this._companies !== undefined
+    return this._companies.length !== 0
       ? this._companies.find((el) => el.id === id)
       : undefined;
+  }
+
+  getNameById(id: number): string | undefined {
+    return this.getCompany(id)?.name;
   }
 
   loadCompanies = asyncWrapper(
@@ -53,7 +61,7 @@ class CompaniesStore {
     try {
       const updatedOrg = await api.updateOrg(id, data);
       runInAction(() => {
-        if (this._companies === undefined) {
+        if (this._companies.length === 0) {
           throw new Error('Company store is empty');
         }
         const index = this._companies.findIndex((c) => c.id === id);
@@ -70,7 +78,7 @@ class CompaniesStore {
     try {
       await api.deleteOrg(id);
       runInAction(() => {
-        if (this._companies === undefined) {
+        if (this._companies.length === 0) {
           throw new Error('Company store is empty');
         }
         this._companies = this._companies.filter((c) => c.id !== id);
@@ -79,18 +87,10 @@ class CompaniesStore {
       console.error('Error deleting organization:', error);
     }
   }
-
-  // getCompany(id: number): Company | undefined {
-  //   return this._companies.find((c) => c.id === id);
-  // }
-
-  getNameById(id: number): string | undefined {
-    return this.getCompany(id)?.name;
-  }
 }
 
 let _companiesStore: CompaniesStore | undefined;
-export const getCompaniesStore = (): CompaniesStore => {
+export const useCompaniesStore = (): CompaniesStore => {
   if (_companiesStore === undefined) {
     _companiesStore = new CompaniesStore();
   }

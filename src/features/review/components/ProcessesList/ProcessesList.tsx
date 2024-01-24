@@ -5,10 +5,10 @@ import { observer } from 'mobx-react-lite';
 import React, { type FC } from 'react';
 import { ProcessListItem } from './ui/ProcessListItem';
 import { usersStore } from '@entities/user';
-import { getCompaniesStore } from '@entities/company/model';
+import { useCompaniesStore } from '@entities/company/model';
 
 export const ProcessesList: FC = observer(() => {
-  const companiesStore = getCompaniesStore();
+  const companiesStore = useCompaniesStore();
   return (
     <Stack gap={1}>
       {processesStore?.processesList !== undefined ? (

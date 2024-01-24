@@ -1,7 +1,7 @@
 import React, { type FC, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { observer } from 'mobx-react-lite';
-import { getCompaniesStore } from '@entities/company/model';
+import { useCompaniesStore } from '@entities/company/model';
 import { documentProcessesStore as processesStore } from '@entities/documentProcess';
 import { documentViewPageStore as pageStore } from '@pages/DocumentViewPage/store';
 import { usersStore } from '@entities/user';
@@ -14,7 +14,7 @@ import { ReviewerSelect } from './ui/select/ReviewerSelect';
 import { CompanySelect } from './ui/select/CompanySelect';
 
 export const SendToReviewForm: FC = observer(() => {
-  const companiesStore = getCompaniesStore();
+  const companiesStore = useCompaniesStore();
 
   const [isOwnCompanyReviewer, setIsOwnCompanyReviewer] = useState(true);
   const [companyId, setCompanyId] = useState('');

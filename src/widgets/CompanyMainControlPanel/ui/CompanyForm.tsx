@@ -7,7 +7,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCompaniesStore } from '@entities/company/model';
+import { useCompaniesStore } from '@entities/company/model';
 
 // todo Не надо использовать стор другого виджета, надо использовать общий стор
 import userStores, {
@@ -24,7 +24,7 @@ export const CompanyForm: FC = observer(() => {
   const { companyId } = useParams<{ companyId: string }>();
   const [changed, setChanged] = useState<boolean>(false);
   const navigate = useNavigate();
-  const companiesStore = getCompaniesStore();
+  const companiesStore = useCompaniesStore();
 
   // todo Можно бы загрузить сразу, раз уже есть companyId ? Но, думаю, не страшно..
   // А вообще, думаю, лучше получать это в пропсах сверху

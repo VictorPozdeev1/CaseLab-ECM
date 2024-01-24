@@ -1,13 +1,13 @@
 import { type FC } from 'react';
 import { observer } from 'mobx-react-lite';
-import { getCompaniesStore } from '@entities/company/model';
+import { useCompaniesStore } from '@entities/company/model';
 import { BaseCompanyMainControlPanel } from './BaseCompanyMainControlPanel';
 import { useParams } from 'react-router-dom';
 
 export const SpecificCompanyMainControlPanel: FC = observer(() => {
-  const companiesStore = getCompaniesStore();
+  const companiesStore = useCompaniesStore();
   const { companyId } = useParams();
-  const companyName = companiesStore.getNameById(+companyId);
+  const companyName = companiesStore.getNameById(+(companyId as string));
 
   const title =
     companyName !== undefined

@@ -5,13 +5,13 @@ import { observer } from 'mobx-react-lite';
 import { documentViewPageStore as pageStore } from './store';
 import { documentProcessesStore as processesStore } from '@entities/documentProcess';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCompaniesStore } from '@entities/company/model';
+import { useCompaniesStore } from '@entities/company/model';
 import { usersStore } from '@entities/user';
 
 export const DocumentViewPage: FC = observer(() => {
   const { documentName } = useParams();
   const navigate = useNavigate();
-  const companiesStore = getCompaniesStore();
+  const companiesStore = useCompaniesStore();
   useEffect(() => {
     void (async () => {
       void (await pageStore.loadDocumentByName(documentName as string));
