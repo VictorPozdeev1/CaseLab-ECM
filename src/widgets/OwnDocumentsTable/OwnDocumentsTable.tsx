@@ -7,12 +7,12 @@ import {
 } from '@mui/x-data-grid';
 import { observer } from 'mobx-react-lite';
 
-import { type Document } from '@entities/document';
+import { type DocumentModel } from '@entities/document';
 import { DocumentStatusChip } from '@entities/document';
 import { useNavigate } from 'react-router';
 
 interface OwnDocumentsTableProps {
-  documents?: Document[];
+  documents?: DocumentModel[];
 }
 
 const columns: GridColDef[] = [
@@ -51,9 +51,9 @@ export const OwnDocumentsTable: FC<OwnDocumentsTableProps> = observer(
       documents?.map((d) => ({
         id: d.id,
         name: d.name,
-        documentType: d.docTypeName,
+        documentType: d.type,
         creationDate: d.date,
-        status: d.finalDocStatus,
+        status: d.status,
       })) ?? [];
 
     return (
