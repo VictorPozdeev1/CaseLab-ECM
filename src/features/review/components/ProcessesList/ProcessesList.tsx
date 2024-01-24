@@ -11,7 +11,7 @@ export const ProcessesList: FC = observer(() => {
   const companiesStore = useCompaniesStore();
   return (
     <Stack gap={1}>
-      {processesStore?.processesList !== undefined ? (
+      {!processesStore.isEmpty ? (
         processesStore.processesList.map((el) => (
           <ProcessListItem
             key={el.id}
@@ -24,6 +24,9 @@ export const ProcessesList: FC = observer(() => {
             }
             status={el.status}
             comment={el.comment}
+            onCancel={() => {
+              void processesStore.delete(el.id);
+            }}
           ></ProcessListItem>
         ))
       ) : (
