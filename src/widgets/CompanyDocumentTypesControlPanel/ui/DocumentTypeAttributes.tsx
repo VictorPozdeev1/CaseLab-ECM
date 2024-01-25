@@ -1,37 +1,33 @@
-import { type FC } from 'react';
-import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import React, { type FC } from 'react';
+import { Box, Checkbox, TextField, Autocomplete } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { Box } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { type DocAttributeDto } from '@api';
+
+import { type DocumentAttribute } from '../model/DocumentAttribute';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-interface PropType {
-  typeAttributes: DocAttributeDto[] | undefined;
-  setTypeAttributes: (newAttr: DocAttributeDto[]) => void;
-  allAttributes: DocAttributeDto[] | undefined;
+interface Props {
+  documentTypeAttributes: DocumentAttribute[] | undefined;
+  onChange: (newList: DocumentAttribute[]) => void;
+  allAttributes: DocumentAttribute[] | undefined;
 }
 
-export const DocumentTypesAttributesList: FC<PropType> = observer(
-  ({ typeAttributes, setTypeAttributes, allAttributes }) => {
-    // console.log(typeAttributes);
-
+export const DocumentTypeAttributes: FC<Props> = observer(
+  ({ documentTypeAttributes, onChange, allAttributes }) => {
     const content =
       allAttributes == null && allAttributes === undefined ? (
         <Box>Нет атрибутов</Box>
       ) : (
         <Autocomplete
+          fullWidth
           multiple
           id="checkboxes-tags-demo"
           options={allAttributes}
           disableCloseOnSelect
-          value={typeAttributes}
+          value={documentTypeAttributes}
           getOptionLabel={(option) => option.name}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           renderOption={(props, option) => (
@@ -42,7 +38,7 @@ export const DocumentTypesAttributesList: FC<PropType> = observer(
                   key={`Checkbox${option.id}`}
                   checkedIcon={checkedIcon}
                   style={{ marginRight: 8 }}
-                  checked={typeAttributes?.some(
+                  checked={documentTypeAttributes?.some(
                     (attr) => attr.id === option.id,
                   )}
                 />
@@ -56,21 +52,17 @@ export const DocumentTypesAttributesList: FC<PropType> = observer(
               </div>
             </React.Fragment>
           )}
-          style={{ width: 500 }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Атрибуты"
-              placeholder="Добавить атрибут"
-            />
-          )}
-          onChange={(
-            event: React.SyntheticEvent<Element, Event>,
-            newValue: DocAttributeDto[],
-          ) => {
-            setTypeAttributes(newValue);
-            // console.log(newValue);
-            // typeAttributesRef.current = newValue.map((el) => el.id) as number[];
+          renderInput={(params) => {
+            return (
+              <TextField
+                {...params}
+                label="Атрибуты"
+                placeholder="Добавить атрибут"
+              />
+            );
+          }}
+          onChange={(_, newValue: DocumentAttribute[]) => {
+            onChange(newValue);
           }}
         />
       );

@@ -1,0 +1,17 @@
+import { type FC } from 'react';
+import { observer } from 'mobx-react-lite';
+
+import { DocumentTypesGrid } from '@widgets/CompanyDocumentTypesControlPanel';
+import { MainPanelTitle } from '@shared/components/MainPanelTitle';
+
+import { myCompanyModel } from './model';
+
+export const MyCompanyDocumentTypesControlPanelPage: FC = observer(() => {
+  const model = myCompanyModel.instance;
+  return (
+    <>
+      <MainPanelTitle title={'Шаблоны документов моей организации'} />
+      <DocumentTypesGrid model={model} />
+    </>
+  );
+});

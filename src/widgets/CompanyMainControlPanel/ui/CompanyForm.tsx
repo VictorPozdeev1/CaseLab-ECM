@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCompaniesStore } from '@entities/company/model';
+import { currentSessionStore } from '@entities/session';
 
 // todo Не надо использовать стор другого виджета, надо использовать общий стор
 import userStores, {
@@ -22,10 +23,16 @@ interface CompanyFormData {
 export const CompanyForm: FC = observer(() => {
   // todo Можно ли обойтись без этого? Получать сверху в пропсах нужную модель
   const { companyId } = useParams<{ companyId: string }>();
+  const isMyCompanyRoute = location.pathname === '/myCompany';
+  const currentCompanyId = isMyCompanyRoute
+    ? currentSessionStore.currentUserCompanyId.toString()
+    : companyId;
+  const initialCompanyUsersStore = isMyCompanyRoute
+    ? userStores.myCompanyUsersStore
+    : userStores.getCustomCompanyUserStore(Number(currentCompanyId));
   const [changed, setChanged] = useState<boolean>(false);
   const navigate = useNavigate();
   const companiesStore = useCompaniesStore();
-
   // todo Можно бы загрузить сразу, раз уже есть companyId ? Но, думаю, не страшно..
   // А вообще, думаю, лучше получать это в пропсах сверху
   const [companyData, setCompanyData] = useState<CompanyFormData>({
@@ -35,32 +42,32 @@ export const CompanyForm: FC = observer(() => {
 
   // todo Тоже сверху передавать
   const [companyUsersStore, setCompanyUsersStore] = useState<CompanyUsersModel>(
-    userStores.getCustomCompanyUserStore(Number(companyId)),
+    initialCompanyUsersStore,
   );
 
   useEffect(() => {
     try {
-      const company = companiesStore.getCompany(Number(companyId));
+      const company = companiesStore.getCompany(Number(currentCompanyId));
       if (company !== null && company !== undefined) {
         setChanged(false);
         setCompanyData({
           name: company.name,
           defaultRecipient: String(company.defaultRecipientId),
         });
-        setCompanyUsersStore(
-          userStores.getCustomCompanyUserStore(Number(companyId)),
-        );
-      } else {
-        console.error('Company not found');
+        const updatedCompanyUsersStore = isMyCompanyRoute
+          ? userStores.myCompanyUsersStore
+          : userStores.getCustomCompanyUserStore(Number(currentCompanyId));
+
+        setCompanyUsersStore(updatedCompanyUsersStore);
       }
     } catch (error) {
       console.error('Error loading company data:', error);
     }
-  }, [companyId, companiesStore]);
+  }, [currentCompanyId, companiesStore.companies]);
 
   const handleSave = (): void => {
     companiesStore
-      .updateCompany(Number(companyId), {
+      .updateCompany(Number(currentCompanyId), {
         name: companyData.name,
         defaultRecipient: Number(companyData.defaultRecipient),
       })
@@ -74,9 +81,13 @@ export const CompanyForm: FC = observer(() => {
 
   const handleDelete = (): void => {
     companiesStore
-      .deleteCompany(Number(companyId))
+      .deleteCompany(Number(currentCompanyId))
       .then(() => {
         navigate('/companies');
+        if (isMyCompanyRoute) {
+          currentSessionStore.logout();
+          navigate('/login');
+        }
       })
       .catch((error) => {
         console.error('Error deleting organization:', error);

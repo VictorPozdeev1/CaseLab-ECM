@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import { Header } from '@widgets/Header';
-import React, { type FC, type PropsWithChildren } from 'react';
+import { type FC, type PropsWithChildren } from 'react';
 
 export const ColumnLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
