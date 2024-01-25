@@ -28,7 +28,7 @@ export const CreateDocumentType: FC<{ model: CompanyDocumentTypesModel }> =
           }}
           // onClick={addUserClickHandler}
         >
-          <Typography>Добавить сотрудника</Typography>
+          <Typography>Добавить тип документа</Typography>
         </Button>
       </Box>
     );
