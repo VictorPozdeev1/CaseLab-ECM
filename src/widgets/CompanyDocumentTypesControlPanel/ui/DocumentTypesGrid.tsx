@@ -48,6 +48,7 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
     const editClickHandler = useCallback(
       (documentTypeToEditId: number): void => {
         setFormProps({
+          title: 'Редактировать шаблон',
           documentTypeId: documentTypeToEditId,
           onClose: () => {
             setFormProps(undefined);
@@ -91,7 +92,7 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
           <GridActionsCellItem
             key={'1'}
             icon={<EditIcon />}
-            label="Edit"
+            label="Редактировать"
             onClick={() => {
               editClickHandler(Number(params.id));
             }}
@@ -100,7 +101,7 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
           <GridActionsCellItem
             key={'2'}
             icon={<DeleteIcon />}
-            label="Delete"
+            label="Удалить"
             onClick={() => {
               console.log(params.id);
             }}
@@ -125,7 +126,7 @@ export const DocumentTypesGrid: FC<{ model: CompanyDocumentTypesModel }> =
       <Stack width={'100%'} height={'100%'} spacing={2}>
         <Stack direction={'row'}>
           <Button variant="contained" onClick={addClickHandler}>
-            Создать шаблон...
+            Создать шаблон
           </Button>
         </Stack>
         <DataGrid

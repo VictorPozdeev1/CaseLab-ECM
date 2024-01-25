@@ -52,11 +52,12 @@ const menuItems = agreementTypes.map((el) => {
 export interface DocumentTypeFormProps {
   documentTypeId: number;
   model: CompanyDocumentTypesModel;
+  title?: string;
   onClose: () => void;
 }
 
 export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
-  ({ documentTypeId, model, onClose }) => {
+  ({ documentTypeId, model, title = 'Создать шаблон', onClose }) => {
     // make useEffect
     if (
       model.documentTypes?.state !== 'fulfilled' ||
@@ -110,7 +111,7 @@ export const DocumentTypeForm: FC<DocumentTypeFormProps> = observer(
 
     return (
       <Dialog fullWidth open={true}>
-        <DialogTitle id="dialog-title">Какой-то заголовок</DialogTitle>
+        <DialogTitle id="dialog-title">{title}</DialogTitle>
         <DialogContent>
           <Stack spacing={5}>
             <Stack direction="row" spacing={3}>
